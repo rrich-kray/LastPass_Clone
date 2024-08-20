@@ -1,0 +1,30 @@
+.Sidebar {
+    width: 100%;
+    height: 100%;
+    background-color: #3c4a54;
+}
+
+.SidebarLinkContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.SidebarLink {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 10px
+}
+
+.SidebarLink a {
+    color: #a9b9c5;
+}
+
+.LinkIcon {
+    height: 75px;
+}

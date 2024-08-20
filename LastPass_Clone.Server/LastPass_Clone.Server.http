@@ -1,0 +1,6 @@
+@LastPass_Clone.Server_HostAddress = http://localhost:5136
+
+GET {{LastPass_Clone.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

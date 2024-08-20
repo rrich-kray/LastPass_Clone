@@ -1,0 +1,36 @@
+.Main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    //justify-content: center;
+    //align-items: center;
+    z-index: -999;
+}
+
+.SidebarWrapper {
+    height: 100%;
+    width: 250px;
+}
+
+.GridNavbarWrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.Grid {
+    flex-grow: 1;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    grid-column-gap: 25px;
+    grid-row-gap: 25px
+}
+
+.CreateNewPasswordButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

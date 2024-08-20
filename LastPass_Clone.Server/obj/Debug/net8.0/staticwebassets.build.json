@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "a3kBh+NITctGl0mvCtlvIxjy9EWMRY8zPV2HpUGNBBQ=",
+  "Source": "PasswordManager.Server",
+  "BasePath": "_content/PasswordManager.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\PasswordManager.Client.esproj",
+      "Version": 2,
+      "Source": "PasswordManager.Client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
