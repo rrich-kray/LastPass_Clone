@@ -26,7 +26,7 @@ builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
 
 var app = builder.Build();
 
-app.UseNoHtmlMiddleware();
+//app.UseNoHtmlMiddleware();
 
 app.UseCors(builder => 
     builder

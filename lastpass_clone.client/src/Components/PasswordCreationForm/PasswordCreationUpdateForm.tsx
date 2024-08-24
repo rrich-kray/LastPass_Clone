@@ -1,6 +1,7 @@
 import styles from "./styles.module.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import PasswordInfo from "../../Types/PasswordInfo";
 import Password from "../../Types/Password";
 import Category from "../../Types/Category";
 
@@ -17,7 +18,14 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { b
     useEffect(() => {
         axios
             .get(`${baseUrl}/GetCategories`)
-            .then(response => setCategories(response.data));
+            .then(response => {
+                const data = response.data;
+                setCategories(data);
+                setCurrentCategoryId(data.id);
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }, []);
 
     const handleChange = (e) => {
@@ -30,21 +38,24 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { b
 
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
-    console.log(currentCategoryId);
-
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        await
-            !updateToggle ?
-            axios.post(`${baseUrl}/CreatePassword`,
-                {
-                    Website: formState.Website,
-                    Username: formState.Username,
-                    Password: formState.Password,
-                    Notes: formState.Notes,
-                    CategoryId: currentCategoryId
-                }) :
-            axios.put(`${baseUrl}/UpdatePassword`,
+        const passwordInfo: PasswordInfo =
+        {
+            Website: formState.Website,
+            Username: formState.Username,
+            Password: formState.Password,
+            Notes: formState.Notes,
+            CategoryId: currentCategoryId!
+        };
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        return await
+            !updateToggle
+            ? axios.post(`${baseUrl}/CreatePassword`, passwordInfo, { headers: headers })
+            : axios.put(
+                `${baseUrl}/UpdatePassword`,
                 {
                     Id: passwordData.id,
                     Website: formState.Website,
@@ -52,7 +63,7 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { b
                     Password: formState.Password,
                     Notes: formState.Notes,
                     CategoryId: currentCategoryId
-                })
+                });
     }
 
     return (

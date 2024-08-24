@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import Tile from "../Components/Tile/Tile";
 import styles from "./styles.module.scss";
-import Password from "../Types/Password";
+import PasswordInfo from "../Types/PasswordInfo";
 import axios from "axios";
 import PasswordCreationUpdateForm from "../Components/PasswordCreationForm/PasswordCreationUpdateForm";
 import PasswordDataForm from "../Components/PasswordDataForm/PasswordDataForm";
@@ -12,7 +12,7 @@ import Navbar from "../Components/Navbar/Navbar"
 const Main: FC = () =>
 {
     const baseUrl: string = "https://localhost:7110";
-    const [passwords, setPasswords] = useState<Password[]>([]);
+    const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
     const [isPasswordCreationModalVisible, setIsPasswordCreationModalVisible] = useState<boolean>(false);
     const [isPasswordUpdateModalVisible, setIsPasswordUpdateModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVIsible] = useState<boolean>(false);
@@ -44,7 +44,7 @@ const Main: FC = () =>
             <div className={styles.GridNavbarWrapper}>
                 <Navbar />
                 <div className={styles.Grid}>
-                    {passwords && passwords.map((password: Password) => (
+                    {passwords && passwords.map((password: PasswordInfo) => (
                         <Tile
                             passwordData={password}
                             isPasswordVisible={isPasswordVisible}

@@ -53,9 +53,9 @@ namespace PasswordManager.Server.Data.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
         public IEnumerable<PasswordInfo> GetPasswordsForCategory(int categoryId) =>
             this.PasswordManagerDatabaseContext.Passwords.Where(x => x.CategoryId == categoryId);
+        
         public void SaveChanges() => this.PasswordManagerDatabaseContext.SaveChanges();
     }
 }

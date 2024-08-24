@@ -18,13 +18,14 @@ namespace PasswordManager.Server.Data.Entities
         [Required]
         public string Password { get; set; }
         public string Notes { get; set; }
-        public int? CategoryId { get; set; }
+        
+        public int CategoryId { get; set; }
     }
     public class PasswordEntityValidator : AbstractValidator<PasswordInfo>
     {
         public PasswordEntityValidator()
         {
-            RuleFor(x => x.Website).Must(BeValidDomain).WithMessage("Website provided is not valid.");
+            //RuleFor(x => x.Website).Must(BeValidDomain).WithMessage("Website provided is not valid.");
             RuleFor(x => x.Username).NotEmpty().WithMessage("Username cannot be empty.");
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password cannot be empty.");
         }

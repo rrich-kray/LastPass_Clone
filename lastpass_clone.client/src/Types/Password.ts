@@ -1,5 +1,5 @@
 type Password = {
-    id: number,
+    id: number;
     website: string;
     username: string;
     password: string;
@@ -7,4 +7,4 @@ type Password = {
     categoryId: number
 }
 
-export default Password
+export default Password;

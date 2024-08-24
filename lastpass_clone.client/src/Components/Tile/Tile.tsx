@@ -1,4 +1,4 @@
-import Password from "../../Types/Password.ts"
+import PasswordInfo from "../../Types/Password.ts"
 import styles from './styles.module.scss'
 import axios from "axios";
 import trashcan from "../../assets/trash-can-icon.webp";
@@ -13,10 +13,10 @@ const Tile = ({
     isPasswordUpdateModalVisible,
     setIsPasswordUpdateModalVisible,
     baseUrl }: {
-        passwordData: Password,
+        passwordData: PasswordInfo,
         isPasswordVisible: boolean,
         setIsPasswordVisible: Dispatch<boolean>,
-        setActivePassword: Dispatch<Password>,
+        setActivePassword: Dispatch<PasswordInfo>,
         isPasswordUpdateModalVisible: boolean,
         setIsPasswordUpdateModalVisible: Dispatch<boolean>,
         baseUrl: string

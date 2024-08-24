@@ -15,12 +15,12 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<PaymentCard> PaymentCards { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<PasswordInfo>();
+            
             modelBuilder.Entity<PasswordInfo>()
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
+            
 
             modelBuilder.Entity<Address>()
                 .HasOne<Category>()
