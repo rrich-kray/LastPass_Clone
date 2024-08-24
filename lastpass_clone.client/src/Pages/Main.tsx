@@ -6,7 +6,8 @@ import axios from "axios";
 import PasswordCreationUpdateForm from "../Components/PasswordCreationForm/PasswordCreationUpdateForm";
 import PasswordDataForm from "../Components/PasswordDataForm/PasswordDataForm";
 import Sidebar from "../Components/Sidebar/Sidebar";
-import Navbar from "../Components/Navbar/Navbar"
+import Navbar from "../Components/Navbar/Navbar";
+import { FaPlusCircle } from "react-icons/fa";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = () =>
@@ -34,7 +35,7 @@ const Main: FC = () =>
             isPasswordVisible && setIsPasswordVIsible(false);
             }
         }>
-            <button className={styles.CreateNewPasswordButton} onClick={() => setIsPasswordCreationModalVisible(!isPasswordCreationModalVisible)}>Create New Password</button>
+            <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsPasswordCreationModalVisible(!isPasswordCreationModalVisible)} />
             {isPasswordVisible && <PasswordDataForm passwordInfo={activePassword} />}
             {isPasswordCreationModalVisible && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={passwords[0]} updateToggle={false} />}
             {isPasswordUpdateModalVisible && activePassword && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={activePassword} updateToggle={true} />}

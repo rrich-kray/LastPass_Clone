@@ -3,7 +3,9 @@ import styles from "./styles.module.scss";
 
 const Navbar = () => {
     return (
-        <div className={styles.Navbar}></div>
+        <div className={styles.Navbar}>
+            <input className={styles.Search}></input>
+        </div>
     )
 }
 
