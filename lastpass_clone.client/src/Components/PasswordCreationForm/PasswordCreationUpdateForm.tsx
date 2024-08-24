@@ -5,6 +5,7 @@ import PasswordInfo from "../../Types/PasswordInfo";
 import Password from "../../Types/Password";
 import Category from "../../Types/Category";
 
+
 const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { baseUrl: string, updateToggle: boolean, passwordData: Password }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();

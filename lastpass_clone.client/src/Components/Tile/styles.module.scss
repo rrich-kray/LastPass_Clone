@@ -4,15 +4,24 @@
 
 .Tile {
     position: relative;
-    height: 300px;
-    width: 300px;
+    height: 150px;
+    width: 275px;
     border: 0.25rem solid black;
-    border-radius: 25px;
     box-shadow: 5px, 5px 5px black;
+    display: flex;
+    flex-direction: column;
+}
+
+.TileLogoContainer {
+    height: 65%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: hsl(197,30%,38%);
 }
 
 .TileContentContainer {
-    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -20,7 +29,8 @@
     justify-content: center;
     cursor: pointer;
     transition: 0.25s linear;
-    overflow: scroll
+    overflow: scroll;
+    flex-grow: 1;
 }
 
 .TileContentContainer:hover {
