@@ -88,6 +88,10 @@ const Tile = ({
                 { categoryIcon && categoryIcon }
             </div>
             <div className={styles.TileContentContainer}>
+                <div className={styles.TileContentContainerPanel}>
+                    <h1 style={{ fontSize: "15px", position: "flex-start" }}>{passwordData.website}</h1>
+                </div>
+                <div className={styles.TileContentContainerPanel}></div>
             </div>
         </div>
     );
