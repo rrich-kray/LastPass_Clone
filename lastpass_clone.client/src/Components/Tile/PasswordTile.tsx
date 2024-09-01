@@ -13,6 +13,7 @@ import { FaRegCreditCard } from "react-icons/fa";
 import { BsBank } from "react-icons/bs";
 
 const Tile = ({
+    type,
     passwordData,
     isPasswordVisible,
     setIsPasswordVisible,
@@ -20,6 +21,7 @@ const Tile = ({
     isPasswordUpdateModalVisible,
     setIsPasswordUpdateModalVisible,
     baseUrl }: {
+        type: string,
         passwordData: PasswordInfo,
         isPasswordVisible: boolean,
         setIsPasswordVisible: Dispatch<boolean>,
@@ -31,7 +33,11 @@ const Tile = ({
     const [categoryIcon, setCategoryIcon] = useState<React.ReactNode>();
     const handleDeleteRequest = async (e) => {
         await e.preventDefault();
-        await axios.post(`${baseUrl}/DeletePassword/${passwordData.id}`);
+        if (type === "Password") {
+            await axios.post(`${baseUrl}/DeletePassword/${passwordData.id}`);
+        } else if (type === "Note") {
+
+        }
     }
 
     const colors: string[] =

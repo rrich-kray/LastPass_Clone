@@ -13,14 +13,18 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<Address> Addresses { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
+        public DbSet<Note> Notes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Note>()
+                .HasOne<Category>()
+                .WithMany()
+                .HasForeignKey(p => p.CategoryId);
+
             modelBuilder.Entity<PasswordInfo>()
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
-            
 
             modelBuilder.Entity<Address>()
                 .HasOne<Category>()

@@ -23,6 +23,7 @@ builder.Services.AddScoped<BankAccountRepository, BankAccountRepository>();
 builder.Services.AddScoped<CategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<PasswordRepository, PasswordRepository>();
 builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
+builder.Services.AddScoped<NoteRepository, NoteRepository>();
 
 var app = builder.Build();
 
