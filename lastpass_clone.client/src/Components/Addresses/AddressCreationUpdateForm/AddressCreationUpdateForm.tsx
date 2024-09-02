@@ -1,11 +1,11 @@
 import styles from "./styles.module.scss";
 import { useState, useEffect } from "react";
-import axios from "axios
-import Password from "../../../Types/Password";
+import axios from "axios";
 import Category from "../../../Types/Category";
+import Address from "../../../Types/Address";
 
 
-const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { baseUrl: string, updateToggle: boolean, addressData: Password }) => {
+const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { baseUrl: string, updateToggle: boolean, addressData: Address }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [formState, setFormState] = useState({
@@ -230,4 +230,4 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { ba
         </form>)
 }
 
-export default PasswordCreationUpdateForm
+export default AddressCreationUpdateForm
