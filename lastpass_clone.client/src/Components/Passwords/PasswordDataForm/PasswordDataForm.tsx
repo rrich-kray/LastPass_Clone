@@ -1,6 +1,7 @@
-import styles from "./styles.module.scss"
+import styles from "./styles.module.scss";
+import PasswordInfo from "../../../Types/PasswordInfo.ts"
 
-const PasswordDataModal = ({ passwordInfo }) => {
+const PasswordDataForm = ({ passwordInfo }: { passwordInfo: PasswordInfo}) => {
     return (
         <div className={styles.PasswordDataModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.PasswordDataModalInfo}>
@@ -23,4 +24,4 @@ const PasswordDataModal = ({ passwordInfo }) => {
     )
 }
 
-export default PasswordDataModal;
+export default PasswordDataForm;

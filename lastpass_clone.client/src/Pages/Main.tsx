@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import PasswordTile from "../Components/Tile/PasswordTile";
+import Tile from "../Components/Tile/Tile";
 import styles from "./styles.module.scss";
 import PasswordInfo from "../Types/PasswordInfo";
 import axios from "axios";
@@ -20,19 +20,26 @@ const Main: FC = () =>
     const [isPasswordCreationModalVisible, setIsPasswordCreationModalVisible] = useState<boolean>(false);
     const [isPasswordUpdateModalVisible, setIsPasswordUpdateModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVIsible] = useState<boolean>(false);
-    const [activePassword, setActivePassword] = useState();
+    const [activePassword, setActivePassword] = useState<PasswordInfo>();
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [isNoteCreationModalVisible, setIsNoteCreationModalVisible] = useState<boolean>(false);
     const [isNoteUpdateModalVisible, setIsNoteUpdateModalVisible] = useState<boolean>(false);
     const [isNoteVisible, setIsNoteVIsible] = useState<boolean>(false);
-    const [activeNote, setActiveNote] = useState();
+    const [activeNote, setActiveNote] = useState<Note>();
 
-    const fetchData = async () => await axios.get(`${baseUrl}/GetAllPasswords`).catch(error => console.log(error))
+    const fetchData = async (url: string) => await axios.get(`${baseUrl}/${url}`).catch(error => console.log(error))
     useEffect(() => {
         const getData = async () => {
-            const res = await fetchData();
-            setPasswords(res.data);
+            const passwords = await fetchData("GetAllPasswords");
+            const notes = await fetchData("GetAllNotes");
+            /*
+            const addresses = await fetchData("GetAllAddresses");
+            const bankAccounts = await fetchData("GetAllBankAccounts");
+            const paymentCards = await fetchData("GetAllPaymentCards");
+            */
+            setPasswords(passwords.data);
+            setNotes(notes.data);
         }
         getData();
     }, [])
@@ -65,13 +72,24 @@ const Main: FC = () =>
                 <Navbar />
                 <div className={styles.Grid}>
                     {passwords && passwords.map((password: PasswordInfo) => (
-                        <PasswordTile
-                            passwordData={password}
-                            isPasswordVisible={isPasswordVisible}
-                            setIsPasswordVisible={setIsPasswordVIsible}
-                            setActivePassword={setActivePassword}
-                            isPasswordUpdateModalVisible={isPasswordUpdateModalVisible}
-                            setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
+                        <Tile
+                            data={password}
+                            isDatumVisible={isPasswordVisible}
+                            setIsDatumVisible={setIsPasswordVIsible}
+                            setActiveDatum={setActivePassword}
+                            isDatumUpdateModalVisible={isPasswordUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsPasswordUpdateModalVisible}
+                            baseUrl={baseUrl}
+                        />
+                    ))}
+                    {notes && notes.map((note: Note) => (
+                        <Tile
+                            data={note}
+                            isDatumVisible={isNoteVisible}
+                            setIsDatumVisible={setIsNoteVIsible}
+                            setActiveDatum={setActiveNote}
+                            isDatumUpdateModalVisible={isNoteUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsNoteUpdateModalVisible}
                             baseUrl={baseUrl}
                         />
                     ))}

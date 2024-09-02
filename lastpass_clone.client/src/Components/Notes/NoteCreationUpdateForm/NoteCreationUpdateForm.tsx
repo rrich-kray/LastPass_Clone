@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import axios from "axios";
-import Note from "../../Types/Note";
-import Category from "../../Types/Category";
+import Note from "../../../Types/Note";
+import Category from "../../../Types/Category";
 
 const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: string, updateToggle: boolean, noteData: Note }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [formState, setFormState] = useState({
+        NoteName: "",
         Content: ""
     })
 
@@ -38,11 +39,18 @@ const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: 
         e.preventDefault();
         return await
             !updateToggle
-            ? axios.post(`${baseUrl}/CreateNote`, {Content: formState.Content})
+            ? axios.post(
+                `${baseUrl}/CreateNote`,
+                {
+                    NoteName: formState.NoteName,
+                    Content: formState.Content,
+                    CategoryId: currentCategoryId
+                })
             : axios.put(
                 `${baseUrl}/UpdateNote`,
                 {
                     Id: noteData.id,
+                    NoteName: formState.NoteName,
                     Content: formState.Content,
                     CategoryId: currentCategoryId!
                 });
@@ -51,6 +59,10 @@ const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: 
         <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
             <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>Create New Password</span>
             <div className={styles.FormInputWrapperContainer}>
+                <div className={styles.FormInputWrapper}>
+                    <span>Note Name</span>
+                    <input name="NoteName" id="NoteName" onChange={handleChange} className={styles.formInput} />
+                </div>
                 <div className={styles.FormInputWrapper}>
                     <span>Note</span>
                     <input name="Note" id="Note" onChange={handleChange} className={styles.formInput} />

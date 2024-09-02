@@ -1,9 +1,9 @@
 import styles from "./styles.module.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import PasswordInfo from "../../Types/PasswordInfo";
-import Password from "../../Types/Password";
-import Category from "../../Types/Category";
+import PasswordInfo from "../../../Types/PasswordInfo";
+import Password from "../../../Types/Password";
+import Category from "../../../Types/Category";
 
 
 const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { baseUrl: string, updateToggle: boolean, passwordData: Password }) => {
@@ -43,11 +43,11 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { b
         e.preventDefault();
         const passwordInfo: PasswordInfo =
         {
-            Website: formState.Website,
-            Username: formState.Username,
-            Password: formState.Password,
-            Notes: formState.Notes,
-            CategoryId: currentCategoryId!
+            website: formState.Website,
+            username: formState.Username,
+            password: formState.Password,
+            notes: formState.Notes,
+            categoryId: currentCategoryId!
         };
         const headers = {
             'Content-Type': 'application/json'
