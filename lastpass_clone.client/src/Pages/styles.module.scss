@@ -5,6 +5,7 @@
     //justify-content: center;
     //align-items: center;
     z-index: -999;
+    background: rgba(249,250,252,255);
 }
 
 .SidebarWrapper {
@@ -20,13 +21,14 @@
 }
 
 .Grid {
-    flex-grow: 1;
+    //flex-grow: 1;
     width: 100%;
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, 300px);
+    grid-template-rows: repeat(auto);
     grid-column-gap: 25px;
-    grid-row-gap: 25px
+    grid-row-gap: 25px;
 }
 
 .CreateNewPasswordButton {

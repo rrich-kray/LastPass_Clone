@@ -11,38 +11,66 @@ import { FaPlusCircle } from "react-icons/fa";
 import NoteCreationUpdateForm from "../Components/Notes/NoteCreationUpdateForm/NoteCreationUpdateForm";
 import Note from "../Types/Note";
 import Address from "../Types/Address";
+import BankAccount from "../Types/BankAccount.ts";
+import PaymentCard from "../Types/PaymentCard.ts";
 import NoteDataForm from "../Components/Notes/NoteDataForm/NoteDataForm";
 import AddressDataForm from "../Components/Addresses/AddressDataForm/AddressDataForm";
 import AddressCreationUpdateForm from "../Components/Addresses/AddressCreationUpdateForm/AddressCreationUpdateForm";
+import NewItemMenu from "../Components/NewItemMenu/NewItemMenu.tsx";
+import DataForm from "../Components/DataForm/DataForm.tsx";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = () =>
 {
     const baseUrl: string = "https://localhost:7110";
 
+    // New item menu
+    const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
+
+    // All below data (passwords, notes, address, bank accounts and payment cards)
+    const [allData, setAllData] = useState<object>([]);
+
+    // Passwords
     const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
     const [isPasswordCreationModalVisible, setIsPasswordCreationModalVisible] = useState<boolean>(false);
     const [isPasswordUpdateModalVisible, setIsPasswordUpdateModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVIsible] = useState<boolean>(false);
     const [activePassword, setActivePassword] = useState<PasswordInfo>();
 
+    // Notes
     const [notes, setNotes] = useState<Note[]>([]);
     const [isNoteCreationModalVisible, setIsNoteCreationModalVisible] = useState<boolean>(false);
     const [isNoteUpdateModalVisible, setIsNoteUpdateModalVisible] = useState<boolean>(false);
     const [isNoteVisible, setIsNoteVIsible] = useState<boolean>(false);
     const [activeNote, setActiveNote] = useState<Note>();
 
+    // Address
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [isAddressCreationModalVisible, setIsAddressCreationModalVisible] = useState<boolean>(false);
     const [isAddressUpdateModalVisible, setIsAddressUpdateModalVisible] = useState<boolean>(false);
     const [isAddressVisible, setIsAddressVIsible] = useState<boolean>(false);
     const [activeAddress, setActiveAddress] = useState<Address>();
 
+    // Bank Account
+    const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
+    const [isBankAccountCreationModalVisible, setIsBankAccountCreationModalVisible] = useState<boolean>(false);
+    const [isBankAccountUpdateModalVisible, setIsBankAccountUpdateModalVisible] = useState<boolean>(false);
+    const [isBankAccountVisible, setIsBankAccountVIsible] = useState<boolean>(false);
+    const [activeBankAccount, setActiveBankAccount] = useState<BankAccount>();
+
+    // Payment Card
+    const [paymentCards, setPaymentCards] = useState<PaymentCard[]>([]);
+    const [isPaymentCardCreationModalVisible, setIsPaymentCardCreationModalVisible] = useState<boolean>(false);
+    const [isPaymentCardUpdateModalVisible, setIsPaymentCardUpdateModalVisible] = useState<boolean>(false);
+    const [isPaymentCardVisible, setIsPaymentCardVIsible] = useState<boolean>(false);
+    const [activePaymentCard, setActivePaymentCard] = useState<PaymentCard>();
+
     const fetchData = async (url: string) => await axios.get(`${baseUrl}/${url}`).catch(error => console.log(error))
     useEffect(() => {
         const getData = async () => {
+
             const passwords = await fetchData("GetAllPasswords");
-            const notes = await fetchData("GetAllNotes");
+            const notes = await fetchData("GetNotes");
             const addresses = await fetchData("GetAllAddresses");
             /*
             const bankAccounts = await fetchData("GetAllBankAccounts");
@@ -53,6 +81,7 @@ const Main: FC = () =>
             setAddresses(addresses.data);
         }
         getData();
+
     }, [])
 
     return (
@@ -68,19 +97,35 @@ const Main: FC = () =>
             isAddressCreationModalVisible && setIsAddressCreationModalVisible(false);
             isAddressUpdateModalVisible && setIsAddressUpdateModalVisible(false);
             isAddressVisible && setIsAddressVIsible(false);
+            
+            isNewItemMenuVisible && setIsNewItemMenuVisible(false);
             }
         }>
-            <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsPasswordCreationModalVisible(!isPasswordCreationModalVisible)} />
+            <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsNewItemMenuVisible(!isNewItemMenuVisible)} />
 
-            {isPasswordVisible && <PasswordDataForm passwordInfo={activePassword} />}
+            {isNewItemMenuVisible &&
+                <NewItemMenu
+                isPasswordCreationModalVisible={isPasswordCreationModalVisible}
+                setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
+                isNoteCreationModalVisible={isNoteCreationModalVisible}
+                setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
+                isAddressCreationModalVisible={isAddressCreationModalVisible}
+                setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
+                isBankAccountCreationModalVisible={isBankAccountCreationModalVisible}
+                setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
+                isPaymentCardCreationModalVisible={isPaymentCardCreationModalVisible}
+                setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
+                />}
+
+            {isPasswordVisible && <DataForm data={activePassword!} />}
             {isPasswordCreationModalVisible && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={passwords[0]} updateToggle={false} />}
             {isPasswordUpdateModalVisible && activePassword && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={activePassword} updateToggle={true} />}
 
-            {isNoteVisible && <NoteDataForm note={activeNote} />}
+            {isNoteVisible && <DataForm data={activeNote!} />}
             {isNoteCreationModalVisible && <NoteCreationUpdateForm baseUrl={baseUrl} noteData={notes[0]} updateToggle={false} />}
             {isNoteUpdateModalVisible && activeNote && <NoteCreationUpdateForm baseUrl={baseUrl} noteData={activeNote} updateToggle={true} />}
 
-            {isAddressVisible && <AddressDataForm address={activeAddress!} />}
+            {isAddressVisible && <DataForm data={activeAddress!} />}
             {isAddressCreationModalVisible && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={addresses[0]} updateToggle={false} />}
             {isAddressUpdateModalVisible && activeNote && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={activeAddress!} updateToggle={true} />}
 

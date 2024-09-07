@@ -64,8 +64,8 @@ const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: 
                     <input name="NoteName" id="NoteName" onChange={handleChange} className={styles.formInput} />
                 </div>
                 <div className={styles.FormInputWrapper}>
-                    <span>Note</span>
-                    <input name="Note" id="Note" onChange={handleChange} className={styles.formInput} />
+                    <span>Content</span>
+                    <input name="Content" id="Note" onChange={handleChange} className={styles.formInput} />
                 </div>
                 <div className={styles.FormInputWrapper}>
                     <span>Category</span>

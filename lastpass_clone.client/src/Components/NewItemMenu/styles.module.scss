@@ -1,0 +1,56 @@
+.NewItemMenu {
+    width: 750px;
+    height: 300px;
+    position: absolute;
+    border: .5px solid black;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    margin-top: auto;
+    left: 0;
+    margin-left: auto;
+    right: 0;
+    margin-right: auto;
+    bottom: 0;
+    margin-bottom: auto;
+    z-index: 1000;
+}
+
+.NewItemMenuBanner {
+    background: rgba(185,63,57,255);
+}
+
+.NewItemMenuBanner {
+    height: 50px;
+    width: 100%;
+}
+
+.NewItemMenuGrid {
+    //width: 100%;
+    flex-grow: 1;
+    padding: 20px;
+    display: grid;
+    //grid-template-columns: repeat(auto-fit, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-column-gap: 25px;
+    grid-row-gap: 25px;
+    background: rgba(249,250,252,255);
+}
+
+.NewItemMenuTile {
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.NewItemMenuTile:hover {
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.NewItemMenu div hover {
+    background: gray
+}

@@ -59,7 +59,7 @@ const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { bas
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const address: address =
+        const address: Address =
         {
             categoryId: currentCategoryId!,
             addressName: formState.addressName,
@@ -121,6 +121,23 @@ const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { bas
                     fax: formState.fax,
                     notes: formState.notes
                 });
+    }
+
+    const formatInputFieldTitle = (input: string): string => input.split(/[A-Z]/).map(word => word[0] + word.slice(1)).join(" ");
+    const formatInputFieldNameAndId = (input: string): string => input.split(/[A-Z]/).map(word => word[0] + word.slice(1)).join("");
+
+    function generateInputFields(address: Address): React.ReactNode[] {
+        const inputFields: React.ReactNode[] = [];
+        if (address !== null) {
+            Object.keys(address).map(key => {
+                inputFields.push(
+                    <div className={styles.FormInputWrapper}>
+                        <span>{formatInputFieldTitle(key)}</span>
+                        <input name={formatInputFieldNameAndId(key)} id={formatInputFieldNameAndId(key)} onChange={handleChange} className={styles.formInput} />
+                    </div>);
+            })
+        }
+        return inputFields;
     }
 
     return (

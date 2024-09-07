@@ -16,6 +16,7 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<Note> Notes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Note>()
                 .HasOne<Category>()
                 .WithMany()

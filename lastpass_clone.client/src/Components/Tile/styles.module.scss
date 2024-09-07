@@ -31,12 +31,21 @@
     flex-grow: 1;
 }
 
-.TileContentContainerPanel {
+.TileContentContainerPanelLeft {
     height: 100%;
     width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.TileContentContainerPanelRight {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 25px;
 }
 
 .TileContentContainer:hover {
@@ -55,21 +64,12 @@
 }
 
 .DeletePassword {
-    position: absolute;
-    top: 7.5px;
-    right: 7.5px;
     height: 25px;
     width: 25px;
-    position: absolute;
-    z-index: 999;
 }
 
 .EditPassword {
-    position: absolute;
-    top: 7.5px;
-    left: 7.5px;
     height: 25px;
     width: 25px;
-    position: absolute;
-    z-index: 999;
+    margin-left: 15px;
 }

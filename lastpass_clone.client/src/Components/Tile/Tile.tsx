@@ -16,14 +16,16 @@ import TypeChecker from "../../Other/TypeChecker.ts"
 // Alternative 1: make tile generic, could be any of existing types
     // Downsides: have to modify existing code when new types are added, instead of adding additional components. Include modifying TileUtils and component
 
-const Tile = ({
-    data,
-    isDatumVisible,
-    setIsDatumVisible,
-    setActiveDatum,
-    isDatumUpdateModalVisible,
-    setIsDatumUpdateModalVisible,
-    baseUrl }: {
+const Tile = (
+    {
+        data,
+        isDatumVisible,
+        setIsDatumVisible,
+        setActiveDatum,
+        isDatumUpdateModalVisible,
+        setIsDatumUpdateModalVisible,
+        baseUrl
+    }: {
         data: PasswordInfo | Note | Address | BankAccount | PaymentCard,
         isDatumVisible: boolean,
         setIsDatumVisible: Dispatch<boolean>,
@@ -61,20 +63,20 @@ const Tile = ({
         if (typeChecker.IsPasswordInfo(data)) {
             return data.website;
         } else if (typeChecker.IsNote(data)) {
-            return data.NoteName;
+            return data.noteName;
         } else if (typeChecker.IsAddress(data)) {
-            return data.AddressName;
+            return data.addressName;
         } else if (typeChecker.IsBankAccount(data)) {
-            return data.Name;
+            return data.name;
         } else if (typeChecker.IsPaymentCard(data)) {
-            return data.Name
+            return data.name
         } else {
             return data["Website"];
         }
     }
 
     useEffect(() => {
-        const passwordName: Promise<string> = tileUtils.FetchCategoryData(data.CategoryId);
+        const passwordName: Promise<string> = tileUtils.FetchCategoryData(data.categoryId);
         const categoryIcon: React.ReactNode = tileUtils.SelectCategoryIcon(passwordName);
         setCategoryIcon(categoryIcon);
     }, []);
@@ -84,20 +86,21 @@ const Tile = ({
             setActiveDatum(data);
             setIsDatumVisible(!isDatumVisible);
         }}>
-            <img src={trashcan} className={styles.DeletePassword} onClick={handleDeleteRequest} />
-            <img src={edit} className={styles.EditPassword} onClick={() => {
-                setActiveDatum(data);
-                setIsDatumUpdateModalVisible(!isDatumUpdateModalVisible)
-            }
-            } />
             <div className={styles.TileLogoContainer} style={{background: tileUtils.SelectRandomColor()}}>
                 { categoryIcon && categoryIcon }
             </div>
             <div className={styles.TileContentContainer}>
-                <div className={styles.TileContentContainerPanel}>
+                <div className={styles.TileContentContainerPanelLeft}>
                     <h1 style={{ fontSize: "15px", position: "flex-start" }}>{GetTileText()}</h1>
                 </div>
-                <div className={styles.TileContentContainerPanel}></div>
+                <div className={styles.TileContentContainerPanelRight}>
+                    <img src={trashcan} className={styles.DeletePassword} onClick={handleDeleteRequest} />
+                    <img src={edit} className={styles.EditPassword} onClick={() => {
+                        setActiveDatum(data);
+                        setIsDatumUpdateModalVisible(!isDatumUpdateModalVisible)
+                    }
+                    } />
+                </div>
             </div>
         </div>
     );
