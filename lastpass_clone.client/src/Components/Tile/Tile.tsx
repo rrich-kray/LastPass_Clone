@@ -54,12 +54,11 @@ const Tile = (
             url = "DeletePassword";
         }
         await axios
-            .post(`${baseUrl}/${url}/${data.Id}`)
+            .delete(`${baseUrl}/${url}/${data.id}`)
             .catch(error => console.log(error));
     }
 
     const GetTileText = (): string => {
-        console.log(typeChecker.IsPasswordInfo(data));
         if (typeChecker.IsPasswordInfo(data)) {
             return data.website;
         } else if (typeChecker.IsNote(data)) {
@@ -91,14 +90,18 @@ const Tile = (
             </div>
             <div className={styles.TileContentContainer}>
                 <div className={styles.TileContentContainerPanelLeft}>
-                    <h1 style={{ fontSize: "15px", position: "flex-start" }}>{GetTileText()}</h1>
+                    <h1 style={{ fontSize: "15px" }}>{GetTileText()}</h1>
                 </div>
                 <div className={styles.TileContentContainerPanelRight}>
-                    <img src={trashcan} className={styles.DeletePassword} onClick={handleDeleteRequest} />
-                    <img src={edit} className={styles.EditPassword} onClick={() => {
+                    <img src={trashcan} className={styles.DeletePassword} onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteRequest();
+                    }} />
+                    <img src={edit} className={styles.EditPassword} onClick={(e) => {
+                        e.stopPropagation();
                         setActiveDatum(data);
                         setIsDatumUpdateModalVisible(!isDatumUpdateModalVisible)
-                    }
+                        }
                     } />
                 </div>
             </div>

@@ -6,7 +6,6 @@
     width: 400px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     top: 0;
     margin-top: auto;
@@ -19,6 +18,7 @@
     background: white;
     border-radius: 25px;
     border: 0.25rem solid black;
+    overflow: scroll;
 }
 
 .PasswordDataModalInfo {
