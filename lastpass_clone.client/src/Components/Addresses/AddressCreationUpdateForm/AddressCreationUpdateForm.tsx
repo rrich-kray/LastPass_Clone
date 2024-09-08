@@ -144,7 +144,7 @@ const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { bas
 
     return (
         <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
-            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>Create New Address</span>
+            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>{updateToggle ? "Update address" : "Create new address"}</span>
             <div className={styles.FormInputWrapperContainer}>
                 <div className={styles.FormInputWrapper}>
                     <span>Address Name</span>

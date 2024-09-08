@@ -57,7 +57,7 @@ const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: 
     }
     return (
         <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
-            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>Create New Password</span>
+            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>{updateToggle ? "Update note" : "Create new note"}</span>
             <div className={styles.FormInputWrapperContainer}>
                 <div className={styles.FormInputWrapper}>
                     <span>Note Name</span>
