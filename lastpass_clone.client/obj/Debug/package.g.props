@@ -12,6 +12,7 @@
     <PackageJsonDependenciesTypesNode Condition="$(PackageJsonDependenciesTypesNode) == ''">^22.4.0</PackageJsonDependenciesTypesNode>
     <PackageJsonDependenciesAxios Condition="$(PackageJsonDependenciesAxios) == ''">^1.7.4</PackageJsonDependenciesAxios>
     <PackageJsonDependenciesReact Condition="$(PackageJsonDependenciesReact) == ''">^18.3.1</PackageJsonDependenciesReact>
+    <PackageJsonDependenciesReactDatepicker Condition="$(PackageJsonDependenciesReactDatepicker) == ''">^7.3.0</PackageJsonDependenciesReactDatepicker>
     <PackageJsonDependenciesReactDom Condition="$(PackageJsonDependenciesReactDom) == ''">^18.3.1</PackageJsonDependenciesReactDom>
     <PackageJsonDependenciesReactIcons Condition="$(PackageJsonDependenciesReactIcons) == ''">^5.3.0</PackageJsonDependenciesReactIcons>
     <PackageJsonDependenciesSass Condition="$(PackageJsonDependenciesSass) == ''">^1.77.8</PackageJsonDependenciesSass>
