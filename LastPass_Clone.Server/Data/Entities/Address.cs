@@ -30,18 +30,12 @@ namespace PasswordManager.Server.Data.Entities
         public string City { get; set; }
         public string County { get; set; }
         public string State { get; set; }
-        [RegularExpression("^\\d{5}(?:[-\\s]\\d{4})?$", ErrorMessage = "Invalid Zip Code")]
         public int ZipCode { get; set; }
         public string Country { get; set; }
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string EmailAddress {  get; set; }
-        [Phone(ErrorMessage = "Invalid phone number")]
         public int PhoneNumber { get; set; }
-        [Phone(ErrorMessage = "Invalid Phone Number")]
         public int EveningPhone { get; set; }
-        [Phone(ErrorMessage = "Invalid Phone Number")]
         public int MobilePhone { get; set; }
-        [Phone(ErrorMessage = "Invalid Fax Number")]
         public int Fax { get; set; }
         public string Notes { get; set; }
 
@@ -51,17 +45,18 @@ namespace PasswordManager.Server.Data.Entities
     {
         public AddressEntityValidator()
         {
-            RuleFor(x => x.FirstName).Must(BeValidName).Length(1, 250).WithMessage("Provided name is not valid.");
-            RuleFor(x => x.MiddleName).Must(BeValidName).Length(1, 250).WithMessage("Provided name is not valid.");
-            RuleFor(x => x.LastName).Must(BeValidName).Length(1, 250).WithMessage("Provided name is not valid.");
-            RuleFor(x => x.UserName).Length(1, 250).WithMessage("Username must be between 1 and 250 characters in length");
-            RuleFor(x => x.UserName).Length(1, 250).WithMessage("Username must be between 1 and 250 characters in length");
-            RuleFor(x => x.Address1).Length(1, 250).WithMessage("Address must be between 1 and 250 characters in length");
-            RuleFor(x => x.Address2).Length(1, 250).WithMessage("Address must be between 1 and 250 characters in length");
-            RuleFor(x => x.Address3).Length(1, 250).WithMessage("Address must be between 1 and 250 characters in length");
-            RuleFor(x => x.City).Length(1, 250).WithMessage("City must be between 1 and 250 characters in length");
-            RuleFor(x => x.State).Length(2).WithMessage("State must be a two character abbreviation.");
+            /*
+            RuleFor(x => x.FirstName).Length(250).WithMessage("Provided name is not valid.");
+            RuleFor(x => x.MiddleName).Length(250).WithMessage("Provided name is not valid.");
+            RuleFor(x => x.LastName).Length(250).WithMessage("Provided name is not valid.");
+            RuleFor(x => x.UserName).Length(250).WithMessage("Username must be no longer than 250 characters in length");
+            RuleFor(x => x.Address1).Length(250).WithMessage("Address must be no longer than 250 characters in length");
+            RuleFor(x => x.Address2).Length(250).WithMessage("Address must be no longer than 250 characters in length");
+            RuleFor(x => x.Address3).Length(250).WithMessage("Address must be no longer than 250 characters in length");
+            RuleFor(x => x.City).Length(250).WithMessage("City must be no longer than 250 characters in length");
+            //RuleFor(x => x.State).Length(2).WithMessage("State must be a two character abbreviation.");
             RuleFor(x => x.Notes).Length(1000).WithMessage("Note must be no longer than 1000 characters.");
+            */
         }
 
         private bool BeValidName(string name) =>

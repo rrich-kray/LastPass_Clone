@@ -28,7 +28,17 @@ namespace PasswordManager.Server.Controllers
             ControllerUtils.CommonControllerCreate(
                 validator: new NoteEntityValidator(),
                 validatee: note,
-                repository: this.NoteRepository);
+                repository: this.NoteRepository, 
+                modelState: ModelState);
+
+        [Route("/UpdateNote")]
+        [HttpPost]
+        public Response Update([FromBody] Note note) =>
+            ControllerUtils.CommonControllerCreate(
+                validator: new NoteEntityValidator(),
+                validatee: note,
+                repository: this.NoteRepository,
+                modelState: ModelState);
 
         [Route("/DeleteNote/{noteId}")]
         [HttpDelete]

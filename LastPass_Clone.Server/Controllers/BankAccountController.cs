@@ -24,26 +24,28 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/CreateBankAccount")]
         [HttpPost]
-        public Response Create(BankAccount bankAccount) =>
+        public Response Create([FromBody] BankAccount bankAccount) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
-                repository: this.BankAccountRepository);
+                repository: this.BankAccountRepository,
+                modelState: ModelState);
 
         [Route("/UpdateBankAccount")]
         [HttpPut]
-        public Response UpdateAddress(BankAccount bankAccount) =>
+        public Response UpdateAddress([FromBody] BankAccount bankAccount) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
-                repository: this.BankAccountRepository);
+                repository: this.BankAccountRepository,
+                modelState: ModelState);
 
-        [Route("/DeleteBankAccount")]
+        [Route("/DeleteBankAccount/{bankAccountId}")]
         [HttpDelete]
         public Response DeleteAddress(int bankAccountId) =>
             ControllerUtils.CommonControllerDelete<BankAccount>(
                 this.BankAccountRepository,
                 bankAccountId,
-                "Address Creation Successful.");
+                "Address Deletion Successful.");
     }
 }

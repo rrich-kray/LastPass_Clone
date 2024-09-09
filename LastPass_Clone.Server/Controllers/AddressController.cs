@@ -1,10 +1,12 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
 using PasswordManager.Server.Types;
 using PasswordManager.Server.Utilities;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -24,21 +26,25 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/CreateAddress")]
         [HttpPost]
-        public Response Create(Address address) =>
-            ControllerUtils.CommonControllerCreate(
+        public Response Create([FromBody] Address address)
+        {
+            return ControllerUtils.CommonControllerCreate(
                 validator: new AddressEntityValidator(),
                 validatee: address,
-                repository: this.AddressRepository);
+                repository: this.AddressRepository,
+                modelState: ModelState);
+        }
 
         [Route("/UpdateAddress")]
         [HttpPut]
-        public Response UpdateAddress(Address address) =>
-            ControllerUtils.CommonControllerCreate(
+        public Response UpdateAddress([FromBody] Address address) =>
+            ControllerUtils.CommonControllerUpdate(
                 validator: new AddressEntityValidator(),
                 validatee: address,
-                repository: this.AddressRepository);
+                repository: this.AddressRepository,
+                modelState: ModelState);
 
-        [Route("/DeleteAddress")]
+        [Route("/DeleteAddress/{addressId}")]
         [HttpDelete]
         public Response DeleteAddress(int addressId) =>
             ControllerUtils.CommonControllerDelete<Address>(

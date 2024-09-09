@@ -14,8 +14,8 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; } 
-        public string Name { get; set; }
         public int CategoryId { get; set; }
+        public string Name { get; set; }
         public string NameOnCard { get; set; }
         public string Type {  get; set; }
         public int Number { get; set; }

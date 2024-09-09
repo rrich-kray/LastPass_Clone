@@ -14,8 +14,8 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
-        public string Name { get; set; }
         public int CategoryId { get; set; }
+        public string Name { get; set; }
         public string BankName { get; set; }
         public string AccountType { get; set; }
         public int RoutingNumber { get; set; }
@@ -24,7 +24,6 @@ namespace PasswordManager.Server.Data.Entities
         public string IBANNumber { get; set; }
         public int PIN {  get; set; }
         public string BranchAddress { get; set; }
-        [Phone]
         public int BranchPhone { get; set; }
         public string Notes { get; set; }
     }
@@ -33,13 +32,13 @@ namespace PasswordManager.Server.Data.Entities
     {
         public BankAccountEntityValidator()
         {
-            RuleFor(x => x.Name).Length(1, 250).WithMessage("Name must be between 1 and 250 characters in length.");
-            RuleFor(x => x.BankName).Length(1, 250).WithMessage("Bank Name must be between 1 and 250 characters in length.");
-            RuleFor(x => x.AccountType).Must(BeValidAccountType).WithMessage("Not a valid checking account type.");
-            RuleFor(x => x.RoutingNumber).Must(BeValidRoutingNumber).WithMessage("Invalid routing number provided.");
-            RuleFor(x => x.SWIFTCode).Must(BeValidSWIFTCode).WithMessage("Invalid SWIFT code provided.");
-            RuleFor(x => x.IBANNumber).Must(BeValidIBANNumber).WithMessage("Invalid IBAN code provided.");
-            RuleFor(x => x.Notes).Length(1, 1000).WithMessage("Notes can be no longer than 1000 characters in length");
+            //RuleFor(x => x.Name).Length(250).WithMessage("Name must be between 1 and 250 characters in length.");
+            //RuleFor(x => x.BankName).Length(250).WithMessage("Bank Name must be between 1 and 250 characters in length.");
+            // RuleFor(x => x.AccountType).Must(BeValidAccountType).WithMessage("Not a valid checking account type.");
+            // RuleFor(x => x.RoutingNumber).Must(BeValidRoutingNumber).WithMessage("Invalid routing number provided.");
+            // RuleFor(x => x.SWIFTCode).Must(BeValidSWIFTCode).WithMessage("Invalid SWIFT code provided.");
+            // RuleFor(x => x.IBANNumber).Must(BeValidIBANNumber).WithMessage("Invalid IBAN code provided.");
+            // RuleFor(x => x.Notes).Length(1, 1000).WithMessage("Notes can be no longer than 1000 characters in length");
         }
 
         // Could also just create an enum

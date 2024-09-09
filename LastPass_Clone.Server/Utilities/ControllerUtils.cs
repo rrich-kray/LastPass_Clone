@@ -1,7 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc.Filters;
 using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
 using PasswordManager.Server.Types;
+using PasswordManager.Server.Utilities;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PasswordManager.Server.Utilities
 {
@@ -10,15 +14,18 @@ namespace PasswordManager.Server.Utilities
         public static Response CommonControllerCreate<T, J, K>(
             T validator,
             J validatee,
-            K repository)
+            K repository,
+            ModelStateDictionary modelState)
             where T : AbstractValidator<J>
             where K : IPasswordManagerRepository<J>
             where J : class
         {
             Response response = new Response();
+            if (!modelState.IsValid) return ModelBindingErrorLogger.LogErrorMessages(modelState, response);
             var validationResult = validator.Validate(validatee);
             if (!validationResult.IsValid)
             {
+                System.Diagnostics.Debug.WriteLine("FLUENT VALIDATION ERROR");
                 response.Result = false;
                 List<string> errorMessages = new List<string>();
                 foreach (var errorMessage in validationResult.Errors)
@@ -43,12 +50,14 @@ namespace PasswordManager.Server.Utilities
         public static Response CommonControllerUpdate<T, J, K>(
             T validator,
             J validatee,
-            K repository)
+            K repository,
+            ModelStateDictionary modelState)
             where T : AbstractValidator<J>
             where K : IPasswordManagerRepository<J>
             where J : class
         {
             Response response = new Response();
+            if (!modelState.IsValid) return ModelBindingErrorLogger.LogErrorMessages(modelState, response);
             var validationResult = validator.Validate(validatee);
             if (!validationResult.IsValid)
             {

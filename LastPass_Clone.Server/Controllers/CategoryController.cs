@@ -27,7 +27,8 @@ namespace PasswordManager.Server.Controllers
             ControllerUtils.CommonControllerCreate(
                 validator: new CategoryEntityValidator(),
                 validatee: category,
-                repository: this.CategoryRepository);
+                repository: this.CategoryRepository, 
+                modelState: ModelState);
 
         [Route("/Delete/{categoryId}")]
         [HttpDelete]

@@ -23,19 +23,21 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/CreatePaymentCard")]
         [HttpPost]
-        public Response Create(PaymentCard paymentCard) =>
+        public Response Create([FromBody] PaymentCard paymentCard) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
-                repository: this.PaymentCardRepository);
+                repository: this.PaymentCardRepository,
+                modelState: ModelState);
 
         [Route("/UpdatePaymentCard")]
         [HttpPut]
-        public Response UpdateAddress(PaymentCard paymentCard) =>
+        public Response UpdateAddress([FromBody] PaymentCard paymentCard) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
-                repository: this.PaymentCardRepository);
+                repository: this.PaymentCardRepository,
+                modelState: ModelState);
 
         [Route("/DeletePaymentCard")]
         [HttpDelete]

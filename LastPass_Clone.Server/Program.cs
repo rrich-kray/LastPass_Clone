@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PasswordManager.Server.Data.Repositories;
 using PasswordManager.Server.Middleware;
 using PasswordManager.Server.Data.Entities;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);

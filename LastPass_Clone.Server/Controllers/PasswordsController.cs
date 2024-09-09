@@ -5,6 +5,7 @@ using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
 using PasswordManager.Server.Utilities;
 using PasswordManager.Server.Data.DTOs;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -45,26 +46,19 @@ namespace PasswordManager.Server.Controllers
             return ControllerUtils.CommonControllerCreate(
                 validator: new PasswordEntityValidator(),
                 validatee: passwordInfo,
-                repository: this.PasswordRepository);
+                repository: this.PasswordRepository, 
+                modelState: ModelState);
         }
             
         [Route("/UpdatePassword")]
         [HttpPut]
         public Response UpdatePassword([FromBody] PasswordInfo passwordInfo)
         {
-            if (!ModelState.IsValid)
-            {
-                return new Response()
-                {
-                    Result = false,
-                    Message = new List<string>() { $"Body could not be mapped to object" }
-                };
-            }
-
             return ControllerUtils.CommonControllerUpdate(
                 validator: new PasswordEntityValidator(),
                 validatee: passwordInfo,
-                repository: this.PasswordRepository);
+                repository: this.PasswordRepository, 
+                modelState: ModelState);
         }
 
         [Route("/DeletePassword/{passwordId}")]
