@@ -1,0 +1,6 @@
+- Ensure that models are more accepting of different user inputs like blanks, wrong types etc.
+- Reformat edit dialogue box
+- reformat show details dialogue box
+- ensure that clicking on box takes user to website. When you hover over the tile, shows a launch button
+- Add sharing functionality
+- Add folders
