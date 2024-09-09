@@ -4,7 +4,6 @@ import styles from "./styles.module.scss";
 import PasswordInfo from "../Types/PasswordInfo";
 import axios from "axios";
 import PasswordCreationUpdateForm from "../Components/Passwords/PasswordCreationUpdateForm/PasswordCreationUpdateForm";
-import PasswordDataForm from "../Components/Passwords/PasswordDataForm/PasswordDataForm";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Navbar from "../Components/Navbar/Navbar";
 import { FaPlusCircle } from "react-icons/fa";
@@ -13,11 +12,11 @@ import Note from "../Types/Note";
 import Address from "../Types/Address";
 import BankAccount from "../Types/BankAccount.ts";
 import PaymentCard from "../Types/PaymentCard.ts";
-import NoteDataForm from "../Components/Notes/NoteDataForm/NoteDataForm";
-import AddressDataForm from "../Components/Addresses/AddressDataForm/AddressDataForm";
 import AddressCreationUpdateForm from "../Components/Addresses/AddressCreationUpdateForm/AddressCreationUpdateForm";
 import NewItemMenu from "../Components/NewItemMenu/NewItemMenu.tsx";
 import DataForm from "../Components/DataForm/DataForm.tsx";
+import BankAccountCreationUpdateForm from "../Components/BankAccount/BankAccountCreationUpdateForm/BankAccountCreationUpdateForm.tsx";
+import PaymentCardCreationUpdateForm from "../Components/PaymentCard/PaymentCardCreationUpdateForm/PaymentCardCreationUpdateForm.tsx";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = () =>
@@ -26,9 +25,6 @@ const Main: FC = () =>
 
     // New item menu
     const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
-
-    // All below data (passwords, notes, address, bank accounts and payment cards)
-    const [allData, setAllData] = useState<object>([]);
 
     // Passwords
     const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
@@ -72,13 +68,13 @@ const Main: FC = () =>
             const passwords = await fetchData("GetAllPasswords");
             const notes = await fetchData("GetNotes");
             const addresses = await fetchData("GetAllAddresses");
-            /*
-            const bankAccounts = await fetchData("GetAllBankAccounts");
-            const paymentCards = await fetchData("GetAllPaymentCards");
-            */
+            const bankAccounts = await fetchData("GetBankAccounts");
+            const paymentCards = await fetchData("GetPaymentCards");
             setPasswords(passwords.data);
             setNotes(notes.data);
             setAddresses(addresses.data);
+            setBankAccounts(bankAccounts.data);
+            setPaymentCards(paymentCards.data);
         }
         getData();
 
@@ -97,6 +93,14 @@ const Main: FC = () =>
             isAddressCreationModalVisible && setIsAddressCreationModalVisible(false);
             isAddressUpdateModalVisible && setIsAddressUpdateModalVisible(false);
             isAddressVisible && setIsAddressVIsible(false);
+
+            isBankAccountCreationModalVisible && setIsBankAccountCreationModalVisible(false);
+            isBankAccountUpdateModalVisible && setIsBankAccountUpdateModalVisible(false);
+            isBankAccountVisible && setIsBankAccountVIsible(false);
+
+            isPaymentCardCreationModalVisible && setIsPaymentCardCreationModalVisible(false);
+            isPaymentCardUpdateModalVisible && setIsPaymentCardUpdateModalVisible(false);
+            isPaymentCardVisible && setIsPaymentCardVIsible(false);
             
             isNewItemMenuVisible && setIsNewItemMenuVisible(false);
             }
@@ -127,7 +131,15 @@ const Main: FC = () =>
 
             {isAddressVisible && <DataForm data={activeAddress!} />}
             {isAddressCreationModalVisible && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={addresses[0]} updateToggle={false} />}
-            {isAddressUpdateModalVisible && activeNote && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={activeAddress!} updateToggle={true} />}
+            {isAddressUpdateModalVisible && activeAddress && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={activeAddress!} updateToggle={true} />}
+
+            {isBankAccountVisible && <DataForm data={activeBankAccount!} />}
+            {isBankAccountCreationModalVisible && <BankAccountCreationUpdateForm baseUrl={baseUrl} bankAccountData={bankAccounts[0]} updateToggle={false} />}
+            {isBankAccountUpdateModalVisible && activeBankAccount && <BankAccountCreationUpdateForm baseUrl={baseUrl} bankAccountData={activeBankAccount!} updateToggle={true} />}
+
+            {isPaymentCardVisible && <DataForm data={activePaymentCard!} />}
+            {isPaymentCardCreationModalVisible && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={paymentCards[0]} updateToggle={false} />}
+            {isPaymentCardUpdateModalVisible && activePaymentCard && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={activePaymentCard!} updateToggle={true} />}
 
             <div className={styles.SidebarWrapper}>
                 <Sidebar />
@@ -165,6 +177,28 @@ const Main: FC = () =>
                             setActiveDatum={setActiveAddress}
                             isDatumUpdateModalVisible={isAddressUpdateModalVisible}
                             setIsDatumUpdateModalVisible={setIsAddressUpdateModalVisible}
+                            baseUrl={baseUrl}
+                        />
+                    ))}
+                    {bankAccounts && bankAccounts.map((bankAccount: BankAccount) => (
+                        <Tile
+                            data={bankAccount}
+                            isDatumVisible={isBankAccountVisible}
+                            setIsDatumVisible={setIsBankAccountVIsible}
+                            setActiveDatum={setActiveBankAccount}
+                            isDatumUpdateModalVisible={isBankAccountUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsBankAccountUpdateModalVisible}
+                            baseUrl={baseUrl}
+                        />
+                    ))}
+                    {paymentCards && paymentCards.map((paymentCard: PaymentCard) => (
+                        <Tile
+                            data={paymentCard}
+                            isDatumVisible={isPaymentCardVisible}
+                            setIsDatumVisible={setIsPaymentCardVIsible}
+                            setActiveDatum={setActivePaymentCard}
+                            isDatumUpdateModalVisible={isPaymentCardUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsPaymentCardUpdateModalVisible}
                             baseUrl={baseUrl}
                         />
                     ))}
