@@ -1,15 +1,28 @@
-import styles from "./styles.module.scss";
-import { useState, useEffect } from "react";
+import styles from "../../../Global/CreationUpdateForm.module.scss";
+import { useState, useEffect, Dispatch } from "react";
 import axios from "axios";
-import PasswordInfo from "../../../Types/PasswordInfo";
 import Password from "../../../Types/Password";
 import Category from "../../../Types/Category";
+import { FaRegStar } from "react-icons/fa";
 
-
-const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { baseUrl: string, updateToggle: boolean, passwordData: Password }) => {
+const PasswordCreationUpdateForm =
+    ({
+        baseUrl,
+        updateToggle,
+        passwordData,
+        setIsPasswordCreationModalVisible,
+        setIsPasswordUpdateModalVisible
+    }: {
+            baseUrl: string,
+            updateToggle: boolean,
+            passwordData: Password,
+            setIsPasswordCreationModalVisible: Dispatch<boolean>,
+            setIsPasswordUpdateModalVisible: Dispatch<boolean>
+    }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [formState, setFormState] = useState({
+        Name: "",
         Website: "",
         Username: "",
         Password: "",
@@ -41,24 +54,23 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { b
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const passwordInfo: PasswordInfo =
-        {
-            website: formState.Website,
-            username: formState.Username,
-            password: formState.Password,
-            notes: formState.Notes,
-            categoryId: currentCategoryId!
-        };
-        const headers = {
-            'Content-Type': 'application/json'
-        }
         return await
             !updateToggle
-            ? axios.post(`${baseUrl}/CreatePassword`, passwordInfo, { headers: headers })
+            ? axios.post(
+                `${baseUrl}/CreatePassword`,
+                {
+                    name: formState.Name,
+                    website: formState.Website,
+                    username: formState.Username,
+                    password: formState.Password,
+                    notes: formState.Notes,
+                    categoryId: currentCategoryId!
+                })
             : axios.put(
                 `${baseUrl}/UpdatePassword`,
                 {
                     Id: passwordData.id,
+                    Name: formState.Name,
                     Website: formState.Website,
                     Username: formState.Username,
                     Password: formState.Password,
@@ -68,34 +80,70 @@ const PasswordCreationUpdateForm = ({ baseUrl, updateToggle, passwordData }: { b
     }
 
     return (
-        <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
-            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>{updateToggle ? "Update password" : "Create new password"}</span>
-            <div className={styles.FormInputWrapperContainer}>
-                <div className={styles.FormInputWrapper}>
-                    <span>Website</span>
-                    <input name="Website" id="Website" onChange={handleChange} className={styles.formInput} />
+        <div className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.CreateNewPasswordHeader}>
+                <span>{updateToggle ? "Update Password" : "Create New Password"}</span>
+            </div>
+            <div className={styles.CreateNewPasswordBody}>
+                <div className={styles.CreateNewPasswordBodyLeftPanel}>
+                    <div className={styles.CreateNewPasswordName}>
+                        <span>Name</span>
+                        <input name="Name" id="Name" onChange={handleChange} />
+                    </div>
+                    <div className={styles.CreateNewPasswordFolder}>
+                        <span>Folder</span>
+                        <select onChange={handleDropdownChange}></select>
+                    </div>
                 </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Username</span>
-                    <input name="Username" id="Username" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Password</span>
-                    <input name="Password" id="Password" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Notes</span>
-                    <input name="Notes" id="Notes" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Category</span>
-                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                <div className={styles.CreateNewPasswordBodyRightPanel}>
+                    <table className={styles.CreateNewPasswordBodyRightPanelTable}>
+                        <tbody>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Category</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Website</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Website" id="Website" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Username</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Username" id="Username"  onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Password</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Password" id="Password"  onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Notes</td>
+                                <td className={styles.TableNotes}>
+                                    <input name="Notes" id="Notes" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div className={styles.BtnWrapper}>
-                <button type="submit" className={styles.SubmitBtn} style={{marginTop: 25}}>Submit</button>
+            <div className={styles.CreateNewPasswordFooter}>
+                <div className={styles.CreateNewPasswordFooterLeftContainer}>
+                    <button className={styles.FaveBtn}>
+                        <FaRegStar />
+                    </button>
+                </div>
+                <div className={styles.CreateNewPasswordFooterRightContainer}>
+                    <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsPasswordUpdateModalVisible(false) : setIsPasswordCreationModalVisible(false)}>Cancel</button>
+                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                </div>
             </div>
-        </form>)
+        </div>)
 }
 
 export default PasswordCreationUpdateForm

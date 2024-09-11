@@ -1,13 +1,27 @@
-import styles from "./styles.module.scss";
-import { useState, useEffect } from "react";
+import styles from "../../../Global/CreationUpdateForm.module.scss";
+import { useState, useEffect, Dispatch } from "react";
 import axios from "axios";
 import Category from "../../../Types/Category";
 import PaymentCard from "../../../Types/PaymentCard";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaRegStar } from "react-icons/fa";
 
 
-const PaymentCardCreationUpdateForm = ({ baseUrl, updateToggle, paymentCardData }: { baseUrl: string, updateToggle: boolean, paymentCardData: PaymentCard }) => {
+const PaymentCardCreationUpdateForm = (
+    {
+        baseUrl,
+        updateToggle,
+        paymentCardData,
+        setIsPaymentCardCreationModalVisible,
+        setIsPaymentCardUpdateModalVisible
+    }: {
+            baseUrl: string,
+            updateToggle: boolean,
+            paymentCardData: PaymentCard,
+            setIsPaymentCardCreationModalVisible: Dispatch<boolean>,
+            setIsPaymentCardUpdateModalVisible: Dispatch<boolean>
+    }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [formState, setFormState] = useState({
@@ -77,54 +91,98 @@ const PaymentCardCreationUpdateForm = ({ baseUrl, updateToggle, paymentCardData 
     }
 
     return (
-        <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
-            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>{updateToggle ? "Update Payment Card" : "Create New Payment Card"}</span>
-            <div className={styles.FormInputWrapperContainer}>
-                <div className={styles.FormInputWrapper}>
-                    <span>Name</span>
-                    <input name="Name" id="Name" onChange={handleChange} className={styles.formInput} />
+        <div className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.CreateNewPasswordHeader}>
+                <span>{updateToggle ? "Update Payment Card" : "Create New Payment Card"}</span>
+            </div>
+            <div className={styles.CreateNewPasswordBody}>
+                <div className={styles.CreateNewPasswordBodyLeftPanel}>
+                    <div className={styles.CreateNewPasswordName}>
+                        <span>Name</span>
+                        <input name="Name" id="Name" onChange={handleChange} />
+                    </div>
+                    <div className={styles.CreateNewPasswordFolder}>
+                        <span>Folder</span>
+                        <select onChange={handleDropdownChange}></select>
+                    </div>
                 </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Name on Card</span>
-                    <input name="NameOnCard" id="NameOnCard" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Type</span>
-                    <input name="Type" id="Type" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Number</span>
-                    <input name="Number" id="Number" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Security Code</span>
-                    <input name="SecurityCode" id="SecurityCode" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <DatePicker selected={formState.StartDate} onChange={(date) => {
-                    setFormState({
-                        ...formState,
-                        StartDate: date?.toISOString()
-                    });
-                }} />
-                <DatePicker selected={formState.ExpirationDate} onChange={(date) => {
-                    setFormState({
-                        ...formState,
-                        ExpirationDate: date?.toISOString()
-                    });
-                }} />
-                <div className={styles.FormInputWrapper}>
-                    <span>Notes</span>
-                    <input name="Notes" id="Notes" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Category</span>
-                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                <div className={styles.CreateNewPasswordBodyRightPanel}>
+                    <table className={styles.CreateNewPasswordBodyRightPanelTable}>
+                        <tbody>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Category</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Name on Card</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="NameOnCard" id="NameOnCard" value={updateToggle ? paymentCardData.nameOnCard : ""} onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Type</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Type" id="Type" value={updateToggle ? paymentCardData.type : ""} onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Number</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Number" id="Number" value={updateToggle ? paymentCardData.number : ""} onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Security Code</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="SecurityCode" id="SecurityCode" value={updateToggle ? paymentCardData.securityCode : ""} onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Start Date</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <DatePicker className={styles.DatePicker} selected={formState.StartDate} onChange={(date) => {
+                                        setFormState({
+                                            ...formState,
+                                            StartDate: date?.toISOString()
+                                        });
+                                    }} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Expiration Date</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <DatePicker className={styles.DatePicker} selected={formState.ExpirationDate} onChange={(date) => {
+                                        setFormState({
+                                            ...formState,
+                                            ExpirationDate: date?.toISOString()
+                                        });
+                                    }} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Notes</td>
+                                <td className={styles.TableNotes}>
+                                    <input name="Notes" id="Notes" value={updateToggle ? paymentCardData.notes : ""} onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div className={styles.BtnWrapper}>
-                <button type="submit" className={styles.SubmitBtn} style={{ marginTop: 25 }}>Submit</button>
+            <div className={styles.CreateNewPasswordFooter}>
+                <div className={styles.CreateNewPasswordFooterLeftContainer}>
+                    <button className={styles.FaveBtn}>
+                        <FaRegStar />
+                    </button>
+                </div>
+                <div className={styles.CreateNewPasswordFooterRightContainer}>
+                    <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsPaymentCardUpdateModalVisible(false) : setIsPaymentCardCreationModalVisible(false)}>Cancel</button>
+                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                </div>
             </div>
-        </form>)
+        </div>)
 }
 
 export default PaymentCardCreationUpdateForm

@@ -1,14 +1,28 @@
-import { useEffect, useState } from "react";
-import styles from "./styles.module.scss";
+import { useEffect, useState, Dispatch } from "react";
+import styles from "../../../Global/CreationUpdateForm.module.scss";
 import axios from "axios";
 import Note from "../../../Types/Note";
 import Category from "../../../Types/Category";
+import { FaRegStar } from "react-icons/fa";
 
-const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: string, updateToggle: boolean, noteData: Note }) => {
+const NoteCreationUpdateForm = (
+    {
+        setIsNoteCreationModalVisible,
+        setIsNoteUpdateModalVisible,
+        baseUrl,
+        updateToggle,
+        noteData
+    }: {
+            setIsNoteCreationModalVisible: Dispatch<boolean>,
+            setIsNoteUpdateModalVisible: Dispatch<boolean>,
+            baseUrl: string,
+            updateToggle: boolean,
+            noteData: Note
+    }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [formState, setFormState] = useState({
-        NoteName: "",
+        Name: "",
         Content: ""
     })
 
@@ -42,7 +56,7 @@ const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: 
             ? axios.post(
                 `${baseUrl}/CreateNote`,
                 {
-                    NoteName: formState.NoteName,
+                    Name: formState.Name,
                     Content: formState.Content,
                     CategoryId: currentCategoryId
                 })
@@ -50,32 +64,58 @@ const NoteCreationUpdateForm = ({ baseUrl, updateToggle, noteData }: { baseUrl: 
                 `${baseUrl}/UpdateNote`,
                 {
                     Id: noteData.id,
-                    NoteName: formState.NoteName,
+                    Name: formState.Name,
                     Content: formState.Content,
                     CategoryId: currentCategoryId!
                 });
     }
     return (
-        <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
-            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>{updateToggle ? "Update note" : "Create new note"}</span>
-            <div className={styles.FormInputWrapperContainer}>
-                <div className={styles.FormInputWrapper}>
-                    <span>Note Name</span>
-                    <input name="NoteName" id="NoteName" onChange={handleChange} className={styles.formInput} />
+        <div className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.CreateNewPasswordHeader}>
+                <span>{updateToggle ? "Update Note" : "Create New Note"}</span>
+            </div>
+            <div className={styles.CreateNewPasswordBody}>
+                <div className={styles.CreateNewPasswordBodyLeftPanel}>
+                    <div className={styles.CreateNewPasswordName}>
+                        <span>Name</span>
+                        <input name="Name" id="Name" onChange={handleChange} />
+                    </div>
+                    <div className={styles.CreateNewPasswordFolder}>
+                        <span>Folder</span>
+                        <select onChange={handleDropdownChange}></select>
+                    </div>
                 </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Content</span>
-                    <input name="Content" id="Note" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Category</span>
-                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                <div className={styles.CreateNewPasswordBodyRightPanel}>
+                    <table className={styles.CreateNewPasswordBodyRightPanelTable}>
+                        <tbody>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Category</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Content</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Content" id="Content" value={updateToggle ? noteData.content : ""} onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div className={styles.BtnWrapper}>
-                <button type="submit" className={styles.SubmitBtn} style={{ marginTop: 25 }}>Submit</button>
+            <div className={styles.CreateNewPasswordFooter}>
+                <div className={styles.CreateNewPasswordFooterLeftContainer}>
+                    <button className={styles.FaveBtn}>
+                        <FaRegStar />
+                    </button>
+                </div>
+                <div className={styles.CreateNewPasswordFooterRightContainer}>
+                    <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsNoteUpdateModalVisible(false) : setIsNoteCreationModalVisible(false)}>Cancel</button>
+                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                </div>
             </div>
-        </form>
+        </div>
     )
 
 }

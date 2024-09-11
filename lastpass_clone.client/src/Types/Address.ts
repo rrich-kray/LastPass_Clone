@@ -1,7 +1,7 @@
 type Address = {
     id: number,
     categoryId: number,
-    addressName: string,
+    name: string,
     title: string,
     firstName: string,
     middleName: string,

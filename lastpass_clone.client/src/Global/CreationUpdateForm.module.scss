@@ -1,0 +1,198 @@
+.CreateNewPasswordForm {
+    background: white;
+    //border: 0.25rem solid black;
+    position: absolute;
+    max-height: 650px;
+    min-height: 215px;
+    max-width: 1000px;
+    min-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    margin-top: auto;
+    left: 0;
+    margin-left: auto;
+    right: 0;
+    margin-right: auto;
+    bottom: 0;
+    margin-bottom: auto;
+    z-index: 1000;
+}
+
+.CreateNewPasswordHeader {
+    width: 100%;
+    height: 50px;
+    background-color: #D12F2E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.CreateNewPasswordHeader span {
+    color: white;
+    font-weight: bold;
+}
+
+.CreateNewPasswordBody {
+    overflow-y: scroll;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+}
+
+.CreateNewPasswordBodyLeftPanel {
+    overflow-y: hidden;
+    width: 35%;
+    height: 100%;
+    background: rgba(249,250,252,255);
+    border-right: 1px solid #B7B7B7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.CreateNewPasswordName, .CreateNewPasswordFolder {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.CreateNewPasswordFolder select, .CreateNewPasswordName input {
+    width: 100%;
+    height: 25px;
+}
+
+.CreateNewPasswordFolder span, .CreateNewPasswordName span {
+    font-weight: bold
+}
+
+.CreateNewPasswordBodyRightPanel {
+    overflow-y: scroll;
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+}
+
+.CreateNewPasswordBodyRightPanelTable {
+    width: 100%;
+    //height: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.CreateNewPasswordBodyRightPanelTable tbody {
+    height: 100%;
+}
+
+.CreateNewPasswordBodyRightPanelTable tr:nth-child(even) {
+    background-color: #FBFBFB;
+}
+
+.CreateNewPasswordBodyRightPanelTable td {
+    border: 1px solid #D8D8D8;
+}
+
+.CreateNewPasswordBodyRightPanelTable input, .CreateNewPasswordBodyRightPanelTable select {
+    width: 100%;
+}
+
+.TableColumnOne {
+    text-align: right;
+    padding-right: 25px;
+    font-weight: bold;
+    height: 25px;
+}
+
+.TableColumnTwo {
+    text-align: center;
+    padding: 15px;
+    height: 25px;
+}
+
+.TableColumnTwo input, .TableColumnTwo select {
+    height: 25px;
+}
+
+.TableNotes {
+    text-align: center;
+    padding: 10px;
+}
+
+.TableNotes input {
+    height: 100px;
+}
+
+.CreateNewPasswordFooter {
+    width: 100%;
+    height: 75px;
+    background: rgba(249,250,252,255);
+    border-top: 1px solid #B7B7B7;
+    display: flex;
+}
+
+.CreateNewPasswordFooterLeftContainer {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 50%;
+}
+
+.CreateNewPasswordFooterLeftContainer button {
+    margin-left: 10px;
+}
+
+.CreateNewPasswordFooterRightContainer {
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+}
+
+.SubmitBtn {
+    margin-right: 10px;
+    font-size: 15px;
+    width: 140px;
+    height: 25px;
+    background-color: #D12F2E;
+    padding: 0px;
+    color: white;
+}
+
+.CancelBtn {
+    margin-right: 10px;
+    margin-top: 0px;
+    font-size: 15px;
+    width: 140px;
+    height: 25px;
+    background-color: white;
+    padding: 0px;
+    color: black;
+}
+
+.FormInputWrapperContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.FormInputWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.DatePicker {
+    width: 100%;
+}

@@ -1,5 +1,6 @@
 type Password = {
     id: number;
+    name: string;
     website: string;
     username: string;
     password: string;

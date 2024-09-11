@@ -21,7 +21,7 @@ import PaymentCardCreationUpdateForm from "../Components/PaymentCard/PaymentCard
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = () =>
 {
-    const baseUrl: string = "https://localhost:7110";
+    const baseUrl: string = "https://localhost:7110"; // put this in ENV file at some point
 
     // New item menu
     const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
@@ -122,24 +122,24 @@ const Main: FC = () =>
                 />}
 
             {isPasswordVisible && <DataForm data={activePassword!} />}
-            {isPasswordCreationModalVisible && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={passwords[0]} updateToggle={false} />}
-            {isPasswordUpdateModalVisible && activePassword && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={activePassword} updateToggle={true} />}
+            {isPasswordCreationModalVisible && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={passwords[0]} updateToggle={false} setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible} setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible} />}
+            {isPasswordUpdateModalVisible && activePassword && <PasswordCreationUpdateForm baseUrl={baseUrl} passwordData={activePassword} updateToggle={true} setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible} setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible} />}
 
             {isNoteVisible && <DataForm data={activeNote!} />}
-            {isNoteCreationModalVisible && <NoteCreationUpdateForm baseUrl={baseUrl} noteData={notes[0]} updateToggle={false} />}
-            {isNoteUpdateModalVisible && activeNote && <NoteCreationUpdateForm baseUrl={baseUrl} noteData={activeNote} updateToggle={true} />}
+            {isNoteCreationModalVisible && <NoteCreationUpdateForm baseUrl={baseUrl} noteData={notes[0]} updateToggle={false} setIsNoteCreationModalVisible={setIsNoteCreationModalVisible} setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
+            {isNoteUpdateModalVisible && activeNote && <NoteCreationUpdateForm baseUrl={baseUrl} noteData={activeNote} updateToggle={true} setIsNoteCreationModalVisible={setIsNoteCreationModalVisible} setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
 
             {isAddressVisible && <DataForm data={activeAddress!} />}
-            {isAddressCreationModalVisible && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={addresses[0]} updateToggle={false} />}
-            {isAddressUpdateModalVisible && activeAddress && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={activeAddress!} updateToggle={true} />}
+            {isAddressCreationModalVisible && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={addresses[0]} updateToggle={false} setIsAddressCreationModalVisible={setIsAddressCreationModalVisible} setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
+            {isAddressUpdateModalVisible && activeAddress && <AddressCreationUpdateForm baseUrl={baseUrl} addressData={activeAddress!} updateToggle={true} setIsAddressCreationModalVisible={setIsAddressCreationModalVisible} setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
 
             {isBankAccountVisible && <DataForm data={activeBankAccount!} />}
-            {isBankAccountCreationModalVisible && <BankAccountCreationUpdateForm baseUrl={baseUrl} bankAccountData={bankAccounts[0]} updateToggle={false} />}
-            {isBankAccountUpdateModalVisible && activeBankAccount && <BankAccountCreationUpdateForm baseUrl={baseUrl} bankAccountData={activeBankAccount!} updateToggle={true} />}
+            {isBankAccountCreationModalVisible && <BankAccountCreationUpdateForm baseUrl={baseUrl} bankAccountData={bankAccounts[0]} updateToggle={false} setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible} setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
+            {isBankAccountUpdateModalVisible && activeBankAccount && <BankAccountCreationUpdateForm baseUrl={baseUrl} bankAccountData={activeBankAccount!} updateToggle={true} setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible} setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
 
             {isPaymentCardVisible && <DataForm data={activePaymentCard!} />}
-            {isPaymentCardCreationModalVisible && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={paymentCards[0]} updateToggle={false} />}
-            {isPaymentCardUpdateModalVisible && activePaymentCard && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={activePaymentCard!} updateToggle={true} />}
+            {isPaymentCardCreationModalVisible && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={paymentCards[0]} updateToggle={false} setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible} setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
+            {isPaymentCardUpdateModalVisible && activePaymentCard && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={activePaymentCard!} updateToggle={true} setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible} setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
             <div className={styles.SidebarWrapper}>
                 <Sidebar />

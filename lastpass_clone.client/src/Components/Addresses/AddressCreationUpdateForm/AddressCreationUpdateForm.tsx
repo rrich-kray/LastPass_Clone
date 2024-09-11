@@ -1,24 +1,39 @@
-import styles from "./styles.module.scss";
-import { useState, useEffect } from "react";
+import styles from "../../../Global/CreationUpdateForm.module.scss";
+import { useState, useEffect, Dispatch } from "react";
 import axios from "axios";
 import Category from "../../../Types/Category";
 import Address from "../../../Types/Address";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaRegStar } from "react-icons/fa";
 
 
-const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { baseUrl: string, updateToggle: boolean, addressData: Address }) => {
+const AddressCreationUpdateForm = (
+    {
+        baseUrl,
+        updateToggle,
+        addressData,
+        setIsAddressCreationModalVisible,
+        setIsAddressUpdateModalVisible
+    }:
+        {
+            baseUrl: string,
+            updateToggle: boolean,
+            addressData: Address,
+            setIsAddressCreationModalVisible: Dispatch<boolean>,
+            setIsAddressUpdateModalVisible: Dispatch<boolean>
+        }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [formState, setFormState] = useState({
-        AddressName: "",
+        Name: "",
         Title: "",
         FirstName: "",
         MiddleName: "",
         LastName: "",
         UserName: "",
         Gender: "",
-        Birthday: new Date('December 17, 1995 03:24:00'),
+        Birthday: new Date(),
         Company: "",
         Address1: "",
         Address2: "",
@@ -61,16 +76,13 @@ const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { bas
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const headers = {
-            'Content-Type': 'application/json'
-        }
         return await
             !updateToggle
             ? axios.post(
                 `${baseUrl}/CreateAddress`, 
                 {
                     categoryId: currentCategoryId!,
-                    addressName: formState.AddressName,
+                    name: formState.Name,
                     title: formState.Title,
                     firstName: formState.FirstName,
                     middleName: formState.MiddleName,
@@ -99,7 +111,7 @@ const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { bas
                 {
                     Id: addressData.id,
                     categoryId: currentCategoryId!,
-                    addressName: formState.AddressName,
+                    name: formState.Name,
                     title: formState.Title,
                     firstName: formState.FirstName,
                     middleName: formState.MiddleName,
@@ -143,115 +155,183 @@ const AddressCreationUpdateForm = ({ baseUrl, updateToggle, addressData }: { bas
     }
 
     return (
-        <form className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
-            <span style={{ marginBottom: 50, fontWeight: 'bold', fontSize: 25 }}>{updateToggle ? "Update address" : "Create new address"}</span>
-            <div className={styles.FormInputWrapperContainer}>
-                <div className={styles.FormInputWrapper}>
-                    <span>Address Name</span>
-                    <input type="text" name="AddressName" id="AddressName" onChange={handleChange} className={styles.formInput} />
+        <div className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.CreateNewPasswordHeader}>
+                <span>{updateToggle ? "Update Address" : "Create New Address"}</span>
+            </div>
+            <div className={styles.CreateNewPasswordBody}>
+                <div className={styles.CreateNewPasswordBodyLeftPanel}>
+                    <div className={styles.CreateNewPasswordName}>
+                        <span>Name</span>
+                        <input name="Name" id="Name" onChange={handleChange} />
+                    </div>
+                    <div className={styles.CreateNewPasswordFolder}>
+                        <span>Folder</span>
+                        <select onChange={handleDropdownChange}></select>
+                    </div>
                 </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Title</span>
-                    <input type="text" name="Title" id="Title" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>First Name</span>
-                    <input type="text" name="FirstName" id="FirstName" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Middle Name</span>
-                    <input type="text" name="MiddleName" id="MiddleName" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Last Name</span>
-                    <input type="text" name="LastName" id="LastName" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>User Name</span>
-                    <input type="text" name="UserName" id="UserName" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Gender</span>
-                    <input type="text" name="Gender" id="Gender" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Birthday</span>
-                    <DatePicker selected={formState.Birthday} onChange={(date) => {
-                        setFormState({
-                            ...formState,
-                            Birthday: date?.toISOString()
-                        });
-                    }} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Company</span>
-                    <input type="text" name="Company" id="Company" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Category</span>
-                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Address 1</span>
-                    <input type="text" name="Address1" id="Address1" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Address 2</span>
-                    <input type="text" name="Address2" id="Address2" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Address 3</span>
-                    <input type="text" name="Address3" id="Address3" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>City</span>
-                    <input type="text" name="City" id="City" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>County</span>
-                    <input type="text" name="County" id="County" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>State</span>
-                    <input type="text" name="State" id="State" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Zip Code</span>
-                    <input type="number" name="ZipCode" id="ZipCode" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Country</span>
-                    <input type="text" name="Country" id="Country" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Email</span>
-                    <input type="email" name="EmailAddress" id="EmailAddress" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Phone Number</span>
-                    <input type="number" name="PhoneNumber" id="PhoneNumber" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Evening Phone</span>
-                    <input type="text" name="EveningPhone" id="EveningPhone" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Mobile Phone</span>
-                    <input type="number" name="MobilePhone" id="MobilePhone" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Fax</span>
-                    <input type="number" name="Fax" id="Fax" onChange={handleChange} className={styles.formInput} />
-                </div>
-                <div className={styles.FormInputWrapper}>
-                    <span>Notes</span>
-                    <input type="text" name="Notes" id="Notes" onChange={handleChange} className={styles.formInput} />
+                <div className={styles.CreateNewPasswordBodyRightPanel}>
+                    <table className={styles.CreateNewPasswordBodyRightPanelTable}>
+                        <tbody>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Category</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Title</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Title" id="Title" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>First Name</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="FirstName" id="FirstName" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Middle Name</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="MiddleName" id="MiddleName"  onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Last Name</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="LastName" id="LastName" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>UserName</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="UserName" id="UserName" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Gender</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Gender" id="Gender" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Birthday</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <DatePicker className={styles.DatePicker} selected={formState.Birthday} onChange={(date) => {
+                                        setFormState({
+                                            ...formState,
+                                            Birthday: date?.toISOString()
+                                        });
+                                    }} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Company</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Company" id="Company" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Address 1</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Address1" id="Address1" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Address 2</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Address2" id="Address2" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Address 3</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Address3" id="Address3" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>City</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="City" id="City" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>County</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="County" id="County" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>State</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="State" id="State" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Zip Code</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="ZipCode" id="ZipCode" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Country</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Country" id="Country" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Email Address</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Email Address" id="Email Address" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Phone Number</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="PhoneNumber" id="PhoneNumber" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Evening Phone</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="EveningPhone" id="EveningPhone" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Mobile Phone</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="MobilePhone" id="MobilePhone" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Fax</td>
+                                <td className={styles.TableColumnTwo}>
+                                    <input name="Fax" id="Fax" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={styles.TableColumnOne}>Notes</td>
+                                <td className={styles.TableNotes}>
+                                    <input name="Notes" id="Notes" onChange={handleChange} className={styles.formInput} />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div className={styles.BtnWrapper}>
-                <button type="submit" className={styles.SubmitBtn} style={{ marginTop: 25 }}>Submit</button>
+            <div className={styles.CreateNewPasswordFooter}>
+                <div className={styles.CreateNewPasswordFooterLeftContainer}>
+                    <button className={styles.FaveBtn}>
+                        <FaRegStar />
+                    </button>
+                </div>
+                <div className={styles.CreateNewPasswordFooterRightContainer}>
+                    <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsAddressUpdateModalVisible(false) : setIsAddressCreationModalVisible(false)}>Cancel</button>
+                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                </div>
             </div>
-        </form>)
+        </div>)
 }
 
 export default AddressCreationUpdateForm

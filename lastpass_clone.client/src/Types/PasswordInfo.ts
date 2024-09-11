@@ -1,4 +1,5 @@
 type PasswordInfo = {
+    name: string;
     website: string;
     username: string;
     password: string;
