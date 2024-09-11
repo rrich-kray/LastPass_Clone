@@ -15,7 +15,7 @@ namespace PasswordManager.Server.Data.Entities
         [Required]
         public int Id { get; set; }
         public int CategoryId { get; set; }
-        public string AddressName { get; set; }
+        public string Name { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

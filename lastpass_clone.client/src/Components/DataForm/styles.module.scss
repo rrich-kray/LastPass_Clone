@@ -2,12 +2,10 @@
     background: white;
     //border: 0.25rem solid black;
     position: absolute;
-    height: max-content;
+    min-height: max-content;
+    max-height: 500px;
+    //height: 500px;
     width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     top: 0;
     margin-top: auto;
     left: 0;
@@ -17,10 +15,21 @@
     bottom: 0;
     margin-bottom: auto;
     z-index: 1000;
+    overflow-y: scroll;
+    overflow-x: hidden
+}
+
+.DataModalTableWrapper {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
 }
 
 .DataModalHeader {
-    width: 100%;
     height: 50px;
     background-color: #D12F2E;
 }

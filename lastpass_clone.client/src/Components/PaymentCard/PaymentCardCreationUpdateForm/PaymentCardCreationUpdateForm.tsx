@@ -118,25 +118,25 @@ const PaymentCardCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>Name on Card</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="NameOnCard" id="NameOnCard" value={updateToggle ? paymentCardData.nameOnCard : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="NameOnCard" id="NameOnCard" placeholder={updateToggle ? paymentCardData.nameOnCard : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Type</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Type" id="Type" value={updateToggle ? paymentCardData.type : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Type" id="Type" placeholder={updateToggle ? paymentCardData.type : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Number" id="Number" value={updateToggle ? paymentCardData.number : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Number" id="Number" placeholder={updateToggle ? paymentCardData.number : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Security Code</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="SecurityCode" id="SecurityCode" value={updateToggle ? paymentCardData.securityCode : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="SecurityCode" id="SecurityCode" placeholder={updateToggle ? paymentCardData.securityCode : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
@@ -164,7 +164,7 @@ const PaymentCardCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>Notes</td>
                                 <td className={styles.TableNotes}>
-                                    <input name="Notes" id="Notes" value={updateToggle ? paymentCardData.notes : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Notes" id="Notes" placeholder={updateToggle ? paymentCardData.notes : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                         </tbody>

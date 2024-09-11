@@ -88,7 +88,7 @@ const PasswordCreationUpdateForm =
                 <div className={styles.CreateNewPasswordBodyLeftPanel}>
                     <div className={styles.CreateNewPasswordName}>
                         <span>Name</span>
-                        <input name="Name" id="Name" onChange={handleChange} />
+                        <input name="Name" id="Name" style={{ borderColor: "border-color: rgb(167, 175, 186)"}} placeholder={updateToggle ? passwordData.name : ""} onChange={handleChange} />
                     </div>
                     <div className={styles.CreateNewPasswordFolder}>
                         <span>Folder</span>
@@ -107,25 +107,25 @@ const PasswordCreationUpdateForm =
                             <tr>
                                 <td className={styles.TableColumnOne}>Website</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Website" id="Website" onChange={handleChange} className={styles.formInput} />
+                                    <input name="Website" id="Website" placeholder={updateToggle ? passwordData.website : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Username</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Username" id="Username"  onChange={handleChange} className={styles.formInput} />
+                                    <input name="Username" id="Username" placeholder={updateToggle ? passwordData.username : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Password</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Password" id="Password"  onChange={handleChange} className={styles.formInput} />
+                                    <input name="Password" id="Password" placeholder={updateToggle ? passwordData.password : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Notes</td>
                                 <td className={styles.TableNotes}>
-                                    <input name="Notes" id="Notes" onChange={handleChange} className={styles.formInput} />
+                                    <input name="Notes" id="Notes" placeholder={updateToggle ? passwordData.notes : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                         </tbody>

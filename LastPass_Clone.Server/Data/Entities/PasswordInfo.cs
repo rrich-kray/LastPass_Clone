@@ -12,6 +12,8 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public string Name { get; set; }
         public string Website { get; set; }
         [Required]
         public string Username { get; set; }
@@ -19,7 +21,6 @@ namespace PasswordManager.Server.Data.Entities
         public string Password { get; set; }
         public string Notes { get; set; }
         
-        public int CategoryId { get; set; }
     }
     public class PasswordEntityValidator : AbstractValidator<PasswordInfo>
     {

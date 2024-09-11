@@ -10,3 +10,4 @@
 - add grouping by category to main page
 - Ability to delete multiple items at once
 - Create single file for CreationUpdate modal formatting
+- fix scroll issue with tables

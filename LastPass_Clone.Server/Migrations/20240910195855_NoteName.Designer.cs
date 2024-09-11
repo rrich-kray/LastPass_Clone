@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PasswordManager.Server.Data.DatabaseContexts;
 
@@ -10,9 +11,11 @@ using PasswordManager.Server.Data.DatabaseContexts;
 namespace LastPass_Clone.Server.Migrations
 {
     [DbContext(typeof(PasswordManagerDatabaseContext))]
-    partial class PasswordManagerDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240910195855_NoteName")]
+    partial class NoteName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -32,6 +35,10 @@ namespace LastPass_Clone.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address3")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AddressName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -85,10 +92,6 @@ namespace LastPass_Clone.Server.Migrations
 
                     b.Property<int>("MobilePhone")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
                         .IsRequired()

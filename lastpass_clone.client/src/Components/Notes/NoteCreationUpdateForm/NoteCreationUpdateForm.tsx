@@ -97,7 +97,7 @@ const NoteCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>Content</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Content" id="Content" value={updateToggle ? noteData.content : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Content" id="Content" placeholder={updateToggle ? noteData.content : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                         </tbody>
