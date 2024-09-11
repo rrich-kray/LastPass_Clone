@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Category from "../../Types/Category";
-import axios from "axios";
+import styles from "./styles.module.scss";
 
-const CategorySection = ({ categoryInfo, baseUrl }: { categoryInfo: Category, baseUrl: string }) => {
-    // categoryInfo will contain Id and name; Id will be used to fetch all of the passwords of that category from an endpoint on the backend
-
-    useEffect(() => {
-        axios.get($"")
-    })
+const CategorySection = ({ category, tiles }: { category: Category, tiles: JSX.Element[] }) => {
     return (
-        <div></div>
+        <div className={styles.CategorySection}>
+            <div className={styles.CategorySectionHeader}>
+                <span>{category.name} {`(${tiles.length})`}</span>
+            </div>
+            <div className={styles.CategorySectionGrid}>
+                {tiles}
+            </div>
+        </div>
     )
 }
+
+export default CategorySection;

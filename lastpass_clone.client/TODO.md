@@ -1,13 +1,13 @@
-- Reformat edit/new/view dialogue boxes
+- Reformat edit/new/view dialogue boxes - done for now
+
+- add grouping by category to main page
 - Add folders
 - Add favorites
 - Ensure that models are more accepting of different user inputs like blanks, wrong types etc.
-- reformat show details dialogue box
 - ensure that clicking on box takes user to website. When you hover over the tile, shows a launch button
 - Add sharing functionality
 - Ability to add attachments
 - Add sorting to main page
-- add grouping by category to main page
 - Ability to delete multiple items at once
 - Create single file for CreationUpdate modal formatting
 - fix scroll issue with tables

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, FC } from "react";
 import PasswordInfo from "../../Types/Password.ts"
 import Category from "../../Types/Category.ts"
 import styles from './styles.module.scss';
@@ -24,7 +24,8 @@ const Tile = (
         setActiveDatum,
         isDatumUpdateModalVisible,
         setIsDatumUpdateModalVisible,
-        baseUrl
+        baseUrl,
+        type
     }: {
         data: PasswordInfo | Note | Address | BankAccount | PaymentCard,
         isDatumVisible: boolean,
@@ -32,7 +33,8 @@ const Tile = (
         setActiveDatum: Dispatch<PasswordInfo | Note | Address | BankAccount | PaymentCard>,
         isDatumUpdateModalVisible: boolean,
         setIsDatumUpdateModalVisible: Dispatch<boolean>,
-        baseUrl: string
+        baseUrl: string,
+        type: string
     }) => {
     const tileUtils: TileUtilities = new TileUtilities(baseUrl);
     const typeChecker: TypeChecker = new TypeChecker();
@@ -64,7 +66,7 @@ const Tile = (
         } else if (typeChecker.IsNote(data)) {
             return data.noteName;
         } else if (typeChecker.IsAddress(data)) {
-            return data.addressName;
+            return data.name;
         } else if (typeChecker.IsBankAccount(data)) {
             return data.name;
         } else if (typeChecker.IsPaymentCard(data)) {

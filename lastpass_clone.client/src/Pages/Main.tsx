@@ -2,6 +2,7 @@ import { FC, useState, useEffect } from "react";
 import Tile from "../Components/Tile/Tile";
 import styles from "./styles.module.scss";
 import PasswordInfo from "../Types/PasswordInfo";
+import Password from "../Types/Password";
 import axios from "axios";
 import PasswordCreationUpdateForm from "../Components/Passwords/PasswordCreationUpdateForm/PasswordCreationUpdateForm";
 import Sidebar from "../Components/Sidebar/Sidebar";
@@ -17,14 +18,24 @@ import NewItemMenu from "../Components/NewItemMenu/NewItemMenu.tsx";
 import DataForm from "../Components/DataForm/DataForm.tsx";
 import BankAccountCreationUpdateForm from "../Components/BankAccount/BankAccountCreationUpdateForm/BankAccountCreationUpdateForm.tsx";
 import PaymentCardCreationUpdateForm from "../Components/PaymentCard/PaymentCardCreationUpdateForm/PaymentCardCreationUpdateForm.tsx";
+import CategorySection from "../Components/CategorySection/CategorySection.tsx";
+import TypeChecker from "../Other/TypeChecker.ts";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = () =>
 {
     const baseUrl: string = "https://localhost:7110"; // put this in ENV file at some point
 
+    // Categories
+    const [categories, setCategories] = useState<Category[]>();
+    const [currentCategoryId, setCurrentCategoryId] = useState<number>();
+    const [currentType, setCurrentType] = useState<string>("All Items");
+
     // New item menu
     const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
+
+    // All items
+    const [allItems, setAllItems] = useState<JSX.Element[]>();
 
     // Passwords
     const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
@@ -61,24 +72,145 @@ const Main: FC = () =>
     const [isPaymentCardVisible, setIsPaymentCardVIsible] = useState<boolean>(false);
     const [activePaymentCard, setActivePaymentCard] = useState<PaymentCard>();
 
-    const fetchData = async (url: string) => await axios.get(`${baseUrl}/${url}`).catch(error => console.log(error))
-    useEffect(() => {
-        const getData = async () => {
+    // Could create endpoint on backend that gets all items belonging to a particular category. Would simplify the frontend a good deal
+    // Currently, gets all items, sets states on the component for all items, creates tiles for all items, and groups them by category
+    const getData = () => {
+        axios
+            .get(`${baseUrl}/GetCategories`)
+            .then(response => {
+                const data = response.data;
+                setCategories(data);
+                setCurrentCategoryId(data.id);
+            })
+            .catch(error => {
+                console.log(error);
+            })
 
-            const passwords = await fetchData("GetAllPasswords");
-            const notes = await fetchData("GetNotes");
-            const addresses = await fetchData("GetAllAddresses");
-            const bankAccounts = await fetchData("GetBankAccounts");
-            const paymentCards = await fetchData("GetPaymentCards");
-            setPasswords(passwords.data);
-            setNotes(notes.data);
-            setAddresses(addresses.data);
-            setBankAccounts(bankAccounts.data);
-            setPaymentCards(paymentCards.data);
+        axios
+            .get(`${baseUrl}/GetAllPasswords`)
+            .then(r => setPasswords(r.data))
+            .catch(e => console.log(e));
+
+        axios
+            .get(`${baseUrl}/GetNotes`)
+            .then(r => setNotes(r.data))
+            .catch(e => console.log(e));
+
+        axios
+            .get(`${baseUrl}/GetAllAddresses`)
+            .then(r => setAddresses(r.data))
+            .catch(e => console.log(e));
+
+        axios
+            .get(`${baseUrl}/GetBankAccounts`)
+            .then(r => setBankAccounts(r.data))
+            .catch(e => console.log(e));
+
+        axios
+            .get(`${baseUrl}/GetPaymentCards`)
+            .then(r => setPaymentCards(r.data))
+            .catch(e => console.log(e));
+    }
+
+    const createTiles = () => {
+        const allItemsArr: JSX.Element[] = [];
+        passwords.map(password => (
+            allItemsArr.push(
+                <Tile
+                    data={password}
+                    isDatumVisible={isPasswordVisible}
+                    setIsDatumVisible={setIsPasswordVIsible}
+                    setActiveDatum={setActivePassword}
+                    isDatumUpdateModalVisible={isPasswordUpdateModalVisible}
+                    setIsDatumUpdateModalVisible={setIsPasswordUpdateModalVisible}
+                    baseUrl={baseUrl}
+                    type="Passwords"
+                />
+            )))
+
+        notes.map((note: Note) => (
+            allItemsArr.push(
+                <Tile
+                    data={note}
+                    isDatumVisible={isNoteVisible}
+                    setIsDatumVisible={setIsNoteVIsible}
+                    setActiveDatum={setActiveNote}
+                    isDatumUpdateModalVisible={isNoteUpdateModalVisible}
+                    setIsDatumUpdateModalVisible={setIsNoteUpdateModalVisible}
+                    baseUrl={baseUrl}
+                    type="Notes"
+                />
+            )))
+
+        addresses.map((address: Address) => (
+            allItemsArr.push(
+                <Tile
+                    data={address}
+                    isDatumVisible={isAddressVisible}
+                    setIsDatumVisible={setIsAddressVIsible}
+                    setActiveDatum={setActiveAddress}
+                    isDatumUpdateModalVisible={isAddressUpdateModalVisible}
+                    setIsDatumUpdateModalVisible={setIsAddressUpdateModalVisible}
+                    baseUrl={baseUrl}
+                    type="Addresses"
+                />
+            )))
+
+        bankAccounts.map((bankAccount: BankAccount) => (
+            allItemsArr.push(
+                <Tile
+                    data={bankAccount}
+                    isDatumVisible={isBankAccountVisible}
+                    setIsDatumVisible={setIsBankAccountVIsible}
+                    setActiveDatum={setActiveBankAccount}
+                    isDatumUpdateModalVisible={isBankAccountUpdateModalVisible}
+                    setIsDatumUpdateModalVisible={setIsBankAccountUpdateModalVisible}
+                    baseUrl={baseUrl}
+                    type="Bank Accounts"
+                />
+            )))
+
+        paymentCards.map((paymentCard: PaymentCard) => (
+            allItemsArr.push(
+                <Tile
+                    data={paymentCard}
+                    isDatumVisible={isPaymentCardVisible}
+                    setIsDatumVisible={setIsPaymentCardVIsible}
+                    setActiveDatum={setActivePaymentCard}
+                    isDatumUpdateModalVisible={isPaymentCardUpdateModalVisible}
+                    setIsDatumUpdateModalVisible={setIsPaymentCardUpdateModalVisible}
+                    baseUrl={baseUrl}
+                    type="Payment Cards"
+                />
+            )))
+
+        setAllItems(allItemsArr);
+    }
+
+    const createAllCategorySections = () => {
+        const categorySections: JSX.Element[] = [];
+        if (categories !== undefined) {
+            categories.forEach(category => {
+                if (allItems !== undefined) {
+                    let tiles = allItems.filter(element => element.props.data.categoryId === category.id);
+                    if (currentType !== "All Items") {
+                        tiles = tiles.filter(x => x.props.type === currentType);
+                    }
+                    categorySections.push(
+                        <CategorySection category={category} tiles={tiles} />
+                    )
+                }
+            });
         }
-        getData();
+        return categorySections;
+    }
 
+    useEffect(() => {
+        getData();
+        createTiles();
     }, [])
+
+    console.log(allItems);
 
     return (
         <div className={styles.Main} onClick={() => {
@@ -142,66 +274,12 @@ const Main: FC = () =>
             {isPaymentCardUpdateModalVisible && activePaymentCard && <PaymentCardCreationUpdateForm baseUrl={baseUrl} paymentCardData={activePaymentCard!} updateToggle={true} setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible} setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
             <div className={styles.SidebarWrapper}>
-                <Sidebar />
+                <Sidebar setCurrentType={setCurrentType} />
             </div>
             <div className={styles.GridNavbarWrapper}>
                 <Navbar />
                 <div className={styles.Grid}>
-                    {passwords && passwords.map((password: PasswordInfo) => (
-                        <Tile
-                            data={password}
-                            isDatumVisible={isPasswordVisible}
-                            setIsDatumVisible={setIsPasswordVIsible}
-                            setActiveDatum={setActivePassword}
-                            isDatumUpdateModalVisible={isPasswordUpdateModalVisible}
-                            setIsDatumUpdateModalVisible={setIsPasswordUpdateModalVisible}
-                            baseUrl={baseUrl}
-                        />
-                    ))}
-                    {notes && notes.map((note: Note) => (
-                        <Tile
-                            data={note}
-                            isDatumVisible={isNoteVisible}
-                            setIsDatumVisible={setIsNoteVIsible}
-                            setActiveDatum={setActiveNote}
-                            isDatumUpdateModalVisible={isNoteUpdateModalVisible}
-                            setIsDatumUpdateModalVisible={setIsNoteUpdateModalVisible}
-                            baseUrl={baseUrl}
-                        />
-                    ))}
-                    {addresses && addresses.map((address: Address) => (
-                        <Tile
-                            data={address}
-                            isDatumVisible={isAddressVisible}
-                            setIsDatumVisible={setIsAddressVIsible}
-                            setActiveDatum={setActiveAddress}
-                            isDatumUpdateModalVisible={isAddressUpdateModalVisible}
-                            setIsDatumUpdateModalVisible={setIsAddressUpdateModalVisible}
-                            baseUrl={baseUrl}
-                        />
-                    ))}
-                    {bankAccounts && bankAccounts.map((bankAccount: BankAccount) => (
-                        <Tile
-                            data={bankAccount}
-                            isDatumVisible={isBankAccountVisible}
-                            setIsDatumVisible={setIsBankAccountVIsible}
-                            setActiveDatum={setActiveBankAccount}
-                            isDatumUpdateModalVisible={isBankAccountUpdateModalVisible}
-                            setIsDatumUpdateModalVisible={setIsBankAccountUpdateModalVisible}
-                            baseUrl={baseUrl}
-                        />
-                    ))}
-                    {paymentCards && paymentCards.map((paymentCard: PaymentCard) => (
-                        <Tile
-                            data={paymentCard}
-                            isDatumVisible={isPaymentCardVisible}
-                            setIsDatumVisible={setIsPaymentCardVIsible}
-                            setActiveDatum={setActivePaymentCard}
-                            isDatumUpdateModalVisible={isPaymentCardUpdateModalVisible}
-                            setIsDatumUpdateModalVisible={setIsPaymentCardUpdateModalVisible}
-                            baseUrl={baseUrl}
-                        />
-                    ))}
+                    {createAllCategorySections()}
                 </div>
             </div>
         </div>)
