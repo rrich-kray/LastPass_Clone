@@ -1,0 +1,29 @@
+.ErrorMessage {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    animation: fade 5s linear;
+}
+
+@keyframes fade {
+    0%,100% {
+        opacity: 0
+    }
+
+    14% {
+        opacity: 1;
+    }
+
+    86% {
+        opacity: 1;
+    }
+
+}
+
+.ErrorMessage span {
+    color: white;
+    text-align: center;
+}

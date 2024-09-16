@@ -11,6 +11,7 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
 
     }
@@ -19,7 +20,7 @@ namespace PasswordManager.Server.Data.Entities
     {
         public CategoryEntityValidator()
         {
-            RuleFor(x => x.Name).Length(1, 250);
+            RuleFor(x => x.Name).Length(250).WithMessage("Name must be less than 255 characters");
         }
     }
 }

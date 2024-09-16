@@ -29,7 +29,10 @@ namespace PasswordManager.Server.Utilities
                 response.Result = false;
                 List<string> errorMessages = new List<string>();
                 foreach (var errorMessage in validationResult.Errors)
-                    errorMessages.Add(errorMessage.ErrorMessage);
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error: {errorMessage.ErrorMessage}");
+                    errorMessages.Add(errorMessage.ErrorMessage.ToString());
+                }
                 response.Message = errorMessages;
                 return response;
             }

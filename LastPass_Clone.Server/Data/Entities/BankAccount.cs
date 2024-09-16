@@ -14,48 +14,39 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
+        [Required]
         public string Name { get; set; }
-        public string BankName { get; set; }
-        public string AccountType { get; set; }
-        public int RoutingNumber { get; set; }
-        public int AccountNumber { get; set; }
-        public int SWIFTCode { get; set; }
-        public string IBANNumber { get; set; }
-        public int PIN {  get; set; }
-        public string BranchAddress { get; set; }
-        public int BranchPhone { get; set; }
-        public string Notes { get; set; }
+        public string? BankName { get; set; }
+        public string? AccountType { get; set; }
+        public string? RoutingNumber { get; set; }
+        public string? AccountNumber { get; set; }
+        public string? SWIFTCode { get; set; }
+        public string? IBANNumber { get; set; }
+        public string? PIN {  get; set; }
+        public string? BranchAddress { get; set; }
+        public string? BranchPhone { get; set; }
+        public string? Notes { get; set; }
     }
 
     public class BankAccountEntityValidator : AbstractValidator<BankAccount>
     {
         public BankAccountEntityValidator()
         {
-            //RuleFor(x => x.Name).Length(250).WithMessage("Name must be between 1 and 250 characters in length.");
-            //RuleFor(x => x.BankName).Length(250).WithMessage("Bank Name must be between 1 and 250 characters in length.");
-            // RuleFor(x => x.AccountType).Must(BeValidAccountType).WithMessage("Not a valid checking account type.");
-            // RuleFor(x => x.RoutingNumber).Must(BeValidRoutingNumber).WithMessage("Invalid routing number provided.");
-            // RuleFor(x => x.SWIFTCode).Must(BeValidSWIFTCode).WithMessage("Invalid SWIFT code provided.");
-            // RuleFor(x => x.IBANNumber).Must(BeValidIBANNumber).WithMessage("Invalid IBAN code provided.");
-            // RuleFor(x => x.Notes).Length(1, 1000).WithMessage("Notes can be no longer than 1000 characters in length");
+            RuleFor(x => x.Name).Length(1, 255).WithMessage("Name must be between 1 and 255 characters.");
+            When(x => x.BankName != "", () => RuleFor(x => x.BankName).Length(1, 255).WithMessage("When it exists, bank name must be between 1 and 255 characters in length."));
+            When(x => x.AccountType != "", () => RuleFor(x => x.AccountType).Length(1, 255).WithMessage("When it exists, account type must be between 1 and 255 characters in length."));
+            When(x => x.BranchAddress != "", () => RuleFor(x => x.BranchAddress).Length(1, 255).WithMessage("When it exists, branch address must be between 1 and 255 characters in length."));
+            When(x => x.Notes != "", () => RuleFor(x => x.Notes).Length(1, 10000).WithMessage("When it exists, notes must be between 1 and 10000 characters in length."));
+            When(x => x.RoutingNumber != "", () => RuleFor(x => x.RoutingNumber).Length(9).WithMessage("When it exists, the routing number must be 9 digits in length."));
+            When(x => x.AccountNumber != "", () => RuleFor(x => x.AccountNumber).Length(1, 255).WithMessage("When it exists, the account number must be between 1 and 255 characters in length."));
+            When(x => x.IBANNumber != "", () => RuleFor(x => x.IBANNumber).Length(1, 34).WithMessage("When it exists, IBAN number must be between 1 and 34 characters in length."));
+            When(x => x.SWIFTCode != "", () => RuleFor(x => x.SWIFTCode).Length(1, 255).WithMessage("Invalid SWIFT code provided."));
         }
 
-        // Could also just create an enum
-        private bool BeValidAccountType(string accountType) =>
-            accountType.Equals("Checking", StringComparison.OrdinalIgnoreCase) || accountType.Equals("Savings", StringComparison.OrdinalIgnoreCase);
-
-        private bool BeValidRoutingNumber(int routingNumber)
+        private bool BeValidSWIFTCode(string swiftCode)
         {
-            bool isCorrectLength = routingNumber.ToString().Length == 9;
-            return isCorrectLength;
-        }
-
-        private bool BeValidSWIFTCode(int swiftCode)
-        {
-            string code = swiftCode.ToString();
-            bool isValidLength = code.Length >= 8 && code.Length <= 11;
-            return isValidLength;
+            return new Regex(@"^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$").Matches(swiftCode).Any();
         }
 
         private bool BeValidIBANNumber(string IBANNumber)

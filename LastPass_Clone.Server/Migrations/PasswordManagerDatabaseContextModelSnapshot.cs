@@ -24,66 +24,54 @@ namespace LastPass_Clone.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Address1")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address2")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address3")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Birthday")
+                    b.Property<DateTime?>("Birthday")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Company")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("County")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EmailAddress")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("EveningPhone")
+                    b.Property<int?>("EveningPhone")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Fax")
+                    b.Property<int?>("Fax")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MobilePhone")
+                    b.Property<int?>("MobilePhone")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -91,25 +79,21 @@ namespace LastPass_Clone.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PhoneNumber")
+                    b.Property<int?>("PhoneNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("State")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ZipCode")
+                    b.Property<int?>("ZipCode")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -125,29 +109,25 @@ namespace LastPass_Clone.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccountNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AccountType")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BankName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BranchAddress")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("BranchPhone")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("BranchPhone")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("IBANNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -155,17 +135,16 @@ namespace LastPass_Clone.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PIN")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("PIN")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RoutingNumber")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RoutingNumber")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("SWIFTCode")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("SWIFTCode")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -232,11 +211,10 @@ namespace LastPass_Clone.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -256,7 +234,7 @@ namespace LastPass_Clone.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -264,19 +242,15 @@ namespace LastPass_Clone.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Website")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -292,10 +266,10 @@ namespace LastPass_Clone.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("ExpirationDate")
+                    b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -303,24 +277,21 @@ namespace LastPass_Clone.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NameOnCard")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Number")
+                    b.Property<string>("Number")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SecurityCode")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SecurityCode")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -334,45 +305,35 @@ namespace LastPass_Clone.Server.Migrations
                 {
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.BankAccount", b =>
                 {
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.Note", b =>
                 {
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PasswordInfo", b =>
                 {
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PaymentCard", b =>
                 {
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
                 });
 #pragma warning restore 612, 618
         }

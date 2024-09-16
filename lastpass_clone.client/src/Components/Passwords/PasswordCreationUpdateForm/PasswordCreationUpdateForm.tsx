@@ -4,6 +4,8 @@ import axios from "axios";
 import Password from "../../../Types/Password";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
+import AlertMessage from "../../AlertMessage/AlertMessage";
+import ComponentUtilities from "../../../Other/ComponentUtilities";
 
 const PasswordCreationUpdateForm =
     ({
@@ -11,35 +13,32 @@ const PasswordCreationUpdateForm =
         updateToggle,
         passwordData,
         setIsPasswordCreationModalVisible,
-        setIsPasswordUpdateModalVisible
+        setIsPasswordUpdateModalVisible,
+        setAlerts,
+        setIsAlertModalVisible
     }: {
             baseUrl: string,
             updateToggle: boolean,
             passwordData: Password,
             setIsPasswordCreationModalVisible: Dispatch<boolean>,
-            setIsPasswordUpdateModalVisible: Dispatch<boolean>
+            setIsPasswordUpdateModalVisible: Dispatch<boolean>,
+            setAlerts: Dispatch<JSX.Element[]>,
+            setIsAlertModalVisible: Dispatch<boolean>
     }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
-    const [formState, setFormState] = useState({
-        Name: "",
-        Website: "",
-        Username: "",
-        Password: "",
-        Notes: "",
-    })
+        const [formState, setFormState] = useState({
+            Name: "",
+            Website: "",
+            Username: "",
+            Password: "",
+            Notes: "",
+        });
+
+        const componentUtils = new ComponentUtilities(setAlerts, setIsAlertModalVisible);
 
     useEffect(() => {
-        axios
-            .get(`${baseUrl}/GetCategories`)
-            .then(response => {
-                const data = response.data;
-                setCategories(data);
-                setCurrentCategoryId(data.id);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        componentUtils.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
     const handleChange = (e) => {
@@ -54,6 +53,10 @@ const PasswordCreationUpdateForm =
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const reset = () => {
+            setAlerts([]);
+            setIsAlertModalVisible(false);
+        }
         return await
             !updateToggle
             ? axios.post(
@@ -66,6 +69,24 @@ const PasswordCreationUpdateForm =
                     notes: formState.Notes,
                     categoryId: currentCategoryId!
                 })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Password Creation successful!";
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
             : axios.put(
                 `${baseUrl}/UpdatePassword`,
                 {
@@ -76,7 +97,25 @@ const PasswordCreationUpdateForm =
                     Password: formState.Password,
                     Notes: formState.Notes,
                     CategoryId: currentCategoryId
-                });
+                })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Password update successful!"
+                        const alerts: JSX.Element[] = [ <AlertMessage message={message} color={"green"} /> ];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
     }
 
     return (

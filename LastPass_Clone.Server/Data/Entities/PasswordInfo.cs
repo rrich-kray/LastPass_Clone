@@ -12,27 +12,40 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
+        [Required]
         public string Name { get; set; }
-        public string Website { get; set; }
-        [Required]
-        public string Username { get; set; }
-        [Required]
-        public string Password { get; set; }
-        public string Notes { get; set; }
+        public string? Website { get; set; }
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+        public string? Notes { get; set; }
         
     }
     public class PasswordEntityValidator : AbstractValidator<PasswordInfo>
     {
         public PasswordEntityValidator()
         {
-            //RuleFor(x => x.Website).Must(BeValidDomain).WithMessage("Website provided is not valid.");
-            RuleFor(x => x.Username).NotEmpty().WithMessage("Username cannot be empty.");
-            RuleFor(x => x.Password).NotEmpty().WithMessage("Password cannot be empty.");
-        }
+            RuleFor(x => x.Website)
+                .Length(1, 500)
+                .When(x => x.Website != "")
+                .WithMessage("Website cannot be greater than 500 characters in length");
 
-        private bool BeValidDomain(string website) =>
-            new Regex(@"^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$").Matches(website).Any();
+            RuleFor(x => x.Username)
+                .Length(1, 500)
+                .When(x => x.Username != "")
+                .WithMessage("Username cannot be greater than 500 characters in length");
+
+            RuleFor(x => x.Password)
+                .Length(1, 500)
+                .When(x => x.Password != "")
+                .WithMessage("Password cannot be greater than 500 characters in length");
+
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .WithMessage("Name is required")
+                .Length(1, 500)
+                .WithMessage("Name cannot be greater than 500 characters in length.");
+        }
     }
 
 }

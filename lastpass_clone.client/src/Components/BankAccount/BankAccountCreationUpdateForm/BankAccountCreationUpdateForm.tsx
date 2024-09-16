@@ -4,6 +4,7 @@ import axios from "axios";
 import BankAccount from "../../../Types/BankAccount";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
+import AlertMessage from "../../AlertMessage/AlertMessage";
 
 const BankAccountCreationUpdateForm = (
     {
@@ -11,13 +12,17 @@ const BankAccountCreationUpdateForm = (
         updateToggle,
         bankAccountData,
         setIsBankAccountCreationModalVisible,
-        setIsBankAccountUpdateModalVisible
+        setIsBankAccountUpdateModalVisible,
+        setAlerts,
+        setIsAlertModalVisible
     }: {
             baseUrl: string,
             updateToggle: boolean,
             bankAccountData: BankAccount,
             setIsBankAccountCreationModalVisible: Dispatch<boolean>,
-            setIsBankAccountUpdateModalVisible: Dispatch<boolean>
+            setIsBankAccountUpdateModalVisible: Dispatch<boolean>,
+            setAlerts: Dispatch<JSX.Element[]>,
+            setIsAlertModalVisible: Dispatch<boolean>
     }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
@@ -25,13 +30,13 @@ const BankAccountCreationUpdateForm = (
         Name: "",
         BankName: "",
         AccountType: "",
-        RoutingNumber: 0,
-        AccountNumber: 0,
-        SwiftCode: 0,
+        RoutingNumber: "",
+        AccountNumber: "",
+        SwiftCode: "",
         IbanNumber: "",
-        Pin: 0,
+        Pin: "",
         BranchAddress: "",
-        BranchPhone: 0,
+        BranchPhone: "",
         Notes: ""
     })
 
@@ -59,6 +64,10 @@ const BankAccountCreationUpdateForm = (
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
     const handleFormSubmit = async (e) => {
+        const reset = () => {
+            setAlerts([]);
+            setIsAlertModalVisible(false);
+        }
         e.preventDefault();
         return await
             !updateToggle
@@ -77,6 +86,24 @@ const BankAccountCreationUpdateForm = (
                     BranchPhone: formState.BranchPhone,
                     Notes: formState.Notes
                 })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Bank account creation successful!"
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
             : axios.put(
                 `${baseUrl}/UpdateBankAccount`,
                 {
@@ -93,7 +120,25 @@ const BankAccountCreationUpdateForm = (
                     BranchAddress: formState.BranchAddress,
                     BranchPhone: formState.BranchPhone,
                     Notes: formState.Notes
-                });
+                })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Bank account Update successful!"
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
     }
 
     return (
@@ -136,13 +181,13 @@ const BankAccountCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>Routing Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="RoutingNumber" id="RoutingNumber" placeholder={updateToggle ? bankAccountData.routingNumber : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input type="number" name="RoutingNumber" id="RoutingNumber" placeholder={updateToggle ? bankAccountData.routingNumber : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Account Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="AccountNumber" id="AccountNumber" placeholder={updateToggle ? bankAccountData.accountNumber : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input type="number" name="AccountNumber" id="AccountNumber" placeholder={updateToggle ? bankAccountData.accountNumber : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
@@ -160,7 +205,7 @@ const BankAccountCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>PIN</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Pin" id="Pin" placeholder={updateToggle ? bankAccountData.PIN : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input type="number" name="Pin" id="Pin" placeholder={updateToggle ? bankAccountData.PIN : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>

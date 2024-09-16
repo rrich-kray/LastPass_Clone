@@ -34,15 +34,6 @@ namespace PasswordManager.Server.Controllers
         [HttpPost]
         public Response CreatePassword([FromBody] PasswordInfo passwordInfo)
         {
-            if (!ModelState.IsValid)
-            {
-                return new Response()
-                {
-                    Result = false,
-                    Message = new List<string>() { $"Body could not be mapped to object" }
-                };
-            }
-
             return ControllerUtils.CommonControllerCreate(
                 validator: new PasswordEntityValidator(),
                 validatee: passwordInfo,

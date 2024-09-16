@@ -6,7 +6,7 @@ import PaymentCard from "../../../Types/PaymentCard";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegStar } from "react-icons/fa";
-
+import AlertMessage from "../../AlertMessage/AlertMessage";
 
 const PaymentCardCreationUpdateForm = (
     {
@@ -14,13 +14,17 @@ const PaymentCardCreationUpdateForm = (
         updateToggle,
         paymentCardData,
         setIsPaymentCardCreationModalVisible,
-        setIsPaymentCardUpdateModalVisible
+        setIsPaymentCardUpdateModalVisible,
+        setAlerts,
+        setIsAlertModalVisible
     }: {
             baseUrl: string,
             updateToggle: boolean,
             paymentCardData: PaymentCard,
             setIsPaymentCardCreationModalVisible: Dispatch<boolean>,
-            setIsPaymentCardUpdateModalVisible: Dispatch<boolean>
+            setIsPaymentCardUpdateModalVisible: Dispatch<boolean>,
+            setAlerts: Dispatch<JSX.Element[]>,
+            setIsAlertModalVisible: Dispatch<boolean>
     }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
@@ -59,6 +63,10 @@ const PaymentCardCreationUpdateForm = (
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
     const handleFormSubmit = async (e) => {
+        const reset = () => {
+            setAlerts([]);
+            setIsAlertModalVisible(false);
+        }
         e.preventDefault();
         return await
             !updateToggle
@@ -74,6 +82,24 @@ const PaymentCardCreationUpdateForm = (
                     ExpirationDate: formState.ExpirationDate,
                     Notes: formState.Notes
                 })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Payment card successful!"
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
             : axios.put(
                 `${baseUrl}/UpdatePaymentCard`,
                 {
@@ -87,7 +113,25 @@ const PaymentCardCreationUpdateForm = (
                     StartDate: formState.StartDate,
                     ExpirationDate: formState.ExpirationDate,
                     Notes: formState.Notes
-                });
+                })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Payment card update successful!";
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
     }
 
     return (

@@ -1,9 +1,13 @@
 - Reformat edit/new/view dialogue boxes - done for now
-
-- add grouping by category to main page
-- Add folders
-- Add favorites
+- add grouping by category to main page - done
+- Add displaying items by type - done
+- Add folders - Done, categories are basically folders
+- Fix tile loading - Done
+- Fix entity validation on 
 - Ensure that models are more accepting of different user inputs like blanks, wrong types etc.
+
+- Add user authentication
+- Add favorites
 - ensure that clicking on box takes user to website. When you hover over the tile, shows a launch button
 - Add sharing functionality
 - Ability to add attachments

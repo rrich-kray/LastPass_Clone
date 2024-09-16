@@ -6,7 +6,7 @@ import Address from "../../../Types/Address";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegStar } from "react-icons/fa";
-
+import AlertMessage from "../../AlertMessage/AlertMessage";
 
 const AddressCreationUpdateForm = (
     {
@@ -14,14 +14,18 @@ const AddressCreationUpdateForm = (
         updateToggle,
         addressData,
         setIsAddressCreationModalVisible,
-        setIsAddressUpdateModalVisible
+        setIsAddressUpdateModalVisible,
+        setAlerts,
+        setIsAlertModalVisible
     }:
         {
             baseUrl: string,
             updateToggle: boolean,
             addressData: Address,
             setIsAddressCreationModalVisible: Dispatch<boolean>,
-            setIsAddressUpdateModalVisible: Dispatch<boolean>
+            setIsAddressUpdateModalVisible: Dispatch<boolean>,
+            setAlerts: Dispatch<JSX.Element[]>,
+            setIsAlertModalVisible: Dispatch<boolean>
         }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
@@ -76,10 +80,14 @@ const AddressCreationUpdateForm = (
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const reset = () => {
+            setAlerts([]);
+            setIsAlertModalVisible(false);
+        }
         return await
             !updateToggle
             ? axios.post(
-                `${baseUrl}/CreateAddress`, 
+                `${baseUrl}/CreateAddress`,
                 {
                     categoryId: currentCategoryId!,
                     name: formState.Name,
@@ -105,6 +113,24 @@ const AddressCreationUpdateForm = (
                     mobilePhone: formState.MobilePhone,
                     fax: formState.Fax,
                     notes: formState.Notes
+                })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Address creation successful!"
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
                 })
             : axios.put(
                 `${baseUrl}/UpdateAddress`,
@@ -134,6 +160,24 @@ const AddressCreationUpdateForm = (
                     mobilePhone: formState.MobilePhone,
                     fax: formState.Fax,
                     notes: formState.Notes
+                })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Address update successful!"
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
                 });
     }
 

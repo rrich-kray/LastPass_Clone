@@ -4,6 +4,7 @@ import axios from "axios";
 import Note from "../../../Types/Note";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
+import AlertMessage from "../../AlertMessage/AlertMessage"
 
 const NoteCreationUpdateForm = (
     {
@@ -11,13 +12,17 @@ const NoteCreationUpdateForm = (
         setIsNoteUpdateModalVisible,
         baseUrl,
         updateToggle,
-        noteData
+        noteData,
+        setAlerts,
+        setIsAlertModalVisible
     }: {
             setIsNoteCreationModalVisible: Dispatch<boolean>,
             setIsNoteUpdateModalVisible: Dispatch<boolean>,
             baseUrl: string,
             updateToggle: boolean,
-            noteData: Note
+            noteData: Note,
+            setNotes: Dispatch<JSX.Element[]>,
+            setIsNoteModalVisible: Dispatch<boolean>
     }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
@@ -51,6 +56,10 @@ const NoteCreationUpdateForm = (
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const reset = () => {
+            setAlerts([]);
+            setIsAlertModalVisible(false);
+        }
         return await
             !updateToggle
             ? axios.post(
@@ -60,6 +69,24 @@ const NoteCreationUpdateForm = (
                     Content: formState.Content,
                     CategoryId: currentCategoryId
                 })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Note Creation successful!";
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
+                })
             : axios.put(
                 `${baseUrl}/UpdateNote`,
                 {
@@ -67,6 +94,24 @@ const NoteCreationUpdateForm = (
                     Name: formState.Name,
                     Content: formState.Content,
                     CategoryId: currentCategoryId!
+                })
+                .then(response => {
+                    if (response.data.result === false) {
+                        const errors: JSX.Element[] = [];
+                        response.data.message.forEach((message: string) => {
+                            errors.push(<AlertMessage message={message} color={"red"} />);
+                        });
+                        setAlerts(errors);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                        return;
+                    } else {
+                        const message: string = "Note Update successful!"
+                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
+                        setAlerts(alerts);
+                        setIsAlertModalVisible(true);
+                        setTimeout(reset, 3000);
+                    }
                 });
     }
     return (

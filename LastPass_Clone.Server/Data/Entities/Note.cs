@@ -14,18 +14,23 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
-        public int CategoryId { get; set; }
-        public string Name { get; set; }
+        public int? CategoryId { get; set; }
         [Required]
-        public string Content { get; set; }
+        public string Name { get; set; }
+        public string? Content { get; set; }
     }
 
     public class NoteEntityValidator : AbstractValidator<Note>
     {
         public NoteEntityValidator()
         {
-            //RuleFor(x => x.Content).Length(10000).WithMessage("Length of note content must be less than 10000 characters");
-            RuleFor(x => x.Name).Length(1, 255).WithMessage("Length of Note Name must be less than 255 characters.");
+            RuleFor(x => x.Content)
+                .Length(10000)
+                .When(x => x.Content != "")
+                .WithMessage("Length of note content must be less than 10000 characters");
+            RuleFor(x => x.Name)
+                .Length(1, 500)
+                .WithMessage("Name cannot be greater than 255 characters in length.");
         }
     }
 }
