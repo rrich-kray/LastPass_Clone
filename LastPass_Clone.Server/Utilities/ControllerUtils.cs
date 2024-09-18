@@ -40,7 +40,7 @@ namespace PasswordManager.Server.Utilities
             {
                 repository.Create(validatee);
                 response.Result = true;
-                response.Message = new List<string> { $"{validatee.GetType().Name} creation successful." };
+                response.Message = new List<string> { $"{validatee.GetType().Name} creation successful."};
             }
             catch (Exception ex)
             {

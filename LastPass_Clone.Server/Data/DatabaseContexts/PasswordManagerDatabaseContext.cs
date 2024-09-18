@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using PasswordManager.Server.Data.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PasswordManager.Server.Data.DatabaseContexts
 {
-    public class PasswordManagerDatabaseContext : DbContext
+    public class PasswordManagerDatabaseContext : IdentityDbContext<User>
     {
         public PasswordManagerDatabaseContext(DbContextOptions<PasswordManagerDatabaseContext> options) : base(options) { }
         public DbSet<PasswordInfo> Passwords { get; set; }
@@ -14,6 +15,7 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<User> Users {  get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -41,6 +43,8 @@ namespace PasswordManager.Server.Data.DatabaseContexts
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
+
+            modelBuilder.Entity<User>();
 
             modelBuilder.Entity<Category>().HasData(
                     new Category

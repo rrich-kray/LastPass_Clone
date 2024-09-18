@@ -25,7 +25,7 @@ namespace PasswordManager.Server.Data.Entities
         public NoteEntityValidator()
         {
             RuleFor(x => x.Content)
-                .Length(10000)
+                .Length(1, 10000)
                 .When(x => x.Content != "")
                 .WithMessage("Length of note content must be less than 10000 characters");
             RuleFor(x => x.Name)
