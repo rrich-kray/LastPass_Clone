@@ -4,9 +4,36 @@ using PasswordManager.Server.Data.Repositories;
 using PasswordManager.Server.Middleware;
 using PasswordManager.Server.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using PasswordManager.Server.Services.JwtAuth;
+using Microsoft.AspNetCore.Mvc;
 
+public class LoginReq
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.PrivateKey)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+builder.Services.AddTransient<AuthService>();
+builder.Services.AddAuthorization();
 
 // Add services to the container.
 builder.Services.AddControllers().AddNewtonsoftJson();
@@ -28,7 +55,11 @@ builder.Services.AddScoped<NoteRepository, NoteRepository>();
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 //app.UseNoHtmlMiddleware();
+
 
 app.UseCors(builder => 
     builder
@@ -50,8 +81,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireAuthorization();
 
 app.MapFallbackToFile("/index.html");
+
+
+app.MapGet("/login", ([FromBody] LoginReq loginReq, AuthService service) =>
+{
+
+});
 
 app.Run();
