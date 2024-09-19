@@ -11,12 +11,6 @@ using System.Text;
 using PasswordManager.Server.Services.JwtAuth;
 using Microsoft.AspNetCore.Mvc;
 
-public class LoginReq
-{
-    public string Email { get; set; }
-    public string Password { get; set; }
-}
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(x =>
@@ -85,10 +79,5 @@ app.MapControllers().RequireAuthorization();
 
 app.MapFallbackToFile("/index.html");
 
-
-app.MapGet("/login", ([FromBody] LoginReq loginReq, AuthService service) =>
-{
-
-});
 
 app.Run();

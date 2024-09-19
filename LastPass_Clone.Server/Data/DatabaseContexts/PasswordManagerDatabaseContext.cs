@@ -14,9 +14,11 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>();
             modelBuilder.Entity<Note>()
                 .HasOne<Category>()
                 .WithMany()
