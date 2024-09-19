@@ -73,7 +73,7 @@ namespace PasswordManager.Server.Controllers
         }
 
         [HttpGet]
-        [Route("/PingAuth")]
+        [Route("/VerifyToken")]
         public async Task<IResult> PingAuth()
         {
             return Results.Json(new AuthenticationResponse { Result = true, Message = "This route is guarded. If this request succeeded, the user possesses a valid JWT."});
