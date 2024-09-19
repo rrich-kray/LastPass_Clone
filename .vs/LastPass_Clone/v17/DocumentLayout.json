@@ -52,7 +52,7 @@
               "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
               "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
-              "ViewState": "AQIAALAAAAAAAAAAAAAgwFgAAABOAAAA",
+              "ViewState": "AQIAALAAAAAAAAAAAAAgwMYAAABbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2024-09-19T12:11:58.278Z",
               "EditorCaption": ""
@@ -67,8 +67,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\App.tsx",
               "ViewState": "AQIAAAwAAAAAAAAAAAAAABUAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-09-19T12:10:04.92Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-19T12:10:04.92Z"
             },
             {
               "$type": "Document",
@@ -80,8 +79,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Services\\JWT\\JwtConfiguration.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAABcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T20:25:10.788Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T20:25:10.788Z"
             },
             {
               "$type": "Document",
