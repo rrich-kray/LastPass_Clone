@@ -44,7 +44,7 @@
               "RelativeDocumentMoniker": "LastPass_Clone.Server\\Services\\JWT\\JwtConfiguration.cs",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\Services\\JWT\\JwtConfiguration.cs",
               "RelativeToolTip": "LastPass_Clone.Server\\Services\\JWT\\JwtConfiguration.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAABcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-18T20:25:10.788Z",
               "EditorCaption": ""
@@ -59,8 +59,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Services\\JWT\\AuthService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T20:24:51.091Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T20:24:51.091Z"
             },
             {
               "$type": "Document",
@@ -72,8 +71,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Data\\Entities\\User.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAABUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T13:39:47.667Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T13:39:47.667Z"
             },
             {
               "$type": "Document",
@@ -85,8 +83,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Program.cs",
               "ViewState": "AQIAAEIAAAAAAAAAAAAvwFgAAABXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T13:17:13.753Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T13:17:13.753Z"
             },
             {
               "$type": "Document",
@@ -98,8 +95,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Controllers\\PasswordsController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAABAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T13:11:52.388Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T13:11:52.388Z"
             },
             {
               "$type": "Document",
@@ -111,8 +107,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Controllers\\UserController.cs",
               "ViewState": "AQIAAD8AAAAAAAAAAAAQwFEAAABDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T13:11:16.621Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T13:11:16.621Z"
             }
           ]
         }
