@@ -1,0 +1,98 @@
+.RegisterPage {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9fafc;
+}
+
+.RegisterForm {
+    //height: 500px;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 4px 0px;
+    background-color: white;
+    padding: 30px 50px;
+}
+
+.RegisterLogoContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.RegisterHeader {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 0.5px solid gray
+}
+
+.RegisterHeaderLeftPanel {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.RegisterHeaderLeftPanel span {
+    font-weight: bold;
+    font-size: 20px
+}
+
+.RegisterHeaderRightPanel {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.RegisterInputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.RegisterInputContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.RegisterInputContainer span {
+    align-self: flex-start;
+}
+
+.RegisterInput {
+    width: 100%;
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: #fdfbcb
+}
+
+.RegisterButtons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.RegisterSubmitBtn {
+    height: 50px;
+    width: 100%;
+    border-radius: 25px;
+    background-color: #ba3e34;
+    color: white;
+}

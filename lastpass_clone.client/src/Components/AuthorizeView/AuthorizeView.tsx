@@ -1,17 +1,17 @@
-import { useState, useEffect, ReactNode, createContext } from "react";
+import { useState, useEffect, ReactNode, createContext, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import axios from "axios";
 
-interface User { email: string; }
-
-const UserContext = createContext({});
+// Component must make request to VerifyToken.
+// If UserContext is empty, or response comes back with a 401 error, return
+// If response is 200, setAuthorized to true
+// Can take it a step further by saving token in a cookie, saving that to local storage, and extracting it in this component
 
 const AuthorizeView = (props: { children: ReactNode }) => {
     const [authorized, setAuthorized] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
-    const emptyUser: User = { email: "" };
-    const [user, setUser] = useState<User>(emptyUser);
+    const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
         let retryCount: number = 0;
@@ -28,7 +28,6 @@ const AuthorizeView = (props: { children: ReactNode }) => {
 
                 if (response.status == 200) {
                     console.log(authorized);
-                    setUser({ email: j.email });
                     setAuthorized(true);
                     return response;
                 } else if (response.status === 401) {
