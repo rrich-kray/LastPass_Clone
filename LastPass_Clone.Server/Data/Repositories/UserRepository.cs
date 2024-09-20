@@ -13,12 +13,13 @@ namespace PasswordManager.Server.Data.Repositories
 
         public IEnumerable<User> User => this.PasswordManagerDatabaseContext.Users;
 
-        public void Create(User user)
+        public User Create(User user)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.Users.Add(user);
+                var newUser = this.PasswordManagerDatabaseContext.Users.Add(user);
                 this.SaveChanges();
+                return newUser.Entity;
             }
             catch (Exception ex)
             {
@@ -26,12 +27,13 @@ namespace PasswordManager.Server.Data.Repositories
             }
         }
 
-        public void Update(User user)
+        public User Update(User user)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.Users.Update(user);
+                var updatedUser = this.PasswordManagerDatabaseContext.Users.Update(user);
                 this.SaveChanges();
+                return updatedUser.Entity;
 
             }
             catch (Exception ex)

@@ -53,12 +53,14 @@ namespace PasswordManager.Server.Controllers
         [Route("/Register")]
         public async Task<IResult> Register([FromBody] User user)
         {
-            var doesEmailExist = this.UserRepository.User.FirstOrDefault(x => x.Email == user.Email) is null;
+            var doesEmailExist = this.UserRepository.User.FirstOrDefault(x => x.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase)) is not null;
             if (doesEmailExist)
             {
                 return Results.Json(new AuthenticationResponse { Result = false, Message = "The provided email already exists for another user." });
             }
-            var newUser = new User 
+
+            var newUser = this.UserRepository.Create(
+                new User
             {
                 Email = user.Email,
                 Password = user.Password,
@@ -66,15 +68,15 @@ namespace PasswordManager.Server.Controllers
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,
                 Roles = user.Roles,
-            };
+            });
 
-            string token = new AuthService().Create(user);
-            return Results.Json(new AuthenticationResponse { UserId = user.Id, Result = true, Token = token, Message = "Account creation successful." });
+            string token = new AuthService().Create(newUser);
+            return Results.Json(new AuthenticationResponse { UserId = newUser.Id, Result = true, Token = token, Message = "Account creation successful." });
         }
 
         [HttpGet]
         [Route("/VerifyToken")]
-        public async Task<IResult> PingAuth()
+        public async Task<IResult> VerifyToken()
         {
             return Results.Json(new AuthenticationResponse { Result = true, Message = "This route is guarded. If this request succeeded, the user possesses a valid JWT."});
         }

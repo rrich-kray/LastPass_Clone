@@ -46,6 +46,7 @@ builder.Services.AddScoped<CategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<PasswordRepository, PasswordRepository>();
 builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
 builder.Services.AddScoped<NoteRepository, NoteRepository>();
+builder.Services.AddScoped<UserRepository, UserRepository>();
 
 var app = builder.Build();
 

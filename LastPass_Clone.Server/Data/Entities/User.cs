@@ -9,7 +9,7 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]
@@ -17,11 +17,12 @@ namespace PasswordManager.Server.Data.Entities
         public string? FirstName { get; set; }
         public string? MiddleName { get; set; }
         public string? LastName { get; set; }
-        public string FullName { get
+        public string FullName { 
+            get
             {
                 return $"{this.FirstName} {this.MiddleName} {this.LastName}";
             } }
-        public string[] Roles { get; set; }
+        public string[]? Roles { get; set; }
 
     }
 }

@@ -34,12 +34,7 @@ public class AuthService
         var ci = new ClaimsIdentity();
 
         ci.AddClaim(new Claim("id", user.Id.ToString()));
-        ci.AddClaim(new Claim(type: ClaimTypes.Name, value: user.UserName));
-        ci.AddClaim(new Claim(type: ClaimTypes.GivenName, user.FullName));
         ci.AddClaim(new Claim(ClaimTypes.Email, user.Email));
-
-        foreach (var role in user.Roles)
-            ci.AddClaim(new Claim(ClaimTypes.Role, role));
 
         return ci;
     }

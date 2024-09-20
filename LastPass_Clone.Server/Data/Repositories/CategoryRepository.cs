@@ -13,11 +13,13 @@ namespace PasswordManager.Server.Data.Repositories
 
         public IEnumerable<Category> Categories => this.PasswordManagerDatabaseContext.Categories;
 
-        public void Create(Category category)
+        public Category Create(Category category)
         {
             try
             {
-                PasswordManagerDatabaseContext.Add(category);
+                var newCategory = PasswordManagerDatabaseContext.Add(category);
+                this.SaveChanges();
+                return newCategory.Entity;
             }
             catch (Exception ex)
             {
@@ -25,12 +27,13 @@ namespace PasswordManager.Server.Data.Repositories
             }
         }
 
-        public void Update(Category category)
+        public Category Update(Category category)
         {
             try
             {
                 var currentCategory = this.PasswordManagerDatabaseContext.Categories.Update(category);
                 this.SaveChanges();
+                return currentCategory.Entity;
 
             }
             catch (Exception ex)

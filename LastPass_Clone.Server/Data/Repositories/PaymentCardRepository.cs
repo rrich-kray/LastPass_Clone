@@ -12,12 +12,13 @@ namespace PasswordManager.Server.Data.Repositories
             this.PasswordManagerDatabaseContext = passwordManagerDatabaseContext;
         }
 
-        public void Create(PaymentCard paymentCard)
+        public PaymentCard Create(PaymentCard paymentCard)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.PaymentCards.Add(paymentCard);
+                var newPaymentCard = this.PasswordManagerDatabaseContext.PaymentCards.Add(paymentCard);
                 this.SaveChanges();
+                return newPaymentCard.Entity;
             }
             catch (Exception ex)
             {
@@ -25,18 +26,15 @@ namespace PasswordManager.Server.Data.Repositories
             }
         }
 
-        public void Update(PaymentCard paymentCard)
+        public PaymentCard Update(PaymentCard paymentCard)
         {
             try
             {
-                var currentAddress = this.PasswordManagerDatabaseContext.PaymentCards.Update(paymentCard);
+                var updatedPaymentCard = this.PasswordManagerDatabaseContext.PaymentCards.Update(paymentCard);
                 this.SaveChanges();
-
+                return updatedPaymentCard.Entity;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
         public void Delete(int paymentCardId)

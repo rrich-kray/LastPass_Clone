@@ -12,30 +12,28 @@ namespace PasswordManager.Server.Data.Repositories
         }
 
         public IEnumerable<PasswordInfo> Passwords => this.PasswordManagerDatabaseContext.Passwords;
-        public void Create(PasswordInfo password)
+        public PasswordInfo Create(PasswordInfo password)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.Passwords.Add(password);
+                var newPassword = this.PasswordManagerDatabaseContext.Passwords.Add(password);
                 this.SaveChanges();
+                return newPassword.Entity;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public void Update(PasswordInfo password)
+        public PasswordInfo Update(PasswordInfo password)
         {
             try
             {
-                var currentAddress = this.PasswordManagerDatabaseContext.Passwords.Update(password);
+                var updatedPassword = this.PasswordManagerDatabaseContext.Passwords.Update(password);
                 this.SaveChanges();
-
+                return updatedPassword.Entity;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
         public void Delete(int passwordId)
         {

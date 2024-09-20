@@ -12,12 +12,13 @@ namespace PasswordManager.Server.Data.Repositories
             this.PasswordManagerDatabaseContext = passwordManagerDatabaseContext;
         }
 
-        public void Create(BankAccount bankAccount)
+        public BankAccount Create(BankAccount bankAccount)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.BankAccounts.Add(bankAccount);
+                var newBankAccount = this.PasswordManagerDatabaseContext.BankAccounts.Add(bankAccount);
                 this.SaveChanges();
+                return newBankAccount.Entity;
             }
             catch (Exception ex)
             {
@@ -25,12 +26,13 @@ namespace PasswordManager.Server.Data.Repositories
             }
         }
 
-        public void Update(BankAccount bankAccount)
+        public BankAccount Update(BankAccount bankAccount)
         {
             try
             {
-                var currentAddress = this.PasswordManagerDatabaseContext.BankAccounts.Update(bankAccount);
+                var updatedBankAccount = this.PasswordManagerDatabaseContext.BankAccounts.Update(bankAccount);
                 this.SaveChanges();
+                return updatedBankAccount.Entity;
 
             }
             catch (Exception ex)

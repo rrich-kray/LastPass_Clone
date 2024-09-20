@@ -12,12 +12,13 @@ namespace PasswordManager.Server.Data.Repositories
             this.PasswordManagerDatabaseContext = passwordManagerDatabaseContext;
         }
 
-        public void Create(Address address)
+        public Address Create(Address address)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.Addresses.Add(address);
+                var newAddress = this.PasswordManagerDatabaseContext.Addresses.Add(address);
                 this.SaveChanges();
+                return newAddress.Entity;
             }
             catch (Exception ex)
             {
@@ -25,12 +26,13 @@ namespace PasswordManager.Server.Data.Repositories
             }
         }
 
-        public void Update(Address address)
+        public Address Update(Address address)
         {
             try
             {
                 var currentAddress = this.PasswordManagerDatabaseContext.Addresses.Update(address);
                 this.SaveChanges();
+                return currentAddress.Entity;
 
             }
             catch (Exception ex)

@@ -8,9 +8,9 @@ namespace PasswordManager.Server.Data.Repositories
     public interface IPasswordManagerRepository<T>
     {
         PasswordManagerDatabaseContext PasswordManagerDatabaseContext { get; }
-        void Create(T entity);
+        T Create(T entity);
+        T Update(T entity);
         void Delete(int entityId);
-        void Update(T entity);
         void SaveChanges();
     }
 }

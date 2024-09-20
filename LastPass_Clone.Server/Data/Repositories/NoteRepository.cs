@@ -13,24 +13,26 @@ namespace PasswordManager.Server.Data.Repositories
             this.PasswordManagerDatabaseContext = passwordManagerDatabaseContext;
         }
 
-        public void Create(Note note)
+        public Note Create(Note note)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.Notes.Add(note);
+                var newNote = this.PasswordManagerDatabaseContext.Notes.Add(note);
                 this.SaveChanges();
+                return newNote.Entity;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public void Update(Note note)
+        public Note Update(Note note)
         {
             try
             {
-                this.PasswordManagerDatabaseContext.Notes.Update(note);
+                var newNote = this.PasswordManagerDatabaseContext.Notes.Update(note);
                 this.SaveChanges();
+                return newNote.Entity;
 
             }
             catch (Exception ex)
