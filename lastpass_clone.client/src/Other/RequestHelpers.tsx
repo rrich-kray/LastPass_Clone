@@ -5,7 +5,7 @@ import Category from "../Types/Category"
 
 // A collection of functions that must be performed for each creation/update form
 // Thought that this would help in the event of adding additional creation/update components
-class RequestUtilities
+class RequestHelpers
 {
     SetAlerts: Dispatch<JSX.Element[]>;
     SetIsAlertModalVisible: Dispatch<boolean>
@@ -108,6 +108,8 @@ class RequestUtilities
             }
         }
     }
+
+    public static SetLocalStorage = (token: string) => localStorage.setItem("token", token); 
 }
 
-export default RequestUtilities;
+export default RequestHelpers;

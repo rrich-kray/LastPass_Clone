@@ -5,7 +5,7 @@ import Password from "../../../Types/Password";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
 import AlertMessage from "../../AlertMessage/AlertMessage";
-import RequestUtilities from "../../../Other/ComponentUtilities";
+import RequestHelpers from "../../../Other/RequestHelpers";
 
 const PasswordCreationUpdateForm =
     ({
@@ -35,7 +35,7 @@ const PasswordCreationUpdateForm =
             Notes: "",
         });
 
-        const componentUtils = new RequestUtilities(setAlerts, setIsAlertModalVisible);
+        const componentUtils = new RequestHelpers(setAlerts, setIsAlertModalVisible);
 
     useEffect(() => {
         componentUtils.GetCategories(baseUrl, setCategories, setCurrentCategoryId);

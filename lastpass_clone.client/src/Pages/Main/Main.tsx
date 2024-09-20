@@ -23,7 +23,7 @@ import TypeChecker from "../../Other/TypeChecker.ts";
 import AlertModal from "../../Components/AlertModal/AlertModal.tsx";
 import Category from "../../Types/Category.ts"
 import AuthorizeView from "../../Components/AuthorizeView/AuthorizeView.tsx";
-import RequestUtilities from "../../Other/ComponentUtilities.tsx";
+import RequestHelpers from "../../Other/RequestHelpers.tsx";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = (
@@ -221,7 +221,7 @@ const Main: FC = (
         }
 
         public async Execute(categories: Category[]) {
-            const options = RequestUtilities.GenerateRequestHeaders();
+            const options = RequestHelpers.GenerateRequestHeaders();
             return axios.all([
                 axios.get(`${baseUrl}/GetAllPasswords`, options),
                 axios.get(`${baseUrl}/GetNotes`, options),
@@ -249,7 +249,7 @@ const Main: FC = (
     // On subsequent renders, the content will appear because it is saved in state
     useEffect(() => {
         axios
-            .get(`${baseUrl}/GetCategories`, RequestUtilities.GenerateRequestHeaders())
+            .get(`${baseUrl}/GetCategories`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 const categories = response.data;
                 setCategories({ ...categories, categories });

@@ -14,7 +14,6 @@ const Register = (
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
     }) => {
-    const { user, setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Email: "",
         Password: "",
@@ -76,9 +75,6 @@ const Register = (
                 }
             });
     }
-
-    console.log(`User context User ID Register: ${user?.userId}`);
-    console.log(`User context token Register: ${user?.token}`);
 
     return (
         <div className={styles.RegisterPage}>

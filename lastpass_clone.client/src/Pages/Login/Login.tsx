@@ -1,8 +1,11 @@
-import { useState, useEffect, useContext, Dispatch } from "react";
+import { useState, Dispatch } from "react";
 import styles from "./styles.module.scss";
 import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
+
+// What if user tries to login again when there is already a token in localStorage?
+    // both Login and Register components should check if there is a token, and if it is still valid, prior to granting access
 
 const Login = (
     {
@@ -14,7 +17,6 @@ const Login = (
         setAlerts: Dispatch<JSX.Element[]>,
         setIsAlertModalVisible: Dispatch<boolean>
     }) => {
-    const { user, setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Email: "",
         Password: "",
@@ -41,7 +43,7 @@ const Login = (
             })
             .then(response => {
                 if (response.data.result === true) {
-                    setUser({ email: formState.Email, token: response.data.accessToken });
+                    localStorage.setItem("token", response.data.token);
                     const alerts = [<AlertMessage message={"Log in successful!"} color={"green"} />];
                     setAlerts(alerts);
                     setIsAlertModalVisible(true);

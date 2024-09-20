@@ -1,7 +1,7 @@
-import { useState, useEffect, ReactNode, createContext, useContext, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../../App";
 import axios from "axios";
+import ComponentUtilities from "../../Other/RequestHelpers";
 
 // Component must make request to VerifyToken.
 // If UserContext is empty, or response comes back with a 401 error, return
@@ -15,6 +15,13 @@ const AuthorizeView = ({ baseUrl, ...props }) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        if (localStorage.getItem("token") === undefined) {
+            return (
+                <>
+                    <Navigate to="/login" />
+                </>
+            )
+        }
         let retryCount: number = 0;
         let maxRetries: number = 10;
         let delay: number = 1000;
@@ -47,13 +54,7 @@ const AuthorizeView = ({ baseUrl, ...props }) => {
             }
         }
 
-        const options = {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            }
-        }
-
-        fetchWithRetry(`${baseUrl}/VerifyToken`, options)
+        fetchWithRetry(`${baseUrl}/VerifyToken`, ComponentUtilities.GenerateRequestHeaders())
             .catch(e => console.log(e))
             .finally(() => setLoading(false));
     }, []);

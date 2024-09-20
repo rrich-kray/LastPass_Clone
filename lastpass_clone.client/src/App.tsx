@@ -6,6 +6,7 @@ import Register from "./Pages/Register/Register.tsx"
 import { createContext, useState } from "react";
 import AlertModal from "./Components/AlertModal/AlertModal.tsx";
 import AuthorizeView from "./Components/AuthorizeView/AuthorizeView.tsx";
+import AccessLoginRegister from "./Components/AccessLoginRegister/AccessLoginRegister.tsx";
 
 // Auth:
 // Use login and register routes provided by ASP.NET. These will both send JWT to frontend
@@ -27,11 +28,27 @@ function App() {
         <BrowserRouter>
             {isAlertModalVisible && alerts && <AlertModal errors={alerts} />}
             <Routes>
-                <Route path="/login" element={<Login baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
-                <Route path="/register" element={<Register baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
+                <Route path="/login" element={
+                    <AccessLoginRegister baseUrl={baseUrl}>
+                        <Login baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
+                    </AccessLoginRegister>
+                } />
+                <Route path="/register" element={
+                    <AccessLoginRegister baseUrl={baseUrl}>
+                        <Register
+                            baseUrl={baseUrl}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible} />
+                    </AccessLoginRegister>
+                } />
                 <Route path="/" element={
                     <AuthorizeView baseUrl={baseUrl}>
-                        <Main baseUrl={baseUrl} alerts={alerts} isAlertModalVisible={isAlertModalVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
+                        <Main
+                            baseUrl={baseUrl}
+                            alerts={alerts}
+                            isAlertModalVisible={isAlertModalVisible}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible} />
                     </AuthorizeView>
                 } />
             </Routes>
