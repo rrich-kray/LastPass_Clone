@@ -5,7 +5,7 @@ import Category from "../Types/Category"
 
 // A collection of functions that must be performed for each creation/update form
 // Thought that this would help in the event of adding additional creation/update components
-class ComponentUtilities
+class RequestUtilities
 {
     SetAlerts: Dispatch<JSX.Element[]>;
     SetIsAlertModalVisible: Dispatch<boolean>
@@ -99,6 +99,15 @@ class ComponentUtilities
                 console.log(error);
             })
     }
+
+    public static GenerateRequestHeaders()
+    {
+        return {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        }
+    }
 }
 
-export default ComponentUtilities;
+export default RequestUtilities;

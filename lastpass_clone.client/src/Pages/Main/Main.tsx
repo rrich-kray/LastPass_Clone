@@ -22,7 +22,8 @@ import CategorySection from "../../Components/CategorySection/CategorySection.ts
 import TypeChecker from "../../Other/TypeChecker.ts";
 import AlertModal from "../../Components/AlertModal/AlertModal.tsx";
 import Category from "../../Types/Category.ts"
-import AuthorizeView from "../../Components/AuthorizeView/AuthorizeView.tsx"
+import AuthorizeView from "../../Components/AuthorizeView/AuthorizeView.tsx";
+import RequestUtilities from "../../Other/ComponentUtilities.tsx";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = (
@@ -220,12 +221,13 @@ const Main: FC = (
         }
 
         public async Execute(categories: Category[]) {
+            const options = RequestUtilities.GenerateRequestHeaders();
             return axios.all([
-                axios.get(`${baseUrl}/GetAllPasswords`),
-                axios.get(`${baseUrl}/GetNotes`),
-                axios.get(`${baseUrl}/GetAllAddresses`),
-                axios.get(`${baseUrl}/GetBankAccounts`),
-                axios.get(`${baseUrl}/GetPaymentCards`)
+                axios.get(`${baseUrl}/GetAllPasswords`, options),
+                axios.get(`${baseUrl}/GetNotes`, options),
+                axios.get(`${baseUrl}/GetAllAddresses`, options),
+                axios.get(`${baseUrl}/GetBankAccounts`, options),   
+                axios.get(`${baseUrl}/GetPaymentCards`, options)
             ])
                 .then(axios.spread((passwords, notes, addresses, bankAccounts, paymentCards) => {
                     const allData = new AllData(
@@ -247,7 +249,7 @@ const Main: FC = (
     // On subsequent renders, the content will appear because it is saved in state
     useEffect(() => {
         axios
-            .get(`${baseUrl}/GetCategories`)
+            .get(`${baseUrl}/GetCategories`, RequestUtilities.GenerateRequestHeaders())
             .then(response => {
                 const categories = response.data;
                 setCategories({ ...categories, categories });
@@ -261,7 +263,6 @@ const Main: FC = (
     }, [currentType]);
 
     return (
-        <AuthorizeView>
             <div className={styles.Main} onClick={() => {
                 if (isPasswordCreationModalVisible) setIsPasswordCreationModalVisible(false);
                 if (isPasswordUpdateModalVisible) setIsPasswordUpdateModalVisible(false);
@@ -414,8 +415,7 @@ const Main: FC = (
                         {categorySections}
                     </div>
                 </div>
-                </div>
-            </AuthorizeView>)
+                </div>)
 }
 
 export default Main;

@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext, Dispatch } from "React";
+import { useState, useEffect, useContext, Dispatch } from "react";
 import styles from "./styles.module.scss";
 import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
-import { UserContext } from "../../App.tsx";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 
 const Login = (
@@ -41,9 +40,14 @@ const Login = (
                 Password: formState.Password
             })
             .then(response => {
-                if (response.status === 200) {
+                if (response.data.result === true) {
                     setUser({ email: formState.Email, token: response.data.accessToken });
                     const alerts = [<AlertMessage message={"Log in successful!"} color={"green"} />];
+                    setAlerts(alerts);
+                    setIsAlertModalVisible(true);
+                    setTimeout(reset, 3000);
+                } else {
+                    const alerts = [<AlertMessage message={response.data.message} color={"red"} />];
                     setAlerts(alerts);
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);

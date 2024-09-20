@@ -5,6 +5,7 @@ import Login from "./Pages/Login/Login.tsx";
 import Register from "./Pages/Register/Register.tsx"
 import { createContext, useState } from "react";
 import AlertModal from "./Components/AlertModal/AlertModal.tsx";
+import AuthorizeView from "./Components/AuthorizeView/AuthorizeView.tsx";
 
 // Auth:
 // Use login and register routes provided by ASP.NET. These will both send JWT to frontend
@@ -14,13 +15,7 @@ import AlertModal from "./Components/AlertModal/AlertModal.tsx";
     // Or a middleware that checks for a valid JWT
 // AuthroizeView will use a route to check if the token is valid. It will get the token from the global state mentioned above
 
-export const UserContext = createContext({});
 function App() {
-    const [user, setUser] = useState<object>({
-        userId: "",
-        email: "",
-        token: ""
-    });
 
     // alerts
     const [alerts, setAlerts] = useState<JSX.Element[]>();
@@ -29,16 +24,18 @@ function App() {
     const baseUrl: string = "https://localhost:7110"; // put this in ENV file at some point
 
     return (
-        <UserContext.Provider value={{ user: user, setUser: setUser }}>
+        <BrowserRouter>
             {isAlertModalVisible && alerts && <AlertModal errors={alerts} />}
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/login" element={<Login baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
-                    <Route path="/register" element={<Register baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
-                    <Route path="/" element={<Main baseUrl={baseUrl} alerts={alerts} isAlertModalVisible={isAlertModalVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
-                </Routes>
-            </BrowserRouter>
-        </UserContext.Provider>
+            <Routes>
+                <Route path="/login" element={<Login baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
+                <Route path="/register" element={<Register baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />} />
+                <Route path="/" element={
+                    <AuthorizeView baseUrl={baseUrl}>
+                        <Main baseUrl={baseUrl} alerts={alerts} isAlertModalVisible={isAlertModalVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
+                    </AuthorizeView>
+                } />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

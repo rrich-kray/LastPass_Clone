@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext, Dispatch } from "React";
+import { useState, useEffect, useContext, Dispatch } from "react";
 import styles from "./styles.module.scss";
 import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
-import { UserContext } from "../../App.tsx";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 
 const Register = (
@@ -49,10 +48,17 @@ const Register = (
                 Password: formState.Password
             })
             .then(response => {
-                if (response.status === 200) {
-                    setUser({email: formState.Email,token: response.data.accessToken});
+                if (response.data.result === true) {
+                    localStorage.setItem("token", response.data.token);
+                    localStorage.setItem("userId", response.data.userId);
                     const alerts = [<AlertMessage message={"Account creation successful!"} color={"green"} />];
                     setAlerts(alerts);
+                    setIsAlertModalVisible(true);
+                    setTimeout(reset, 3000);
+                } else {
+                    const errorAlerts: JSX.Element[] = [];
+                    errorAlerts.push(<AlertMessage message={response.data.message} color={"red"} />);
+                    setAlerts(errorAlerts);
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
                 }
@@ -69,7 +75,10 @@ const Register = (
                     setTimeout(reset, 3000);
                 }
             });
-        }
+    }
+
+    console.log(`User context User ID Register: ${user?.userId}`);
+    console.log(`User context token Register: ${user?.token}`);
 
     return (
         <div className={styles.RegisterPage}>

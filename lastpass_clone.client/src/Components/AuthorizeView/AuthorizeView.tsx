@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode, createContext, useContext } from "react";
+import { useState, useEffect, ReactNode, createContext, useContext, Fragment } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import axios from "axios";
@@ -8,10 +8,11 @@ import axios from "axios";
 // If response is 200, setAuthorized to true
 // Can take it a step further by saving token in a cookie, saving that to local storage, and extracting it in this component
 
-const AuthorizeView = (props: { children: ReactNode }) => {
+// If page is refreshed or changed, UserContext is lost. Why the values appear in Register after registering, but do not appear in AuthorizeView
+
+const AuthorizeView = ({ baseUrl, ...props }) => {
     const [authorized, setAuthorized] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
-    const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
         let retryCount: number = 0;
@@ -22,11 +23,11 @@ const AuthorizeView = (props: { children: ReactNode }) => {
             return new Promise(resolve => setTimeout(resolve, delay));
         }
 
-        async function fetchWithRetry(url: string, options: any) {
+        async function fetchWithRetry(url: string, options: object) {
             try {
-                let response = await axios.get(url, options);
 
-                if (response.status == 200) {
+                const response = await axios.get(url, options);
+                if (response.data.result === true) {
                     console.log(authorized);
                     setAuthorized(true);
                     return response;
@@ -46,7 +47,15 @@ const AuthorizeView = (props: { children: ReactNode }) => {
             }
         }
 
-        fetchWithRetry("/VerifyToken", { method: "GET" }).catch(e => console.log(e)).finally(() => setLoading(false));
+        const options = {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        }
+
+        fetchWithRetry(`${baseUrl}/VerifyToken`, options)
+            .catch(e => console.log(e))
+            .finally(() => setLoading(false));
     }, []);
 
     if (loading) {
@@ -59,7 +68,7 @@ const AuthorizeView = (props: { children: ReactNode }) => {
         if (authorized && !loading) {
             return (
                 <>
-                    <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+                     {props.children}
                 </>
             )
         } else {
