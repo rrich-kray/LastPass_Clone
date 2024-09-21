@@ -94,7 +94,7 @@ const Login = (
                     </div>
                 </div>
                 <div className={styles.RegisterButtons}>
-                    <button className={styles.RegisterSubmitBtn} onClick={handleFormSubmit}>Register!</button>
+                    <button className={styles.RegisterSubmitBtn} onClick={handleFormSubmit}>Log in!</button>
                 </div>
             </form>
         </div>

@@ -410,7 +410,7 @@ const Main: FC = (
                     <Sidebar setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
-                    <Navbar />
+                    <Navbar baseUrl={ baseUrl}/>
                     <div className={styles.Grid}>
                         {categorySections}
                     </div>

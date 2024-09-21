@@ -24,7 +24,7 @@ const AuthorizeView = ({ baseUrl, ...props }) => {
         }
         let retryCount: number = 0;
         let maxRetries: number = 10;
-        let delay: number = 1000;
+        let delay: number = 100;
 
         function wait(delay: number) {
             return new Promise(resolve => setTimeout(resolve, delay));

@@ -3,13 +3,20 @@
     height: 65px;
     background-color: #D12F2E;
     display: flex;
-    justify-content: center;
-    align-items: center
+    justify-content: space-between;
+    align-items: center;
 }
 
 .Search {
     height: 60%;
     width: 60%;
     background: rgba(196,96,92,255);
-    border: none
+    border: none;
+}
+
+.NavbarLogoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
 }

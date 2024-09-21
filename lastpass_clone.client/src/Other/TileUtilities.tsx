@@ -7,6 +7,7 @@ import { BsBank } from "react-icons/bs";
 import axios from "axios";
 import styles from "../Components/Sidebar/styles.module.scss"
 import Category from "../../Types/Category";
+import RequestHelpers from "./RequestHelpers.tsx";
 
 class TileUtilities
 {
@@ -44,14 +45,14 @@ class TileUtilities
 
     async HandleDeleteRequest (entityId: number, url: string) {
         await axios
-            .post(`${this.baseUrl}/${url}/${entityId}`)
+            .post(`${this.baseUrl}/${url}/${entityId}`, RequestHelpers.GenerateRequestHeaders())
             .catch(error => console.log(error));
     }
 
     async FetchCategoryData(categoryId: number): Promise<string>
     {
         return await axios
-            .get(`${this.baseUrl}/GetCategories`)
+            .get(`${this.baseUrl}/GetCategories`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 const data = response.data;
                 return data.find((x: Category) => x.id === categoryId).Name;
