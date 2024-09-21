@@ -37,13 +37,9 @@ namespace PasswordManager.Server.Controllers
             // look up user in database by email, check password, if 
             var user = this.UserRepository.User.FirstOrDefault(x => x.Email == loginReq.Email);
             if (user is null)
-            {
                 return Results.Json(new AuthenticationResponse { Result = false, Message = "User with email was not found." });
-            }
             if (user.Password != loginReq.Password)
-            {
                 return Results.Json(new AuthenticationResponse { Result = false, Message = "Invalid credentials provided." });
-            }
             string token = new AuthService().Create(user);
             return Results.Json(new AuthenticationResponse { UserId = user.Id, Result = true, Token = token, Message = "Log in successful." });
         }
@@ -79,6 +75,25 @@ namespace PasswordManager.Server.Controllers
         public async Task<IResult> VerifyToken()
         {
             return Results.Json(new AuthenticationResponse { Result = true, Message = "This route is guarded. If this request succeeded, the user possesses a valid JWT."});
+        }
+
+        [HttpGet]
+        [Route("/GetUserData")]
+        public async Task<IResult> GetUserDataFromToken()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var decodedToken = new AuthService().Decode(token);
+            var user = this.UserRepository.User.FirstOrDefault(x => x.Id.ToString() == decodedToken.Id);
+            return Results.Json(new User
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Password = user.Password,
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                Roles = user.Roles,
+            });
         }
     }
 }
