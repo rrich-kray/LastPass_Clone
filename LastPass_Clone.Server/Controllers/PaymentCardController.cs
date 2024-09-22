@@ -42,16 +42,16 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/UpdatePaymentCard")]
         [HttpPut]
-        public Response UpdateAddress([FromBody] PaymentCard paymentCard) =>
+        public IResult UpdateAddress([FromBody] PaymentCard paymentCard) =>
             ControllerUtils.CommonControllerUpdate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
                 repository: this.PaymentCardRepository,
                 modelState: ModelState);
 
-        [Route("/DeletePaymentCard")]
+        [Route("/DeletePaymentCard/{PaymentCardId}")]
         [HttpDelete]
-        public Response DeleteAddress(int paymentCardId) =>
+        public IResult DeleteAddress(int paymentCardId) =>
             ControllerUtils.CommonControllerDelete<PaymentCard>(
                 this.PaymentCardRepository,
                 paymentCardId,

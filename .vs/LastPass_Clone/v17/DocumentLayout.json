@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\components\\passwords\\passwordcreationupdateform\\passwordcreationupdateform.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\components\\passwords\\passwordcreationupdateform\\passwordcreationupdateform.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\pages\\main\\main.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\pages\\main\\main.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\other\\requesthelpers.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\other\\requesthelpers.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\components\\tile\\tile.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\components\\tile\\tile.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\components\\sidebar\\sidebar.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\components\\sidebar\\sidebar.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,38 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 307,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "RequestHelpers.tsx",
-              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Other\\RequestHelpers.tsx",
-              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Other\\RequestHelpers.tsx",
-              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Other\\RequestHelpers.tsx",
-              "RelativeToolTip": "lastpass_clone.client\\src\\Other\\RequestHelpers.tsx",
-              "ViewState": "AQIAAA0AAAAAAAAAAAAQwBkAAAAFAAAA",
+              "Title": "Tile.tsx",
+              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Tile\\Tile.tsx",
+              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Components\\Tile\\Tile.tsx",
+              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Tile\\Tile.tsx",
+              "RelativeToolTip": "lastpass_clone.client\\src\\Components\\Tile\\Tile.tsx",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAxwEoAAABjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-09-22T00:37:45.374Z",
+              "WhenOpened": "2024-09-22T16:54:30.574Z",
               "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 307,
-          "SelectedChildIndex": 0,
-          "Children": [
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Sidebar.tsx",
+              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
+              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
+              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
+              "RelativeToolTip": "lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAAB4AAACFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2024-09-22T16:53:54.226Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PasswordCreationUpdateForm.tsx",
-              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Passwords\\PasswordCreationUpdateForm\\PasswordCreationUpdateForm.tsx",
-              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Components\\Passwords\\PasswordCreationUpdateForm\\PasswordCreationUpdateForm.tsx",
-              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Passwords\\PasswordCreationUpdateForm\\PasswordCreationUpdateForm.tsx",
-              "RelativeToolTip": "lastpass_clone.client\\src\\Components\\Passwords\\PasswordCreationUpdateForm\\PasswordCreationUpdateForm.tsx",
-              "ViewState": "AQIAACEAAAAAAAAAAAAAADUAAAAaAAAA",
+              "Title": "Main.tsx",
+              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
+              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
+              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
+              "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
+              "ViewState": "AQIAAMwAAAAAAAAAAAAuwNsAAABaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-09-22T00:16:10.401Z",
+              "WhenOpened": "2024-09-22T15:57:44.71Z",
               "EditorCaption": ""
             }
           ]

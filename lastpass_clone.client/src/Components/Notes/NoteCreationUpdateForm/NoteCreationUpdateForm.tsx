@@ -48,15 +48,13 @@ const NoteCreationUpdateForm = (
 
         const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
+        const requestHelpers = new RequestHelpers();
+
         const handleFormSubmit = async (e) => {
             e.preventDefault();
-            const reset = () => {
-                setAlerts([]);
-                setIsAlertModalVisible(false);
-            }
             return await
                 !updateToggle
-                ? axios.post(
+                ? requestHelpers.MakeRequest(
                     `${baseUrl}/CreateNote`,
                     {
                         userId: user.id,
@@ -64,26 +62,12 @@ const NoteCreationUpdateForm = (
                         Content: formState.Content,
                         CategoryId: currentCategoryId
                     },
-                    RequestHelpers.GenerateRequestHeaders())
-                    .then(response => {
-                        if (response.data.result === false) {
-                            const errors: JSX.Element[] = [];
-                            response.data.message.forEach((message: string) => {
-                                errors.push(<AlertMessage message={message} color={"red"} />);
-                            });
-                            setAlerts(errors);
-                            setIsAlertModalVisible(true);
-                            setTimeout(reset, 3000);
-                            return;
-                        } else {
-                            const message: string = "Note Creation successful!";
-                            const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                            setAlerts(alerts);
-                            setIsAlertModalVisible(true);
-                            setTimeout(reset, 3000);
-                        }
-                    })
-                : axios.put(
+                    false,
+                    "Note Creation successful!",
+                    setAlerts,
+                    setIsAlertModalVisible
+                )
+                : requestHelpers.MakeRequest(
                     `${baseUrl}/UpdateNote`,
                     {
                         userId: user.id,
@@ -92,25 +76,11 @@ const NoteCreationUpdateForm = (
                         Content: formState.Content,
                         CategoryId: currentCategoryId!
                     },
-                    RequestHelpers.GenerateRequestHeaders())
-                    .then(response => {
-                        if (response.data.result === false) {
-                            const errors: JSX.Element[] = [];
-                            response.data.message.forEach((message: string) => {
-                                errors.push(<AlertMessage message={message} color={"red"} />);
-                            });
-                            setAlerts(errors);
-                            setIsAlertModalVisible(true);
-                            setTimeout(reset, 3000);
-                            return;
-                        } else {
-                            const message: string = "Note Update successful!"
-                            const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                            setAlerts(alerts);
-                            setIsAlertModalVisible(true);
-                            setTimeout(reset, 3000);
-                        }
-                    });
+                    true,
+                    "Note update successful!",
+                    setAlerts,
+                    setIsAlertModalVisible
+                );
         }
         return (
             <div className={styles.CreateNewPasswordForm} onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()}>

@@ -57,15 +57,14 @@ const BankAccountCreationUpdateForm = (
 
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
+    const requestHelpers = new RequestHelpers();
+
     const handleFormSubmit = async (e) => {
-        const reset = () => {
-            setAlerts([]);
-            setIsAlertModalVisible(false);
-        }
         e.preventDefault();
         return await
             !updateToggle
-            ? axios.post(`${baseUrl}/CreateBankAccount`,
+            ? requestHelpers.MakeRequest(
+                `${baseUrl}/CreateBankAccount`,
                 {
                     userId: user.id,
                     CategoryId: currentCategoryId,
@@ -81,26 +80,12 @@ const BankAccountCreationUpdateForm = (
                     BranchPhone: formState.BranchPhone,
                     Notes: formState.Notes
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Bank account creation successful!"
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
-            : axios.put(
+                false,
+                "Bank account Creation successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            )
+            : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdateBankAccount`,
                 {
                     userId: user.id,
@@ -118,25 +103,11 @@ const BankAccountCreationUpdateForm = (
                     BranchPhone: formState.BranchPhone,
                     Notes: formState.Notes
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Bank account Update successful!"
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
+                true,
+                "Bank account update successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            );
     }
 
     return (

@@ -48,6 +48,12 @@ builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
 builder.Services.AddScoped<NoteRepository, NoteRepository>();
 builder.Services.AddScoped<UserRepository, UserRepository>();
 
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = 300;
+    options.HttpsPort = 5001;
+});
+
 var app = builder.Build();
 
 app.UseAuthentication();
@@ -79,6 +85,8 @@ app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 
 app.MapFallbackToFile("/index.html");
+
+app.UseHttpsRedirection();
 
 
 app.Run();

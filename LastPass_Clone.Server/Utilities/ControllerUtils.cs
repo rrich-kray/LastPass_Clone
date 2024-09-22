@@ -46,13 +46,9 @@ namespace PasswordManager.Server.Utilities
             try
             {
                 var entity = repository.Create(validatee);
-                return Results.Json(new ControllerResponse<J>
-                { 
-                    Success = true, 
-                    Messages = new List<string> { $"{validatee.GetType().Name} creation successful." },
-                    Entity = entity
-                });
- 
+                response.Success = true;
+                response.Messages = new List<string> { $"{validatee.GetType().Name} creation successful." };
+                response.Entity = entity;
             }
             catch (Exception ex)
             {
@@ -62,7 +58,7 @@ namespace PasswordManager.Server.Utilities
             return Results.Json(response);
         }
 
-        public static Response CommonControllerUpdate<T, J, K>(
+        public static IResult CommonControllerUpdate<T, J, K>(
             T validator,
             J validatee,
             K repository,
@@ -71,50 +67,51 @@ namespace PasswordManager.Server.Utilities
             where K : IPasswordManagerRepository<J>
             where J : class
         {
-            Response response = new Response();
-            //if (!modelState.IsValid) return ModelBindingErrorLogger.LogErrorMessages(modelState, response);
+            ControllerResponse<J> response = new ControllerResponse<J>();
+            if (!modelState.IsValid) return Results.Json(ModelBindingErrorLogger.LogErrorMessages(modelState, response));
             var validationResult = validator.Validate(validatee);
             if (!validationResult.IsValid)
             {
-                response.Result = false;
+                response.Success = false;
                 List<string> errorMessages = new List<string>();
                 foreach (var errorMessage in validationResult.Errors)
                     errorMessages.Add(errorMessage.ErrorMessage);
-                response.Message = errorMessages;
-                return response;
+                response.Messages = errorMessages;
+                return Results.Json(response); ;
             }
             try
             {
-                repository.Update(validatee);
-                response.Result = true;
-                response.Message = new List<string> { $"{validatee.GetType().Name} update successful." };
+                var entity = repository.Update(validatee);
+                response.Success = true;
+                response.Messages = new List<string> { $"{validatee.GetType().Name} update successful." };
+                response.Entity = entity;
             }
             catch (Exception ex)
             {
-                response.Result = false;
-                response.Message = new List<string> { ex.Message };
+                response.Success = false;
+                response.Messages = new List<string> { ex.Message };
             }
-            return response;
+            return Results.Json(response);
         }
 
-        public static Response CommonControllerDelete<T>(
-            IPasswordManagerRepository<T> repository, 
+        public static IResult CommonControllerDelete<T>(
+            IPasswordManagerRepository<T> repository,
             int id,
             string successMessage)
         {
-            Response response = new Response();
+            ControllerResponse<T> response = new ControllerResponse<T>();
             try
             {
                 repository.Delete(id);
-                response.Result = true;
-                response.Message = new List<string> { successMessage };
+                response.Success = true;
+                response.Messages = new List<string> { successMessage };
             }
             catch (Exception ex)
             {
-                response.Result = false;
-                response.Message = new List<string> { ex.Message };
+                response.Success = false;
+                response.Messages = new List<string> { ex.Message };
             }
-            return response;
+            return Results.Json(response);
         }
     }
 }

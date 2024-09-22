@@ -51,19 +51,16 @@ const PasswordCreationUpdateForm =
         });
         }
 
-        console.log(user);
 
-    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
+        const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
+
+    const requestHelpers = new RequestHelpers();
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const reset = () => {
-            setAlerts([]);
-            setIsAlertModalVisible(false);
-        }
         return await
             !updateToggle
-            ? axios.post(
+            ? requestHelpers.MakeRequest(
                 `${baseUrl}/CreatePassword`,
                 {
                     userId: user.id,
@@ -74,26 +71,12 @@ const PasswordCreationUpdateForm =
                     notes: formState.Notes,
                     categoryId: currentCategoryId!
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Password Creation successful!";
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
-            : axios.put(
+                false,
+                "Password Creation successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            )
+            : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdatePassword`,
                 {
                     Id: passwordData.id,
@@ -105,25 +88,11 @@ const PasswordCreationUpdateForm =
                     Notes: formState.Notes,
                     CategoryId: currentCategoryId
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Password update successful!"
-                        const alerts: JSX.Element[] = [ <AlertMessage message={message} color={"green"} /> ];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
+                true,
+                "Password update successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            );
     }
 
     return (

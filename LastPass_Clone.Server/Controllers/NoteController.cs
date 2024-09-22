@@ -42,8 +42,8 @@ namespace PasswordManager.Server.Controllers
                 modelState: ModelState);
 
         [Route("/UpdateNote")]
-        [HttpPost]
-        public Response Update([FromBody] Note note) =>
+        [HttpPut]
+        public IResult Update([FromBody] Note note) =>
             ControllerUtils.CommonControllerUpdate(
                 validator: new NoteEntityValidator(),
                 validatee: note,
@@ -52,7 +52,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeleteNote/{noteId}")]
         [HttpDelete]
-        public Response Delete(int noteId) =>
+        public IResult Delete(int noteId) =>
             ControllerUtils.CommonControllerDelete<Note>(
                 this.NoteRepository,
                 noteId,

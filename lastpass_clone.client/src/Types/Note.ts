@@ -1,6 +1,6 @@
 type Note = {
     id: number;
-    noteName: string;
+    name: string;
     content: string;
     categoryId: number;
 }

@@ -72,15 +72,13 @@ const AddressCreationUpdateForm = (
 
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
+    const requestHelpers = new RequestHelpers();
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const reset = () => {
-            setAlerts([]);
-            setIsAlertModalVisible(false);
-        }
         return await
             !updateToggle
-            ? axios.post(
+            ? requestHelpers.MakeRequest(
                 `${baseUrl}/CreateAddress`,
                 {
                     userId: user.id,
@@ -109,26 +107,12 @@ const AddressCreationUpdateForm = (
                     fax: formState.Fax,
                     notes: formState.Notes
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Address creation successful!"
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
-            : axios.put(
+                false,
+                "Address Creation successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            )
+            : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdateAddress`,
                 {
                     userId: user.id,
@@ -158,25 +142,11 @@ const AddressCreationUpdateForm = (
                     fax: formState.Fax,
                     notes: formState.Notes
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Address update successful!"
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                });
+                true,
+                "Address update successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            );
     }
 
     const formatInputFieldTitle = (input: string): string => input.split(/[A-Z]/).map(word => word[0] + word.slice(1)).join(" ");

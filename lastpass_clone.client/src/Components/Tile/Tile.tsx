@@ -11,7 +11,8 @@ import Address from "../../Types/Address.ts"
 import BankAccount from "../../Types/BankAccount.ts"
 import PaymentCard from "../../Types/PaymentCard.ts"
 import axios from "axios"
-import TypeChecker from "../../Other/TypeChecker.ts"
+import TypeChecker from "../../Other/TypeChecker.ts";
+import RequestHelpers from "../../Other/RequestHelpers";
 
 // Alternative 1: make tile generic, could be any of existing types
     // Downsides: have to modify existing code when new types are added, instead of adding additional components. Include modifying TileUtils and component
@@ -25,7 +26,9 @@ const Tile = (
         isDatumUpdateModalVisible,
         setIsDatumUpdateModalVisible,
         baseUrl,
-        type
+        type,
+        setAlerts,
+        setIsAlertModalVisible
     }: {
         data: PasswordInfo | Note | Address | BankAccount | PaymentCard,
         isDatumVisible: boolean,
@@ -34,45 +37,63 @@ const Tile = (
         isDatumUpdateModalVisible: boolean,
         setIsDatumUpdateModalVisible: Dispatch<boolean>,
         baseUrl: string,
-        type: string
+        type: string,
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertUpdateModalVisible: Dispatch<boolean>
     }) => {
     const tileUtils: TileUtilities = new TileUtilities(baseUrl);
     const typeChecker: TypeChecker = new TypeChecker();
     const [categoryIcon, setCategoryIcon] = useState<React.ReactNode>();
 
-    async function handleDeleteRequest() {
+    function handleDeleteRequest() {
         let url: string;
+        let itemType: string;
         if (typeChecker.IsPasswordInfo(data)) {
             url = "DeletePassword";
+            itemType = "Password"
         } else if (typeChecker.IsNote(data)) {
             url = "DeleteNote";
+            itemType = "Note"
         } else if (typeChecker.IsAddress(data)) {
             url = "DeleteAddress";
+            itemType = "Address"
         } else if (typeChecker.IsBankAccount(data)) {
             url = "DeleteBankAccount";
+            itemType = "Bank Account"
         } else if (typeChecker.IsPaymentCard(data)) {
             url = "DeletePaymentCard";
+            itemType = "Payment Card"
         } else {
             url = "DeletePassword";
+            itemType = "Password"
         }
-        await axios
-            .delete(`${baseUrl}/${url}/${data.id}`)
-            .catch(error => console.log(error));
+        const requestHelpers = new RequestHelpers()
+        axios
+            .delete(`${baseUrl}/${url}/${data.id}`, RequestHelpers.GenerateRequestHeaders())
+            .then(response => {
+                if (response.data.success === true) requestHelpers.HandleSuccessAlerts(`${itemType} deletion successful`, setAlerts, setIsAlertModalVisible);
+                else requestHelpers.HandleErrorAlerts(response, setAlerts, setIsAlertModalVisible);
+            })
+            .catch(error => {
+                requestHelpers.HandleAxiosCatchErrors(error, setAlerts, setIsAlertModalVisible);
+            });
     }
+
+    const trimTitle = (title: string) => title?.length > 10 ? `${title?.slice(0, 10)}...` : title;
 
     const GetTileText = (): string => {
         if (typeChecker.IsPasswordInfo(data)) {
-            return data.website;
+            return trimTitle(data.website === "" || data.website === undefined ? data.name : data.website);
         } else if (typeChecker.IsNote(data)) {
-            return data.noteName;
+            return trimTitle(data.name);
         } else if (typeChecker.IsAddress(data)) {
-            return data.name;
+            return trimTitle(data.name);
         } else if (typeChecker.IsBankAccount(data)) {
-            return data.name;
+            return trimTitle(data.name);
         } else if (typeChecker.IsPaymentCard(data)) {
-            return data.name
+            return trimTitle(data.name)
         } else {
-            return data["Website"];
+            return trimTitle(data["Website"]);
         }
     }
 

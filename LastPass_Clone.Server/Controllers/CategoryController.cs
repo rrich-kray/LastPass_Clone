@@ -42,7 +42,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/Delete/{categoryId}")]
         [HttpDelete]
-        public Response Delete(int categoryId) =>
+        public IResult Delete(int categoryId) =>
             ControllerUtils.CommonControllerDelete<Category>(
                 this.CategoryRepository, 
                 categoryId, 

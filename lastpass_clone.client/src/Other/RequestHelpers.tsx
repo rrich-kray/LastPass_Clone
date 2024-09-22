@@ -7,67 +7,112 @@ import Category from "../Types/Category";
 // Thought that this would help in the event of adding additional creation/update components
 class RequestHelpers
 {
-    SetAlerts: Dispatch<JSX.Element[]>;
-    SetIsAlertModalVisible: Dispatch<boolean>
-    constructor(
-        setAlerts: Dispatch<JSX.Element[]>,
-        setIsAlertModalVisible: Dispatch<boolean>,
-    ) {
-        this.SetAlerts = setAlerts;
-        this.SetIsAlertModalVisible = setIsAlertModalVisible;
-    }
+    constructor() { }
 
     public MakeRequest(
         url: string,
         formStateData: object,
         updateToggle: boolean,
-        successMessage: string
+        successMessage: string,
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertModalVisible: Dispatch<boolean>
     )
     {
         return !updateToggle
             ? axios.post(
                 url,
-                formStateData
+                formStateData,
+                RequestHelpers.GenerateRequestHeaders()
             )
-                .then(response => this.HandleErrorAlerts(response))
+                .then(response => {
+                    if (response.data.success === true) {
+                        this.HandleSuccessAlerts(successMessage, setAlerts, setIsAlertModalVisible);
+                    } else {
+                        this.HandleErrorAlerts(response, setAlerts, setIsAlertModalVisible);
+                    }
+                })
+                .catch(error => {
+                    this.HandleAxiosCatchErrors(error, setAlerts, setIsAlertModalVisible);
+                })
             : axios.put(
                 url,
-                formStateData
+                formStateData,
+                RequestHelpers.GenerateRequestHeaders()
             )
-                .then(() => this.HandleSuccessAlerts(successMessage))
+                .then((response) => {
+                    if (response.data.success === true) {
+                        this.HandleSuccessAlerts(successMessage, setAlerts, setIsAlertModalVisible);
+                    } else {
+                        this.HandleErrorAlerts(response, setAlerts, setIsAlertModalVisible);
+                    }
+                })
+                .catch(error => {
+                    this.HandleAxiosCatchErrors(error, setAlerts, setIsAlertModalVisible);
+                })
 
     }
 
-    private Reset()
-    {
-        this.SetAlerts([]);
-        this.SetIsAlertModalVisible(false);
-    }
-
-    private HandleAlerts(errors: JSX.Element[])
-    {
-        this.SetAlerts(errors);
-        this.SetIsAlertModalVisible(true);
-        setTimeout(this.Reset, 3000);
-    }
-
-    private HandleErrorAlerts(
-        response: AxiosResponse,
+    public HandleAxiosCatchErrors(
+        error: any,
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertModalVisible: Dispatch<boolean>
     )
     {
+        if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
         const errors: JSX.Element[] = [];
-        response.data.message.forEach((message: string) => {
+        errors.push(<AlertMessage message={error.message} color={"red"} />);
+        this.HandleAlerts(errors, setAlerts, setIsAlertModalVisible);
+    }
+
+    public HandleErrorAlerts(
+        response: AxiosResponse,
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertModalVisible: Dispatch<boolean>
+    ) {
+        const errors: JSX.Element[] = [];
+        response.data.messages.forEach((message: string) => {
             errors.push(<AlertMessage message={message} color={"red"} />);
         });
-        this.HandleAlerts(errors);
+        this.HandleAlerts(errors, setAlerts, setIsAlertModalVisible);
         return;
     }
 
-    private HandleSuccessAlerts(message: string)
+    public HandleSuccessAlerts(
+        message: string,
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertModalVisible: Dispatch<boolean>)
     {
         const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-        this.HandleAlerts(alerts);
+        this.HandleAlerts(alerts, setAlerts, setIsAlertModalVisible);
         return;
+    }
+
+    private HandleAlerts(
+        errors: JSX.Element[],
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertModalVisible: Dispatch<boolean>)
+    {
+        setAlerts(errors);
+        setIsAlertModalVisible(true);
+        setTimeout(() => this.Reset(setAlerts, setIsAlertModalVisible), 3000);
+    }
+
+    private Reset(
+        setAlerts: Dispatch<JSX.Element[]>,
+        setIsAlertModalVisible: Dispatch<boolean>
+    ): void
+    {
+        setAlerts([]);
+        setIsAlertModalVisible(false);
     }
 
     public HandleChange(

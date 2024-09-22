@@ -135,6 +135,8 @@ const Main: FC = (
                         setIsDatumUpdateModalVisible={setIsPasswordUpdateModalVisible}
                         baseUrl={baseUrl}
                         type="Passwords"
+                        setAlerts={setAlerts}
+                        setIsAlertModalVisible={setIsAlertModalVisible}
                     />
                 )))
 
@@ -149,6 +151,8 @@ const Main: FC = (
                         setIsDatumUpdateModalVisible={setIsNoteUpdateModalVisible}
                         baseUrl={baseUrl}
                         type="Notes"
+                        setAlerts={setAlerts}
+                        setIsAlertModalVisible={setIsAlertModalVisible}
                     />
                 )))
 
@@ -163,6 +167,8 @@ const Main: FC = (
                         setIsDatumUpdateModalVisible={setIsAddressUpdateModalVisible}
                         baseUrl={baseUrl}
                         type="Addresses"
+                        setAlerts={setAlerts}
+                        setIsAlertModalVisible={setIsAlertModalVisible}
                     />
                 )))
 
@@ -177,6 +183,8 @@ const Main: FC = (
                         setIsDatumUpdateModalVisible={setIsBankAccountUpdateModalVisible}
                         baseUrl={baseUrl}
                         type="Bank Accounts"
+                        setAlerts={setAlerts}
+                        setIsAlertModalVisible={setIsAlertModalVisible}
                     />
                 )))
 
@@ -191,6 +199,8 @@ const Main: FC = (
                         setIsDatumUpdateModalVisible={setIsPaymentCardUpdateModalVisible}
                         baseUrl={baseUrl}
                         type="Payment Cards"
+                        setAlerts={setAlerts}
+                        setIsAlertModalVisible={setIsAlertModalVisible}
                     />
                 )))
 
@@ -407,7 +417,7 @@ const Main: FC = (
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
                 <div className={styles.SidebarWrapper}>
-                    <Sidebar setCurrentType={setCurrentType} />
+                <Sidebar currentType={currentType} setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
                     <Navbar baseUrl={ baseUrl}/>

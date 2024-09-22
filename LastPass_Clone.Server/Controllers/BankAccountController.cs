@@ -43,7 +43,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/UpdateBankAccount")]
         [HttpPut]
-        public Response UpdateBankAccount([FromBody] BankAccount bankAccount) =>
+        public IResult UpdateBankAccount([FromBody] BankAccount bankAccount) =>
             ControllerUtils.CommonControllerUpdate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
@@ -52,7 +52,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeleteBankAccount/{bankAccountId}")]
         [HttpDelete]
-        public Response DeleteBankAccount(int bankAccountId) =>
+        public IResult DeleteBankAccount(int bankAccountId) =>
             ControllerUtils.CommonControllerDelete<BankAccount>(
                 this.BankAccountRepository,
                 bankAccountId,

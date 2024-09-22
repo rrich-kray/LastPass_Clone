@@ -47,7 +47,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/UpdateAddress")]
         [HttpPut]
-        public Response UpdateAddress([FromBody] Address address) =>
+        public IResult UpdateAddress([FromBody] Address address) =>
             ControllerUtils.CommonControllerUpdate(
                 validator: new AddressEntityValidator(),
                 validatee: address,
@@ -56,7 +56,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeleteAddress/{addressId}")]
         [HttpDelete]
-        public Response DeleteAddress(int addressId) =>
+        public IResult DeleteAddress(int addressId) =>
             ControllerUtils.CommonControllerDelete<Address>(
                 this.AddressRepository, 
                 addressId, 

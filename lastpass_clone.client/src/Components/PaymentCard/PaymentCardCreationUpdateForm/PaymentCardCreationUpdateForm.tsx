@@ -56,15 +56,14 @@ const PaymentCardCreationUpdateForm = (
 
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
+    const requestHelpers = new RequestHelpers();
+
     const handleFormSubmit = async (e) => {
-        const reset = () => {
-            setAlerts([]);
-            setIsAlertModalVisible(false);
-        }
         e.preventDefault();
         return await
             !updateToggle
-            ? axios.post(`${baseUrl}/CreatePaymentCard`,
+            ? requestHelpers.MakeRequest(
+                `${baseUrl}/CreatePaymentCard`,
                 {
                     userId: user.id,
                     CategoryId: currentCategoryId,
@@ -77,26 +76,12 @@ const PaymentCardCreationUpdateForm = (
                     ExpirationDate: formState.ExpirationDate,
                     Notes: formState.Notes
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Payment card successful!"
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
-            : axios.put(
+                false,
+                "Payment card Creation successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            )
+            : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdatePaymentCard`,
                 {
                     userId: user.id,
@@ -111,25 +96,11 @@ const PaymentCardCreationUpdateForm = (
                     ExpirationDate: formState.ExpirationDate,
                     Notes: formState.Notes
                 },
-                RequestHelpers.GenerateRequestHeaders())
-                .then(response => {
-                    if (response.data.result === false) {
-                        const errors: JSX.Element[] = [];
-                        response.data.message.forEach((message: string) => {
-                            errors.push(<AlertMessage message={message} color={"red"} />);
-                        });
-                        setAlerts(errors);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                        return;
-                    } else {
-                        const message: string = "Payment card update successful!";
-                        const alerts: JSX.Element[] = [<AlertMessage message={message} color={"green"} />];
-                        setAlerts(alerts);
-                        setIsAlertModalVisible(true);
-                        setTimeout(reset, 3000);
-                    }
-                })
+                true,
+                "Payment card update successful!",
+                setAlerts,
+                setIsAlertModalVisible
+            );
     }
 
     return (
