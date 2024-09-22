@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
+using PasswordManager.Server.Services.JwtAuth;
 using PasswordManager.Server.Types;
 using PasswordManager.Server.Utilities;
 using System.Net;
@@ -24,9 +25,18 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<Address> GetAddresses() => this.AddressRepository.Addresses;
 
+        [Route("/GetAddressesByUserId")]
+        [HttpGet]
+        public IEnumerable<Address> GetPasswordsByUserId()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var decodedToken = new AuthService().Decode(token);
+            return this.AddressRepository.Addresses.Where(address => address.UserId.ToString().Equals(decodedToken.Id));
+        }
+
         [Route("/CreateAddress")]
         [HttpPost]
-        public Response Create([FromBody] Address address)
+        public IResult Create([FromBody] Address address)
         {
             return ControllerUtils.CommonControllerCreate(
                 validator: new AddressEntityValidator(),

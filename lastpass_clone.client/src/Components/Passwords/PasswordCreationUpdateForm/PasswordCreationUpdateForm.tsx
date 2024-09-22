@@ -1,11 +1,12 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
-import { useState, useEffect, Dispatch } from "react";
+import { useState, useEffect, Dispatch, useContext } from "react";
 import axios from "axios";
 import Password from "../../../Types/Password";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
 import AlertMessage from "../../AlertMessage/AlertMessage";
 import RequestHelpers from "../../../Other/RequestHelpers";
+import { UserContext } from "../../../App";
 
 const PasswordCreationUpdateForm =
     ({
@@ -25,21 +26,22 @@ const PasswordCreationUpdateForm =
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
     }) => {
-    const [categories, setCategories] = useState<Category[]>();
-    const [currentCategoryId, setCurrentCategoryId] = useState<number>();
-        const [formState, setFormState] = useState({
-            Name: "",
-            Website: "",
-            Username: "",
-            Password: "",
-            Notes: "",
-        });
-
-        const componentUtils = new RequestHelpers(setAlerts, setIsAlertModalVisible);
+        const [categories, setCategories] = useState<Category[]>();
+        const [currentCategoryId, setCurrentCategoryId] = useState<number>();
+        const { user, setUser } = useContext(UserContext);
+            const [formState, setFormState] = useState({
+                Name: "",
+                Website: "",
+                Username: "",
+                Password: "",
+                Notes: "",
+            });
 
     useEffect(() => {
-        componentUtils.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
+        RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
+
+        console.log(`Passwords user ID: ${user.id}`);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -47,7 +49,9 @@ const PasswordCreationUpdateForm =
             ...formState,
             [name]: value
         });
-    }
+        }
+
+        console.log(user);
 
     const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
 
@@ -62,13 +66,15 @@ const PasswordCreationUpdateForm =
             ? axios.post(
                 `${baseUrl}/CreatePassword`,
                 {
+                    userId: user.id,
                     name: formState.Name,
                     website: formState.Website,
                     username: formState.Username,
                     password: formState.Password,
                     notes: formState.Notes,
                     categoryId: currentCategoryId!
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];
@@ -91,13 +97,15 @@ const PasswordCreationUpdateForm =
                 `${baseUrl}/UpdatePassword`,
                 {
                     Id: passwordData.id,
+                    userId: user.id,
                     Name: formState.Name,
                     Website: formState.Website,
                     Username: formState.Username,
                     Password: formState.Password,
                     Notes: formState.Notes,
                     CategoryId: currentCategoryId
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];

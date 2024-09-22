@@ -90,6 +90,9 @@ namespace LastPass_Clone.Server.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
@@ -99,6 +102,8 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Addresses");
                 });
@@ -146,9 +151,14 @@ namespace LastPass_Clone.Server.Migrations
                     b.Property<string>("SWIFTCode")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -162,6 +172,9 @@ namespace LastPass_Clone.Server.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -221,9 +234,14 @@ namespace LastPass_Clone.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notes");
                 });
@@ -247,6 +265,9 @@ namespace LastPass_Clone.Server.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 
@@ -256,6 +277,8 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Passwords");
                 });
@@ -294,9 +317,14 @@ namespace LastPass_Clone.Server.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PaymentCards");
                 });
@@ -340,6 +368,10 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("PasswordManager.Server.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.BankAccount", b =>
@@ -347,6 +379,10 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("PasswordManager.Server.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.Note", b =>
@@ -354,6 +390,10 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("PasswordManager.Server.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PasswordInfo", b =>
@@ -361,6 +401,10 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("PasswordManager.Server.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PaymentCard", b =>
@@ -368,6 +412,10 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasOne("PasswordManager.Server.Data.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("PasswordManager.Server.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

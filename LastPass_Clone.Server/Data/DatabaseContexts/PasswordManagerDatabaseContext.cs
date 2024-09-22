@@ -24,25 +24,50 @@ namespace PasswordManager.Server.Data.DatabaseContexts
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
 
+            modelBuilder.Entity<Note>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(p => p.UserId);
+
             modelBuilder.Entity<PasswordInfo>()
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
+
+            modelBuilder.Entity<PasswordInfo>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(p => p.UserId);
 
             modelBuilder.Entity<Address>()
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
 
+            modelBuilder.Entity<Address>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(p => p.UserId);
+
             modelBuilder.Entity<PaymentCard>()
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
 
+            modelBuilder.Entity<PaymentCard>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(p => p.UserId);
+
             modelBuilder.Entity<BankAccount>()
                 .HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId);
+
+            modelBuilder.Entity<BankAccount>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(p => p.UserId);
 
             modelBuilder.Entity<Category>().HasData(
                     new Category

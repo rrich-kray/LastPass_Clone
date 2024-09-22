@@ -14,6 +14,7 @@ namespace PasswordManager.Server.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
+        public int? UserId { get; set; }
         public int? CategoryId { get; set; }
         [Required]
         public string Name { get; set; }

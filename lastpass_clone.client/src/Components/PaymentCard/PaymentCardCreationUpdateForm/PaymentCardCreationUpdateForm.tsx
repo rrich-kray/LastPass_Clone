@@ -1,5 +1,5 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
-import { useState, useEffect, Dispatch } from "react";
+import { useState, useEffect, Dispatch, useContext } from "react";
 import axios from "axios";
 import Category from "../../../Types/Category";
 import PaymentCard from "../../../Types/PaymentCard";
@@ -7,6 +7,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegStar } from "react-icons/fa";
 import AlertMessage from "../../AlertMessage/AlertMessage";
+import {UserContext} from "../../../App";
+import RequestHelpers from "../../../Other/RequestHelpers";
 
 const PaymentCardCreationUpdateForm = (
     {
@@ -28,6 +30,7 @@ const PaymentCardCreationUpdateForm = (
     }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
+    const { user, setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Name: "",
         NameOnCard: "",
@@ -37,19 +40,10 @@ const PaymentCardCreationUpdateForm = (
         StartDate: new Date(),
         ExpirationDate: new Date(),
         Notes: ""
-    })
+    });
 
     useEffect(() => {
-        axios
-            .get(`${baseUrl}/GetCategories`)
-            .then(response => {
-                const data = response.data;
-                setCategories(data);
-                setCurrentCategoryId(data.id);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
     const handleChange = (e) => {
@@ -72,6 +66,7 @@ const PaymentCardCreationUpdateForm = (
             !updateToggle
             ? axios.post(`${baseUrl}/CreatePaymentCard`,
                 {
+                    userId: user.id,
                     CategoryId: currentCategoryId,
                     Name: formState.Name,
                     NameOnCard: formState.NameOnCard,
@@ -81,7 +76,8 @@ const PaymentCardCreationUpdateForm = (
                     StartDate: formState.StartDate,
                     ExpirationDate: formState.ExpirationDate,
                     Notes: formState.Notes
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];
@@ -103,6 +99,7 @@ const PaymentCardCreationUpdateForm = (
             : axios.put(
                 `${baseUrl}/UpdatePaymentCard`,
                 {
+                    userId: user.id,
                     Id: paymentCardData.id,
                     CategoryId: currentCategoryId,
                     Name: formState.Name,
@@ -113,7 +110,8 @@ const PaymentCardCreationUpdateForm = (
                     StartDate: formState.StartDate,
                     ExpirationDate: formState.ExpirationDate,
                     Notes: formState.Notes
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];

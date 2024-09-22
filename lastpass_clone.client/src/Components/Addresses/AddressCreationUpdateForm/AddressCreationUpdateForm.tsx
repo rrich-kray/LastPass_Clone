@@ -1,5 +1,5 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
-import { useState, useEffect, Dispatch } from "react";
+import { useState, useEffect, Dispatch, useContext } from "react";
 import axios from "axios";
 import Category from "../../../Types/Category";
 import Address from "../../../Types/Address";
@@ -7,6 +7,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegStar } from "react-icons/fa";
 import AlertMessage from "../../AlertMessage/AlertMessage";
+import RequestHelpers from "../../../Other/RequestHelpers";
+import { UserContext } from "../../../App"
 
 const AddressCreationUpdateForm = (
     {
@@ -29,6 +31,7 @@ const AddressCreationUpdateForm = (
         }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
+    const { user, setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Name: "",
         Title: "",
@@ -56,16 +59,7 @@ const AddressCreationUpdateForm = (
     })
 
     useEffect(() => {
-        axios
-            .get(`${baseUrl}/GetCategories`)
-            .then(response => {
-                const data = response.data;
-                setCategories(data);
-                setCurrentCategoryId(data.id);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
     const handleChange = (e) => {
@@ -89,6 +83,7 @@ const AddressCreationUpdateForm = (
             ? axios.post(
                 `${baseUrl}/CreateAddress`,
                 {
+                    userId: user.id,
                     categoryId: currentCategoryId!,
                     name: formState.Name,
                     title: formState.Title,
@@ -113,7 +108,8 @@ const AddressCreationUpdateForm = (
                     mobilePhone: formState.MobilePhone,
                     fax: formState.Fax,
                     notes: formState.Notes
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];
@@ -135,6 +131,7 @@ const AddressCreationUpdateForm = (
             : axios.put(
                 `${baseUrl}/UpdateAddress`,
                 {
+                    userId: user.id,
                     Id: addressData.id,
                     categoryId: currentCategoryId!,
                     name: formState.Name,
@@ -160,7 +157,8 @@ const AddressCreationUpdateForm = (
                     mobilePhone: formState.MobilePhone,
                     fax: formState.Fax,
                     notes: formState.Notes
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];

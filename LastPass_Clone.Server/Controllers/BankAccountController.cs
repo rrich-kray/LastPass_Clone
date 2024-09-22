@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
+using PasswordManager.Server.Services.JwtAuth;
 using PasswordManager.Server.Types;
 using PasswordManager.Server.Utilities;
 using System.Net;
@@ -22,9 +23,18 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<BankAccount> GetBankAccounts() => this.BankAccountRepository.BankAccounts;
 
+        [Route("/GetBankAccountsByUserId")]
+        [HttpGet]
+        public IEnumerable<BankAccount> GetPasswordsByUserId()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var decodedToken = new AuthService().Decode(token);
+            return this.BankAccountRepository.BankAccounts.Where(account => account.UserId.ToString().Equals(decodedToken.Id));
+        }
+
         [Route("/CreateBankAccount")]
         [HttpPost]
-        public Response Create([FromBody] BankAccount bankAccount) =>
+        public IResult Create([FromBody] BankAccount bankAccount) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
@@ -33,8 +43,8 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/UpdateBankAccount")]
         [HttpPut]
-        public Response UpdateAddress([FromBody] BankAccount bankAccount) =>
-            ControllerUtils.CommonControllerCreate(
+        public Response UpdateBankAccount([FromBody] BankAccount bankAccount) =>
+            ControllerUtils.CommonControllerUpdate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
                 repository: this.BankAccountRepository,
@@ -42,7 +52,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeleteBankAccount/{bankAccountId}")]
         [HttpDelete]
-        public Response DeleteAddress(int bankAccountId) =>
+        public Response DeleteBankAccount(int bankAccountId) =>
             ControllerUtils.CommonControllerDelete<BankAccount>(
                 this.BankAccountRepository,
                 bankAccountId,

@@ -223,11 +223,11 @@ const Main: FC = (
         public async Execute(categories: Category[]) {
             const options = RequestHelpers.GenerateRequestHeaders();
             return axios.all([
-                axios.get(`${baseUrl}/GetAllPasswords`, options),
-                axios.get(`${baseUrl}/GetNotes`, options),
-                axios.get(`${baseUrl}/GetAllAddresses`, options),
-                axios.get(`${baseUrl}/GetBankAccounts`, options),   
-                axios.get(`${baseUrl}/GetPaymentCards`, options)
+                axios.get(`${baseUrl}/GetPasswordsByUserId`, options),
+                axios.get(`${baseUrl}/GetNotesByUserId`, options),
+                axios.get(`${baseUrl}/GetAddressesByUserId`, options),
+                axios.get(`${baseUrl}/GetBankAccountsByUserId`, options),   
+                axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options)
             ])
                 .then(axios.spread((passwords, notes, addresses, bankAccounts, paymentCards) => {
                     const allData = new AllData(
@@ -249,7 +249,7 @@ const Main: FC = (
     // On subsequent renders, the content will appear because it is saved in state
     useEffect(() => {
         axios
-            .get(`${baseUrl}/GetCategories`, RequestHelpers.GenerateRequestHeaders())
+            .get(`${baseUrl}/GetCategoriesByUserId`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 const categories = response.data;
                 setCategories({ ...categories, categories });

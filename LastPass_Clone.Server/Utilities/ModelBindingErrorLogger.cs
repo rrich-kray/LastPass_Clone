@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using PasswordManager.Server.Types;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using PasswordManager.Server.Utilities;
 
 namespace PasswordManager.Server.Utilities
 {
     public static class ModelBindingErrorLogger
     {
-        public static Response LogErrorMessages(ModelStateDictionary modelState, Response response)
+        public static ControllerResponse<T> LogErrorMessages<T>(ModelStateDictionary modelState, ControllerResponse<T> response)
         {
             System.Diagnostics.Debug.WriteLine("MODEL BINDING ERROR");
-            response.Result = false;
+            response.Success = false;
             foreach (var keyModelStatePair in modelState)
             {
                 var key = keyModelStatePair.Key;
@@ -20,7 +21,7 @@ namespace PasswordManager.Server.Utilities
                     foreach (var errorMessage in errorMessages)
                     {
                         System.Diagnostics.Debug.WriteLine($"ModelState error: {errorMessage}");
-                        response.Message.Add(errorMessage);
+                        response.Messages.Add(errorMessage);
                     }
                 }
             }

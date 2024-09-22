@@ -1,10 +1,12 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
-import { useState, useEffect, Dispatch } from "react";
+import { useState, useEffect, Dispatch, useContext } from "react";
 import axios from "axios";
 import BankAccount from "../../../Types/BankAccount";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
 import AlertMessage from "../../AlertMessage/AlertMessage";
+import {UserContext} from "../../../App";
+import RequestHelpers from "../../../Other/RequestHelpers";
 
 const BankAccountCreationUpdateForm = (
     {
@@ -26,6 +28,7 @@ const BankAccountCreationUpdateForm = (
     }) => {
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
+    const { user, setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Name: "",
         BankName: "",
@@ -41,16 +44,7 @@ const BankAccountCreationUpdateForm = (
     })
 
     useEffect(() => {
-        axios
-            .get(`${baseUrl}/GetCategories`)
-            .then(response => {
-                const data = response.data;
-                setCategories(data);
-                setCurrentCategoryId(data.id);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
     const handleChange = (e) => {
@@ -73,6 +67,7 @@ const BankAccountCreationUpdateForm = (
             !updateToggle
             ? axios.post(`${baseUrl}/CreateBankAccount`,
                 {
+                    userId: user.id,
                     CategoryId: currentCategoryId,
                     Name: formState.Name,
                     BankName: formState.BankName,
@@ -85,7 +80,8 @@ const BankAccountCreationUpdateForm = (
                     BranchAddress: formState.BranchAddress,
                     BranchPhone: formState.BranchPhone,
                     Notes: formState.Notes
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];
@@ -107,6 +103,7 @@ const BankAccountCreationUpdateForm = (
             : axios.put(
                 `${baseUrl}/UpdateBankAccount`,
                 {
+                    userId: user.id,
                     Id: bankAccountData.id,
                     CategoryId: currentCategoryId,
                     Name: formState.Name,
@@ -120,7 +117,8 @@ const BankAccountCreationUpdateForm = (
                     BranchAddress: formState.BranchAddress,
                     BranchPhone: formState.BranchPhone,
                     Notes: formState.Notes
-                })
+                },
+                RequestHelpers.GenerateRequestHeaders())
                 .then(response => {
                     if (response.data.result === false) {
                         const errors: JSX.Element[] = [];

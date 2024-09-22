@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import AlertMessage from "../Components/AlertMessage/AlertMessage";
 import axios, { AxiosResponse } from "axios";
-import Category from "../Types/Category"
+import Category from "../Types/Category";
 
 // A collection of functions that must be performed for each creation/update form
 // Thought that this would help in the event of adding additional creation/update components
@@ -34,7 +34,7 @@ class RequestHelpers
                 url,
                 formStateData
             )
-                .then(response => this.HandleSuccessAlerts(successMessage))
+                .then(() => this.HandleSuccessAlerts(successMessage))
 
     }
 
@@ -83,13 +83,13 @@ class RequestHelpers
         }
     }
 
-    public GetCategories(
+    public static GetCategories(
         baseUrl: string,
         setCategories: Dispatch<React.SetStateAction<Category[] | undefined>>,
         setCurrentCategoryId: Dispatch<number>)
     {
         axios
-            .get(`${baseUrl}/GetCategories`)
+            .get(`${baseUrl}/GetCategoriesByUserId`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 const data = response.data;
                 setCategories(data);

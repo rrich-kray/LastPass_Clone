@@ -5,6 +5,7 @@ using PasswordManager.Server.Utilities;
 using PasswordManager.Server.Data.DatabaseContexts;
 using PasswordManager.Server.Types;
 using System.Net;
+using PasswordManager.Server.Services.JwtAuth;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -22,9 +23,18 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<Note> GetCategories() => this.NoteRepository.Notes;
 
+        [Route("/GetNotesByUserId")]
+        [HttpGet]
+        public IEnumerable<Note> GetPasswordsByUserId()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var decodedToken = new AuthService().Decode(token);
+            return this.NoteRepository.Notes.Where(note => note.UserId.ToString().Equals(decodedToken.Id));
+        }
+
         [Route("/CreateNote")]
         [HttpPost]
-        public Response Create([FromBody] Note note) =>
+        public IResult Create([FromBody] Note note) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new NoteEntityValidator(),
                 validatee: note,
@@ -34,7 +44,7 @@ namespace PasswordManager.Server.Controllers
         [Route("/UpdateNote")]
         [HttpPost]
         public Response Update([FromBody] Note note) =>
-            ControllerUtils.CommonControllerCreate(
+            ControllerUtils.CommonControllerUpdate(
                 validator: new NoteEntityValidator(),
                 validatee: note,
                 repository: this.NoteRepository,

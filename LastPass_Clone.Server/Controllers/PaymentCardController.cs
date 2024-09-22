@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
+using PasswordManager.Server.Services.JwtAuth;
 using PasswordManager.Server.Types;
 using PasswordManager.Server.Utilities;
 using System.Net;
@@ -21,9 +22,18 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<PaymentCard> GetPaymentCards() => this.PaymentCardRepository.PaymentCards;
 
+        [Route("/GetPaymentCardsByUserId")]
+        [HttpGet]
+        public IEnumerable<PaymentCard> GetPasswordsByUserId()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var decodedToken = new AuthService().Decode(token);
+            return this.PaymentCardRepository.PaymentCards.Where(paymentCard => paymentCard.UserId.ToString().Equals(decodedToken.Id));
+        }
+
         [Route("/CreatePaymentCard")]
         [HttpPost]
-        public Response Create([FromBody] PaymentCard paymentCard) =>
+        public IResult Create([FromBody] PaymentCard paymentCard) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
@@ -33,7 +43,7 @@ namespace PasswordManager.Server.Controllers
         [Route("/UpdatePaymentCard")]
         [HttpPut]
         public Response UpdateAddress([FromBody] PaymentCard paymentCard) =>
-            ControllerUtils.CommonControllerCreate(
+            ControllerUtils.CommonControllerUpdate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
                 repository: this.PaymentCardRepository,
