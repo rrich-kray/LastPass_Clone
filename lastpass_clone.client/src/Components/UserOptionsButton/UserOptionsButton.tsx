@@ -15,7 +15,6 @@ const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
             .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 setUserInfo(response.data)
-                console.log(response.data);
             })
             .catch(error => console.log(error));
     }, []);
@@ -24,8 +23,6 @@ const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
         localStorage.removeItem("token");
         window.location.assign("/Login");
     }
-
-    console.log(userInfo);
 
     return (
         <div className={styles.UserOptionsButtonDropdown} tabIndex={0}>

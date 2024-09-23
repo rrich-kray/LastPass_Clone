@@ -35,7 +35,6 @@ const AuthorizeView = ({ baseUrl, ...props }) => {
 
                 const response = await axios.get(url, options);
                 if (response.data.result === true) {
-                    console.log(authorized);
                     setAuthorized(true);
                     return response;
                 } else if (response.status === 401) {

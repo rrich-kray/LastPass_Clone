@@ -7,6 +7,7 @@ using PasswordManager.Server.Utilities;
 using PasswordManager.Server.Data.DTOs;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PasswordManager.Server.Services.JwtAuth;
+using PasswordManager.Server.Services;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -31,7 +32,8 @@ namespace PasswordManager.Server.Controllers
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             var decodedToken = new AuthService().Decode(token);
-            return this.PasswordRepository.Passwords.Where(password => password.UserId.ToString().Equals(decodedToken.Id));
+            var userPasswords = this.PasswordRepository.Passwords.Where(password => password.UserId.ToString().Equals(decodedToken.Id));
+            return userPasswords;
         }
 
         [Route("/GetPasswordsForCategory/{categoryId}")]

@@ -72,6 +72,7 @@ namespace PasswordManager.Server.Utilities
             var validationResult = validator.Validate(validatee);
             if (!validationResult.IsValid)
             {
+                System.Diagnostics.Debug.WriteLine("FLUENT VALIDATION ERROR");
                 response.Success = false;
                 List<string> errorMessages = new List<string>();
                 foreach (var errorMessage in validationResult.Errors)

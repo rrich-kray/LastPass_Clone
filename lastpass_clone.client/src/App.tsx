@@ -31,7 +31,6 @@ function App() {
             .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 setUser(response.data)
-                console.log(response.data);
             })
             .catch(error => console.log(error));
     }, []);

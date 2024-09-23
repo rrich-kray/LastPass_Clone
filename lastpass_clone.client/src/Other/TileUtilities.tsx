@@ -55,7 +55,7 @@ class TileUtilities
             .get(`${this.baseUrl}/GetCategories`, RequestHelpers.GenerateRequestHeaders())
             .then(response => {
                 const data = response.data;
-                return data.find((x: Category) => x.id === categoryId).Name;
+                return data.find((x: Category) => x.id === categoryId).name;
             })
             .catch(error => {
                 console.log(error);

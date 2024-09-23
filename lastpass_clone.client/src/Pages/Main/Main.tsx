@@ -24,6 +24,7 @@ import AlertModal from "../../Components/AlertModal/AlertModal.tsx";
 import Category from "../../Types/Category.ts"
 import AuthorizeView from "../../Components/AuthorizeView/AuthorizeView.tsx";
 import RequestHelpers from "../../Other/RequestHelpers.tsx";
+import FuzzyMatchService from "../../Other/FuzzyMatchService.tsx"
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = (
@@ -41,18 +42,20 @@ const Main: FC = (
             baseUrl: string
     }) =>
 {
-
     // Categories
     const [categories, setCategories] = useState<Category[]>([]);
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [currentType, setCurrentType] = useState<string>("All Items");
     const [categorySections, setCategorySections] = useState<JSX.Element[]>([]);
 
+    // Search
+    const [searchTerm, setSearchTerm] = useState<string>();
+
     // New item menu
     const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
 
     // All items
-    const [allItems, setAllItems] = useState<JSX.Element[]>();
+    const [allData, setAllData] = useState<AllData>();
 
     // Passwords
     const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
@@ -103,19 +106,22 @@ const Main: FC = (
         Addresses: Address[];
         BankAccounts: BankAccount[];
         PaymentCards: PaymentCard[];
+        Categories: Category[]
 
         constructor(
             passwords: Password[],
             notes: Note[],
             addresses: Address[],
             bankAccounts: BankAccount[],
-            paymentCards: PaymentCard[]
+            paymentCards: PaymentCard[],
+            categories: Category[]
         ) {
             this.Passwords = passwords;
             this.Notes = notes;
             this.Addresses = addresses;
             this.BankAccounts = bankAccounts;
             this.PaymentCards = paymentCards;
+            this.Categories = categories;
         }
     }
     class CategorySectionComponentFactory
@@ -207,7 +213,7 @@ const Main: FC = (
             return allTiles;
         }
 
-        public CreateAllCategorySections(categories: Category[], allTiles: JSX.Element[]) {
+        public CreateAllCategorySections(currentType: string, categories: Category[], allTiles: JSX.Element[]): JSX.Element[] {
             const categorySections: JSX.Element[] = [];
             if (categories !== undefined) {
                 categories.forEach(category => {
@@ -230,47 +236,60 @@ const Main: FC = (
             return categorySections;
         }
 
-        public async Execute(categories: Category[]) {
-            const options = RequestHelpers.GenerateRequestHeaders();
-            return axios.all([
-                axios.get(`${baseUrl}/GetPasswordsByUserId`, options),
-                axios.get(`${baseUrl}/GetNotesByUserId`, options),
-                axios.get(`${baseUrl}/GetAddressesByUserId`, options),
-                axios.get(`${baseUrl}/GetBankAccountsByUserId`, options),   
-                axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options)
-            ])
-                .then(axios.spread((passwords, notes, addresses, bankAccounts, paymentCards) => {
-                    const allData = new AllData(
-                        passwords.data,
-                        notes.data,
-                        addresses.data,
-                        bankAccounts.data,
-                        paymentCards.data
-                    );
+        public FilterAllData(allData: AllData): AllData
+        {
+            return new AllData(
+                FuzzyMatchService.SimpleMatchingAlgorithm<Password>(allData.Passwords, searchTerm),
+                FuzzyMatchService.SimpleMatchingAlgorithm<Note>(allData.Notes, searchTerm),
+                FuzzyMatchService.SimpleMatchingAlgorithm<Address>(allData.Addresses, searchTerm),
+                FuzzyMatchService.SimpleMatchingAlgorithm<BankAccount>(allData.BankAccounts, searchTerm),
+                FuzzyMatchService.SimpleMatchingAlgorithm<PaymentCard>(allData.PaymentCards, searchTerm),
+                allData.Categories
+            )
+        }
 
-                    const allTiles = this.CreateTiles(allData);
-                    const categorySections = this.CreateAllCategorySections(categories, allTiles);
-                    setCategorySections(categorySections);
-                }));
+        public Execute(allData: AllData): void
+        {
+            console.log(allData);
+            allData = this.FilterAllData(allData);
+            console.log(allData);
+            const allTiles = this.CreateTiles(allData);
+            const categorySections = this.CreateAllCategorySections(currentType, allData.Categories, allTiles);
+            setCategorySections(categorySections);
         }
     }
 
     // on initial render, useEffect runs after the component is rendered and commited to the DOM, and the DOM is painted, but the data is stilled stored in state
     // On subsequent renders, the content will appear because it is saved in state
+    // Or could be a race condition. Component displays before async function completes data fetch
     useEffect(() => {
-        axios
-            .get(`${baseUrl}/GetCategoriesByUserId`, RequestHelpers.GenerateRequestHeaders())
-            .then(response => {
-                const categories = response.data;
-                setCategories({ ...categories, categories });
-                setCurrentCategoryId(categories.id);
+        async function GetAllData() {
+            const options = RequestHelpers.GenerateRequestHeaders();
+            const [passwords, notes, addresses, bankAccounts, paymentCards, categories] = await axios.all([
+                axios.get(`${baseUrl}/GetPasswordsByUserId`, options),
+                axios.get(`${baseUrl}/GetNotesByUserId`, options),
+                axios.get(`${baseUrl}/GetAddressesByUserId`, options),
+                axios.get(`${baseUrl}/GetBankAccountsByUserId`, options),
+                axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options),
+                axios.get(`${baseUrl}/GetCategoriesByUserId`, options)
+            ]);
+            const allData = new AllData(
+                passwords.data,
+                notes.data,
+                addresses.data,
+                bankAccounts.data,
+                paymentCards.data,
+                categories.data
+            );
+            setAllData(allData);
+            // new CategorySectionComponentFactory().Execute(allData);
+        }
+        GetAllData();
+    }, [currentType, searchTerm]);
 
-                new CategorySectionComponentFactory().Execute(categories);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }, [currentType]);
+    useEffect(() => {
+        if (allData) new CategorySectionComponentFactory().Execute(allData);
+    }, [allData, searchTerm])
 
     return (
             <div className={styles.Main} onClick={() => {
@@ -417,10 +436,10 @@ const Main: FC = (
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
                 <div className={styles.SidebarWrapper}>
-                <Sidebar currentType={currentType} setCurrentType={setCurrentType} />
+                    <Sidebar currentType={currentType} setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
-                    <Navbar baseUrl={ baseUrl}/>
+                    <Navbar baseUrl={baseUrl} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                     <div className={styles.Grid}>
                         {categorySections}
                     </div>
