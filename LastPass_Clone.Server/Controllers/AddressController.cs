@@ -60,7 +60,7 @@ namespace PasswordManager.Server.Controllers
             ControllerUtils.CommonControllerDelete<Address>(
                 this.AddressRepository, 
                 addressId, 
-                "Address Creation Successful.");
+                "Address deleteion successful.");
 
     }
 }

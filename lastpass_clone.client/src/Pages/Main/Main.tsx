@@ -289,34 +289,57 @@ const Main: FC = (
 
     useEffect(() => {
         if (allData) new CategorySectionComponentFactory().Execute(allData);
-    }, [allData, searchTerm])
+    }, [allData, searchTerm]);
+
+    const isModalVisible = () => {
+        return (
+            isPasswordCreationModalVisible ||
+            isPasswordUpdateModalVisible ||
+            isPasswordVisible ||
+            isNoteCreationModalVisible ||
+            isNoteUpdateModalVisible ||
+            isNoteVisible ||
+            isAddressCreationModalVisible ||
+            isAddressUpdateModalVisible ||
+            isAddressVisible ||
+            isBankAccountCreationModalVisible ||
+            isBankAccountUpdateModalVisible ||
+            isBankAccountVisible ||
+            isPaymentCardCreationModalVisible ||
+            isPaymentCardUpdateModalVisible ||
+            isPaymentCardVisible ||
+            isNewItemMenuVisible
+        )
+    }
 
     return (
             <div className={styles.Main} onClick={() => {
-                if (isPasswordCreationModalVisible) setIsPasswordCreationModalVisible(false);
-                if (isPasswordUpdateModalVisible) setIsPasswordUpdateModalVisible(false);
-                if (isPasswordVisible) setIsPasswordVIsible(false);
+                    if (isPasswordCreationModalVisible) setIsPasswordCreationModalVisible(false);
+                    if (isPasswordUpdateModalVisible) setIsPasswordUpdateModalVisible(false);
+                    if (isPasswordVisible) setIsPasswordVIsible(false);
 
-                if (isNoteCreationModalVisible) setIsNoteCreationModalVisible(false);
-                if (isNoteUpdateModalVisible) setIsNoteUpdateModalVisible(false);
-                if (isNoteVisible) setIsNoteVIsible(false);
+                    if (isNoteCreationModalVisible) setIsNoteCreationModalVisible(false);
+                    if (isNoteUpdateModalVisible) setIsNoteUpdateModalVisible(false);
+                    if (isNoteVisible) setIsNoteVIsible(false);
 
-                if (isAddressCreationModalVisible) setIsAddressCreationModalVisible(false);
-                if (isAddressUpdateModalVisible) setIsAddressUpdateModalVisible(false);
-                if (isAddressVisible) setIsAddressVIsible(false);
+                    if (isAddressCreationModalVisible) setIsAddressCreationModalVisible(false);
+                    if (isAddressUpdateModalVisible) setIsAddressUpdateModalVisible(false);
+                    if (isAddressVisible) setIsAddressVIsible(false);
 
-                if (isBankAccountCreationModalVisible) setIsBankAccountCreationModalVisible(false);
-                if (isBankAccountUpdateModalVisible) setIsBankAccountUpdateModalVisible(false);
-                if (isBankAccountVisible) setIsBankAccountVIsible(false);
+                    if (isBankAccountCreationModalVisible) setIsBankAccountCreationModalVisible(false);
+                    if (isBankAccountUpdateModalVisible) setIsBankAccountUpdateModalVisible(false);
+                    if (isBankAccountVisible) setIsBankAccountVIsible(false);
 
-                if (isPaymentCardCreationModalVisible) setIsPaymentCardCreationModalVisible(false);
-                if (isPaymentCardUpdateModalVisible) setIsPaymentCardUpdateModalVisible(false);
-                if (isPaymentCardVisible) setIsPaymentCardVIsible(false);
+                    if (isPaymentCardCreationModalVisible) setIsPaymentCardCreationModalVisible(false);
+                    if (isPaymentCardUpdateModalVisible) setIsPaymentCardUpdateModalVisible(false);
+                    if (isPaymentCardVisible) setIsPaymentCardVIsible(false);
             
-                if (isNewItemMenuVisible) setIsNewItemMenuVisible(false);
+                    if (isNewItemMenuVisible) setIsNewItemMenuVisible(false);
                 }
             }>
                 <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsNewItemMenuVisible(!isNewItemMenuVisible)} />
+
+                {isModalVisible() && <div className={styles.Overlay}></div>}
 
                 {isAlertModalVisible && alerts && <AlertModal errors={alerts} />}
 

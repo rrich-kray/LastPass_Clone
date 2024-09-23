@@ -8,6 +8,15 @@
     background: rgba(249,250,252,255);
 }
 
+.Overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(15, 27, 43, 0.6);
+    opacity: .5;
+    z-index: 1000;
+    position: absolute;
+}
+
 .SidebarWrapper {
     height: 100%;
     width: 275px;

@@ -1,10 +1,8 @@
 .DataModal {
     background: white;
-    //border: 0.25rem solid black;
     position: absolute;
-    min-height: max-content;
+    height: max-content;
     max-height: 500px;
-    //height: 500px;
     width: 500px;
     top: 0;
     margin-top: auto;
@@ -16,7 +14,8 @@
     margin-bottom: auto;
     z-index: 1000;
     overflow-y: scroll;
-    overflow-x: hidden
+    overflow-x: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .DataModalTableWrapper {
@@ -32,6 +31,10 @@
 .DataModalHeader {
     height: 50px;
     background-color: #D12F2E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white
 }
 
 .PasswordDataModalInfo {
