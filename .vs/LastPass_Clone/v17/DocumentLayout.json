@@ -50,8 +50,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\Sidebar\\styles.module.scss",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2024-09-23T22:34:33.68Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-23T22:34:33.68Z"
             },
             {
               "$type": "Document",
@@ -61,7 +60,7 @@
               "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\Sidebar\\Sidebar.tsx",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAlAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAA8AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2024-09-23T22:30:11.265Z",
               "EditorCaption": ""
@@ -76,8 +75,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Types\\Password.ts",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-09-23T18:15:38.081Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-23T18:15:38.081Z"
             },
             {
               "$type": "Document",
@@ -89,8 +87,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
               "ViewState": "AQIAAOkAAAAAAAAAAAAgwP4AAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-09-23T15:10:04.601Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-23T15:10:04.601Z"
             },
             {
               "$type": "Document",
@@ -102,8 +99,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Controllers\\PasswordsController.cs",
               "ViewState": "AQIAACoAAAAAAAAAAAAowB4AAAA/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-23T15:08:59.211Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-23T15:08:59.211Z"
             },
             {
               "$type": "Document",
@@ -115,8 +111,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Other\\FuzzyMatchService.tsx",
               "ViewState": "AQIAADAAAAAAAAAAAAAYwEgAAAA6AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-09-23T15:00:54.894Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-23T15:00:54.894Z"
             },
             {
               "$type": "Document",
@@ -128,8 +123,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Services\\FuzzyMatchService.cs",
               "ViewState": "AQIAABMAAAAAAAAAAAAkwAgAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-22T18:39:06.063Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-22T18:39:06.063Z"
             }
           ]
         }
