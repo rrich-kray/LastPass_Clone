@@ -4,8 +4,8 @@ import styles from "./styles.module.scss";
 import { RxTriangleDown } from "react-icons/rx";
 import { RxTriangleLeft } from "react-icons/rx";
 
-const CategorySection = ({ categoryName, tiles }: { categoryName: string, tiles: JSX.Element[] }) => {
-    const [isExpanded, setIsExpanded] = useState<boolean>(true);
+const CategorySection = ({ categoryName, tiles, collapsed }: { categoryName: string, tiles: JSX.Element[], collapsed: boolean }) => {
+    const [isExpanded, setIsExpanded] = useState<boolean>(collapsed);
     return (
         <div className={styles.CategorySection}>
             <div className={styles.CategorySectionHeader}>

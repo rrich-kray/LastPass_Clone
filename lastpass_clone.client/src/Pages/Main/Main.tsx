@@ -53,6 +53,9 @@ const Main: FC = (
     const [currentType, setCurrentType] = useState<string>("All Items");
     const [categorySections, setCategorySections] = useState<JSX.Element[]>([]);
 
+    // Collapsed
+    const [collapsed, setCollapsed] = useState<boolean>();
+
     // Search
     const [searchTerm, setSearchTerm] = useState<string>();
 
@@ -233,7 +236,7 @@ const Main: FC = (
                         if (currentType !== "All Items") tiles = tiles.filter(x => x.props.type === currentType);
                         tiles = tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name));
                         categorySections.push(
-                            <CategorySection categoryName={category.name} tiles={tiles} />
+                            <CategorySection categoryName={category.name} tiles={tiles} collapsed={collapsed} />
                         )
                     }
                 });
@@ -300,7 +303,7 @@ const Main: FC = (
 
     useEffect(() => {
         if (allData) new CategorySectionComponentFactory().Execute(allData);
-    }, [allData, searchTerm]);
+    }, [allData, searchTerm, collapsed]);
 
     const isModalVisible = () => {
         return (
@@ -328,7 +331,7 @@ const Main: FC = (
             return <TileGrid tiles={tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name))} />
         } else if (currentSort === SortingOptions.NameZA) {
             return <TileGrid tiles={tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name)).reverse()} />
-        } else return <CategoryGrid categorySections={categorySections} />
+        } else return <CategoryGrid categorySections={categorySections} collapsed={collapsed} />
     }
 
     return (
@@ -482,7 +485,7 @@ const Main: FC = (
                 </div>
                 <div className={styles.GridNavbarWrapper}>
                     <Navbar baseUrl={baseUrl} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                    <SortingBar currentSort={currentSort} setCurrentSort={setCurrentSort} SortingOptions={SortingOptions} currentType={currentType} />
+                    <SortingBar collapsed={collapsed} setCollapsed={setCollapsed} currentSort={currentSort} setCurrentSort={setCurrentSort} SortingOptions={SortingOptions} currentType={currentType} />
                     {RenderGrid()}
                 </div>
                 </div>)

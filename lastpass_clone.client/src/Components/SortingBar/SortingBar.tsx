@@ -13,12 +13,16 @@ const SortingBar = (
         currentType,
         currentSort,
         setCurrentSort,
-        sortingOptions
+        sortingOptions,
+        collapsed,
+        setCollapsed
     }: {
             currentType: string,
             currentSort: string,
             setCurrentSort: Dispatch<string>,
-            sortingOptions: SortingOptions
+            sortingOptions: SortingOptions,
+            collapsed: boolean,
+            setCollapsed: Dispatch<boolean>
     }) => {
 
     return (
@@ -28,12 +32,12 @@ const SortingBar = (
             </div>
             <div className={styles.SortingBarRightPanel}>
                 <div className={styles.SortingBarButtonContainer}>
-                    <button className={styles.SortingBarButton} style={{ marginRight: "7.5px" }}></button>
+                    {/*<button className={styles.SortingBarButton} style={{ marginRight: "7.5px" }} onClick={() => setCollapsed(!collapsed)}></button>
                     <button className={styles.SortingBarButton} style={{ marginRight: "7.5px" }}></button>
                     <div className={styles.ListTileViewButtons}>
                         <button className={styles.SortingBarButton}></button>
                         <button className={styles.SortingBarButton}></button>
-                    </div>
+                    </div>*/}
 
                     <div className={styles.SortingBarDropdownWrapper} tabIndex={0}>
                         <div className={styles.SortButton} style={{ marginLeft: "7.5px" }}>
