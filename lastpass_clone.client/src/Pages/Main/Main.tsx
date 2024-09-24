@@ -51,6 +51,9 @@ const Main: FC = (
     // Search
     const [searchTerm, setSearchTerm] = useState<string>();
 
+    // Sidebar
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
     // New item menu
     const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
 
@@ -458,8 +461,8 @@ const Main: FC = (
                         setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
-                <div className={styles.SidebarWrapper}>
-                    <Sidebar currentType={currentType} setCurrentType={setCurrentType} />
+            <div className={styles.SidebarWrapper} style={{ width: isCollapsed ? "75px" : "275px"}}>
+                    <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
                     <Navbar baseUrl={baseUrl} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
