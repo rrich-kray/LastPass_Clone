@@ -1,0 +1,12 @@
+.TileGrid {
+    border-top: 1px solid rgb(167, 175, 186);
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    grid-template-rows: repeat(auto);
+    grid-column-gap: 25px;
+    grid-row-gap: 25px;
+    padding: 20px;
+}

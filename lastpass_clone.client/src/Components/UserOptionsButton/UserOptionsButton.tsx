@@ -35,7 +35,7 @@ const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
                 </div>
             </div>
             <div className={styles.DropdownContent}>
-                <div className={styles.DropdownSelection} >
+                <div className={styles.DropdownSelection}>
                     <IoMdSettings size={20} style={{marginRight: "10px"}} />
                     <a >Account Settings</a>
                 </div>
