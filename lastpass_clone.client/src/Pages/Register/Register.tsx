@@ -87,7 +87,7 @@ const Register = (
                         <span>CREATE AN ACCOUNT</span>
                     </div>
                     <div className={styles.RegisterHeaderRightPanel}>
-                        <span>Or Log In</span>
+                        <span onClick={() => window.location.replace("/Login")}>Or Log In</span>
                     </div>
                 </div>
                 <div className={styles.RegisterInputs}>

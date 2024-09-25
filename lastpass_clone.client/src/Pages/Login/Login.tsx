@@ -80,7 +80,7 @@ const Login = (
                         <span>LOG IN</span>
                     </div>
                     <div className={styles.RegisterHeaderRightPanel}>
-                        <span>Or create an account</span>
+                        <span onClick={() => window.location.replace("/register")}>Or create an account</span>
                     </div>
                 </div>
                 <div className={styles.RegisterInputs}>
