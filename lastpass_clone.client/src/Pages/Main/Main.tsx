@@ -289,8 +289,6 @@ const Main: FC = (
                 axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options),
                 axios.get(`${baseUrl}/GetCategoriesByUserId`, options)
             ]);
-            console.log(categories);
-            console.log(passwords.data);
             const allData = new AllData(
                 passwords.data,
                 notes.data,
