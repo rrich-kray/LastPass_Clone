@@ -19,12 +19,14 @@ import DataForm from "../../Components/DataForm/DataForm.tsx";
 import BankAccountCreationUpdateForm from "../../Components/BankAccount/BankAccountCreationUpdateForm/BankAccountCreationUpdateForm.tsx";
 import PaymentCardCreationUpdateForm from "../../Components/PaymentCard/PaymentCardCreationUpdateForm/PaymentCardCreationUpdateForm.tsx";
 import CategorySection from "../../Components/CategorySection/CategorySection.tsx";
-import TypeChecker from "../../Other/TypeChecker.ts";
 import AlertModal from "../../Components/AlertModal/AlertModal.tsx";
 import Category from "../../Types/Category.ts"
-import AuthorizeView from "../../Components/AuthorizeView/AuthorizeView.tsx";
 import RequestHelpers from "../../Other/RequestHelpers.tsx";
 import FuzzyMatchService from "../../Other/FuzzyMatchService.tsx"
+import SortingBar from "../../Components/SortingBar/SortingBar.tsx";
+import SortingOptions from "../../Other/SortingOptionsEnum.ts";
+import TileGrid from "../../Components/TileGrid/TileGrid.tsx"
+import CategoryGrid from "../../Components/CategoryGrid/CategoryGrid.tsx"
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main: FC = (
@@ -42,11 +44,17 @@ const Main: FC = (
             baseUrl: string
     }) =>
 {
+    // Tiles
+    const [tiles, setTiles] = useState<JSX.Element[]>([]);
+
     // Categories
     const [categories, setCategories] = useState<Category[]>([]);
     const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [currentType, setCurrentType] = useState<string>("All Items");
     const [categorySections, setCategorySections] = useState<JSX.Element[]>([]);
+
+    // Collapsed
+    const [collapsed, setCollapsed] = useState<boolean>();
 
     // Search
     const [searchTerm, setSearchTerm] = useState<string>();
@@ -59,6 +67,9 @@ const Main: FC = (
 
     // All items
     const [allData, setAllData] = useState<AllData>();
+
+    // Sorting
+    const [currentSort, setCurrentSort] = useState<string>();
 
     // Passwords
     const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
@@ -133,6 +144,7 @@ const Main: FC = (
 
         private CreateTiles(allData: AllData) {
             const allTiles: JSX.Element[] = [];
+            console.log(allData.Passwords)
             allData.Passwords.map(password => (
                 allTiles.push(
                     <Tile
@@ -217,16 +229,15 @@ const Main: FC = (
         }
 
         public CreateAllCategorySections(currentType: string, categories: Category[], allTiles: JSX.Element[]): JSX.Element[] {
-            const categorySections: JSX.Element[] = [];
+            let categorySections: JSX.Element[] = [];
             if (categories !== undefined) {
                 categories.forEach(category => {
                     if (allTiles !== undefined) {
                         let tiles = allTiles.filter(tile => tile.props.data.categoryId === category.id);
-                        if (currentType !== "All Items") {
-                            tiles = tiles.filter(x => x.props.type === currentType);
-                        }
+                        if (currentType !== "All Items") tiles = tiles.filter(x => x.props.type === currentType);
+                        tiles = tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name));
                         categorySections.push(
-                            <CategorySection categoryName={category.name} tiles={tiles} />
+                            <CategorySection categoryName={category.name} tiles={tiles} collapsed={collapsed} />
                         )
                     }
                 });
@@ -235,7 +246,9 @@ const Main: FC = (
             if (currentType !== "All Items") {
                 noneCategoryTiles = noneCategoryTiles.filter(x => x.props.type === currentType);
             }
-            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} />);
+            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} collapsed={collapsed} />);
+            if (currentSort === SortingOptions.FolderAZ) categorySections = categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName));
+            if (currentSort === SortingOptions.FolderZA) categorySections = categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName)).reverse();
             return categorySections;
         }
 
@@ -253,11 +266,11 @@ const Main: FC = (
 
         public Execute(allData: AllData): void
         {
-            console.log(allData);
             allData = this.FilterAllData(allData);
-            console.log(allData);
             const allTiles = this.CreateTiles(allData);
             const categorySections = this.CreateAllCategorySections(currentType, allData.Categories, allTiles);
+            console.log(categorySections[0].props)
+            setTiles(allTiles);
             setCategorySections(categorySections);
         }
     }
@@ -276,6 +289,8 @@ const Main: FC = (
                 axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options),
                 axios.get(`${baseUrl}/GetCategoriesByUserId`, options)
             ]);
+            console.log(categories);
+            console.log(passwords.data);
             const allData = new AllData(
                 passwords.data,
                 notes.data,
@@ -285,6 +300,7 @@ const Main: FC = (
                 categories.data
             );
             setAllData(allData);
+            setCategories(categories.data);
             // new CategorySectionComponentFactory().Execute(allData);
         }
         GetAllData();
@@ -292,7 +308,7 @@ const Main: FC = (
 
     useEffect(() => {
         if (allData) new CategorySectionComponentFactory().Execute(allData);
-    }, [allData, searchTerm]);
+    }, [allData, searchTerm, collapsed, currentSort]);
 
     const isModalVisible = () => {
         return (
@@ -313,6 +329,14 @@ const Main: FC = (
             isPaymentCardVisible ||
             isNewItemMenuVisible
         )
+    }
+
+    const RenderGrid = () => {
+        if (currentSort === SortingOptions.NameAZ) {
+            return <TileGrid tiles={tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name))} />
+        } else if (currentSort === SortingOptions.NameZA) {
+            return <TileGrid tiles={tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name)).reverse()} />
+        } else return <CategoryGrid categorySections={categorySections} collapsed={collapsed} />
     }
 
     return (
@@ -461,14 +485,13 @@ const Main: FC = (
                         setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
-            <div className={styles.SidebarWrapper} style={{ width: isCollapsed ? "75px" : "275px"}}>
+                <div className={styles.SidebarWrapper} style={{ width: isCollapsed ? "75px" : "275px"}}>
                     <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
                     <Navbar baseUrl={baseUrl} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                    <div className={styles.Grid}>
-                        {categorySections}
-                    </div>
+                    <SortingBar collapsed={collapsed} setCollapsed={setCollapsed} currentSort={currentSort} setCurrentSort={setCurrentSort} SortingOptions={SortingOptions} currentType={currentType} />
+                    {RenderGrid()}
                 </div>
                 </div>)
 }

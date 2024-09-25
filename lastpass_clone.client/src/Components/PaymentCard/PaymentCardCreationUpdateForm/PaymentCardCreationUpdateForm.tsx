@@ -54,7 +54,7 @@ const PaymentCardCreationUpdateForm = (
         });
     }
 
-    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
+    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.value);
 
     const requestHelpers = new RequestHelpers();
 
@@ -115,19 +115,13 @@ const PaymentCardCreationUpdateForm = (
                         <input name="Name" id="Name" onChange={handleChange} />
                     </div>
                     <div className={styles.CreateNewPasswordFolder}>
-                        <span>Folder</span>
-                        <select onChange={handleDropdownChange}></select>
+                        <span>Category</span>
+                        <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
                     </div>
                 </div>
                 <div className={styles.CreateNewPasswordBodyRightPanel}>
                     <table className={styles.CreateNewPasswordBodyRightPanelTable}>
                         <tbody>
-                            <tr>
-                                <td className={styles.TableColumnOne}>Category</td>
-                                <td className={styles.TableColumnTwo}>
-                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
-                                </td>
-                            </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Name on Card</td>
                                 <td className={styles.TableColumnTwo}>
