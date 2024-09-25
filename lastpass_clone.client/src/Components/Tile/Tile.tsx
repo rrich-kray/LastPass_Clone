@@ -44,6 +44,9 @@ const Tile = (
     const tileUtils: TileUtilities = new TileUtilities(baseUrl);
     const typeChecker: TypeChecker = new TypeChecker();
     const [categoryIcon, setCategoryIcon] = useState<React.ReactNode>();
+    const [tileColor, setTileColor] = useState<string>();
+    const [title, setTitle] = useState<string>();
+    const [hovered, setHovered] = useState<boolean>(false);
 
     function handleDeleteRequest() {
         let url: string;
@@ -79,54 +82,56 @@ const Tile = (
             });
     }
 
-    const trimTitle = (title: string) => title?.length > 10 ? `${title?.slice(0, 10)}...` : title;
+    const trimTitleNoHover = (title: string) => title?.length > 30 ? `${title?.slice(0, 30)}...` : title;
+    const trimTitleHover = (title: string) => title?.length > 10 ? `${title?.slice(0, 10)}...` : title;
 
     const GetTileText = (): string => {
         if (typeChecker.IsPasswordInfo(data)) {
-            return trimTitle(data.website === "" || data.website === undefined ? data.name : data.website);
-        } else if (typeChecker.IsNote(data)) {
-            return trimTitle(data.name);
-        } else if (typeChecker.IsAddress(data)) {
-            return trimTitle(data.name);
-        } else if (typeChecker.IsBankAccount(data)) {
-            return trimTitle(data.name);
-        } else if (typeChecker.IsPaymentCard(data)) {
-            return trimTitle(data.name)
+            if (!hovered) return trimTitleNoHover(data.website === "" || data.website === undefined ? data.name : data.website);
+            else return trimTitleHover(data.website === "" || data.website === undefined ? data.name : data.website);
         } else {
-            return trimTitle(data["Website"]);
+            if (!hovered) return trimTitleNoHover(data.name);
+            return trimTitleHover(data.name);
         }
     }
 
     useEffect(() => {
-        const passwordName: Promise<string> = tileUtils.FetchCategoryData(data.categoryId);
-        const categoryIcon: React.ReactNode = tileUtils.SelectCategoryIcon(passwordName);
+        const type = typeChecker.GetType(data);
+        const categoryIcon: JSX.Element = tileUtils.SelectCategoryIcon(type);
         setCategoryIcon(categoryIcon);
+        setTileColor(tileUtils.SelectRandomColor());
     }, []);
 
     return (
-        <div className={styles.Tile} onClick={() => {
-            setActiveDatum(data);
-            setIsDatumVisible(!isDatumVisible);
-        }}>
-            <div className={styles.TileLogoContainer} style={{background: tileUtils.SelectRandomColor()}}>
-                { categoryIcon && categoryIcon }
+        <div className={styles.Tile} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+            <div className={styles.TileLogoContainer} style={{ background: tileColor }}>
+                {categoryIcon && categoryIcon}
+                <div className={styles.TileViewButtonOverlay}></div>
+                <div className={styles.TileViewButton} onClick={() => {
+                    setActiveDatum(data);
+                    setIsDatumVisible(!isDatumVisible);
+                }}>
+                    <span>View</span>
+                </div>
             </div>
             <div className={styles.TileContentContainer}>
-                <div className={styles.TileContentContainerPanelLeft}>
+                <div className={styles.TileContentContainerPanelLeft} style={{ width: hovered ? "50%" : "100%"}}>
                     <h1 style={{ fontSize: "15px" }}>{GetTileText()}</h1>
                 </div>
-                <div className={styles.TileContentContainerPanelRight}>
-                    <img src={trashcan} className={styles.DeletePassword} onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteRequest();
-                    }} />
-                    <img src={edit} className={styles.EditPassword} onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveDatum(data);
-                        setIsDatumUpdateModalVisible(!isDatumUpdateModalVisible)
+                {hovered && <div className={styles.TileContentContainerPanelRight}>
+                    <div className={styles.TileEditDeleteItemContainer}>
+                        <img src={trashcan} className={styles.DeletePassword} onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteRequest();
+                        }} />
+                        <img src={edit} className={styles.EditPassword} onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveDatum(data);
+                            setIsDatumUpdateModalVisible(!isDatumUpdateModalVisible);
                         }
-                    } />
-                </div>
+                        } />
+                    </div>
+                </div>}
             </div>
         </div>
     );

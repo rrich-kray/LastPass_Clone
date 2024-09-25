@@ -14,13 +14,21 @@ Completed
 - Fix issue in which tiles are not displaying in categories
 - Fix grid issue when only tiles are displayed and there are not enough tiles for two rows. Large gap between first and second row
 - Fix length of note content error
+- Fix null reference error that ModelBindingErrorLogger is throwing - needed to instantiate ControllerResponse class with new list, otherwise it was looking for a list and finding nothing
+- Fix error in which, upon registration/app start and subsequent initial main page load, UserId is not being sent in payload in creation or update requests. Likely something to do with state being set in App.tsx. It is undefined on initial page load, after refresh of main, is fine
+- fix tiles to show appropriate image
+- Fix tile coloring
+- Fix arrow direction
 
 WIP
-- Fix error in which, upon registration/app start and subsequent initial main page load, UserId is not being sent in payload in creation or update requests. Likely something to do with state being set in App.tsx. It is undefined on initial page load, after refresh is fine
-- Add sorting to main page - all tiles sorting currently works, category sorting does not
-
+- Add hover button to tiles
 
 TODO
+- Add sorting to main page - need most recent. This will require adding creation/update dates to entities on backend, and modifying frontend to send back update dates/times
+- Refactor main page
+- Add account settings
+- Add configuration file to store things like URLs
+- Update formatting of loading page. Add nice animation
 - Add button to collapse all category sections, if it is sorted as such
 - Add list view
 - Add smaller tiles toggle

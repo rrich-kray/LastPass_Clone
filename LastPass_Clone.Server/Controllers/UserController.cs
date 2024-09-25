@@ -17,7 +17,7 @@ namespace PasswordManager.Server.Controllers
 
         public class AuthenticationResponse
         {
-            public int? UserId { get; set; }
+            public User User { get; set; }
             public bool? Result { get; set; }
             public string? Token { get; set; }
             public string? Message { get; set; }
@@ -43,7 +43,7 @@ namespace PasswordManager.Server.Controllers
             if (user.Password != loginReq.Password)
                 return Results.Json(new AuthenticationResponse { Result = false, Message = "Invalid credentials provided." });
             string token = new AuthService().Create(user);
-            return Results.Json(new AuthenticationResponse { UserId = user.Id, Result = true, Token = token, Message = "Log in successful." });
+            return Results.Json(new AuthenticationResponse { User = user, Result = true, Token = token, Message = "Log in successful." });
         }
 
         [AllowAnonymous]
@@ -70,7 +70,7 @@ namespace PasswordManager.Server.Controllers
 
             this.CreateDefaultUserCategories(newUser);
             string token = new AuthService().Create(newUser);
-            return Results.Json(new AuthenticationResponse { UserId = newUser.Id, Result = true, Token = token, Message = "Account creation successful." });
+            return Results.Json(new AuthenticationResponse { User = newUser, Result = true, Token = token, Message = "Account creation successful." });
         }
 
         [HttpGet]

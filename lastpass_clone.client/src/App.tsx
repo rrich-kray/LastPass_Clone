@@ -57,7 +57,7 @@ function App() {
                     } />
                     <Route path="/" element={
                         <AuthorizeView baseUrl={baseUrl}>
-                            {user && <Main
+                            {user !== null && user !== undefined && <Main
                                 baseUrl={baseUrl}
                                 alerts={alerts}
                                 isAlertModalVisible={isAlertModalVisible}

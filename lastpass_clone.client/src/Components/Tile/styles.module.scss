@@ -4,12 +4,20 @@
 
 .Tile {
     position: relative;
-    height: 125px;
-    width: 285px;
+    height: 130px;
+    width: 270px;
     //border: 0.05rem solid black;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     display: flex;
     flex-direction: column;
+}
+
+.Tile:hover .EditPassword {
+    opacity: 1
+}
+
+.Tile:hover .DeletePassword {
+    opacity: 1
 }
 
 .TileLogoContainer {
@@ -21,12 +29,52 @@
     background: hsl(197,30%,38%);
 }
 
+.TileViewButtonOverlay {
+    position: absolute;
+    height: 65%;
+    width: 100%;
+    opacity: 0;
+    background-color: #485655;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Tile:hover .TileViewButtonOverlay {
+    opacity: .5;
+}
+
+.Tile:hover .TileViewButton {
+    opacity: .75;
+}
+
+.TileViewButton {
+    position: absolute;
+    height: 35%;
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #515C6A;
+    border: 1px solid white;
+    border-radius: 5px;
+    opacity: 0;
+}
+
+.TileViewButton:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.TileViewButton span {
+    color: white
+}
+
 .TileContentContainer {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: 0.25s linear;
     flex-grow: 1;
 }
@@ -36,7 +84,9 @@
     width: 50%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding-left: 15px
 }
 
 .TileContentContainerPanelRight {
@@ -48,9 +98,6 @@
     padding-right: 25px;
 }
 
-.TileContentContainer:hover {
-    opacity: 1;
-}
 
 .TileContentContainerHeader,
 .TileContentContainerUsername,
@@ -63,21 +110,40 @@
     font-size: 30px;
 }
 
+.TileEditDeleteItemContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    //width: 50%;
+}
+
 .DeletePassword {
-    height: 25px;
-    width: 25px;
+    padding: 5px;
+    height: 15px;
+    width: auto;
+    border: .5px solid #D3D3D3;
+    border-radius: 2.5px;
+    opacity: 0;
+    cursor: pointer;
 }
 
 .DeletePassword:hover {
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    background-color: #D3D3D3
 }
 
 .EditPassword {
-    height: 25px;
-    width: 25px;
-    margin-left: 15px;
+    padding: 5px;
+    height: 15px;
+    width: auto;
+    margin-left: 5px;
+    border: .5px #D3D3D3;
+    border-radius: 2.5px;
+    opacity: 0;
+    cursor: pointer;
+    border: .5px solid #D3D3D3;
 }
 
 .EditPassword:hover {
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    background-color: #D3D3D3;
 }

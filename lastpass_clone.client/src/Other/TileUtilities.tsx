@@ -27,7 +27,7 @@ class TileUtilities
 
     SelectRandomColor(): string  { return this.colors[Math.floor(Math.random() * this.colors.length)] }
 
-    SelectCategoryIcon (categoryName: string): React.ReactNode {
+    SelectCategoryIcon (categoryName: string): JSX.Element {
         if (categoryName === "Password") {
             return <FaLock size={ 30 } className = { styles.SidebarLinkIcon } />
         } else if (categoryName === "Note") {

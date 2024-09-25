@@ -35,10 +35,10 @@ const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
                 </div>
             </div>
             <div className={styles.DropdownContent}>
-                <div className={styles.DropdownSelection}>
-                    <IoMdSettings size={20} style={{marginRight: "10px"}} />
+                {/*<div className={styles.DropdownSelection}>
+                    <IoMdSettings size={20} style={{ marginRight: "10px" }} />
                     <a >Account Settings</a>
-                </div>
+                </div>*/}
                 <div className={styles.DropdownSelection}>
                     <BiLogOut size={20} style={{ marginRight: "10px" }} />
                     <a onClick={logout}>Logout</a>

@@ -3,6 +3,7 @@ import styles from "./styles.module.scss";
 import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
+import { UserContext } from "../../App";
 
 const Register = (
     {
@@ -13,7 +14,8 @@ const Register = (
             baseUrl: string,
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
-    }) => {
+        }) => {
+    const { user, setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Email: "",
         Password: "",
@@ -51,6 +53,7 @@ const Register = (
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("userId", response.data.userId);
                     const alerts = [<AlertMessage message={"Account creation successful!"} color={"green"} />];
+                    setUser(response.data.user);
                     setAlerts(alerts);
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);

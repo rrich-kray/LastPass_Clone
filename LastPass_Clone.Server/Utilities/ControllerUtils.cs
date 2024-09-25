@@ -13,8 +13,8 @@ namespace PasswordManager.Server.Utilities
     public class ControllerResponse<T>
     {
         public bool Success { get; set; }
-        public List<string>? Messages { get; set; }
         public T? Entity { get; set; }
+        public List<string>? Messages = new List<string>();
     }
     public static class ControllerUtils
     {

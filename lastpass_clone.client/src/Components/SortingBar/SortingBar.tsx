@@ -41,8 +41,7 @@ const SortingBar = (
 
                     <div className={styles.SortingBarDropdownWrapper} tabIndex={0}>
                         <div className={styles.SortButton} style={{ marginLeft: "7.5px" }}>
-                            <span style={{fontWeight: "bold"}}>Sort By: </span>
-                            <span>{currentSort}</span>
+                            <span><strong>Sort By: </strong> {currentSort}</span>
                         </div>
                         <div className={styles.SortingBarDropdownMenu}>
                             <div className={styles.SortingBarDropdownSelection} onClick={() => setCurrentSort(SortingOptions.FolderAZ)}>
@@ -57,9 +56,9 @@ const SortingBar = (
                             <div className={styles.SortingBarDropdownSelection} onClick={() => setCurrentSort(SortingOptions.NameZA)}>
                                 <a>Name (z-a)</a>
                             </div>
-                            <div className={styles.SortingBarDropdownSelection} onClick={() => setCurrentSort(SortingOptions.MostRecent)}>
+                            {/*<div className={styles.SortingBarDropdownSelection} onClick={() => setCurrentSort(SortingOptions.MostRecent)}>
                                 <a>Most Recent</a>
-                            </div>
+                            </div>*/}
                         </div>
                     </div>
                 </div>
