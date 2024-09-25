@@ -24,10 +24,13 @@ const DataForm = ({ data }: { data: object }) => {
         }
         return itemType;
     }
+
+    const trimText = (title: string, length: number) => title?.length > length ? `${title?.slice(0, length)}...` : title;
+
     return (
         <div className={styles.DataModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.DataModalHeader}>
-                {`View ${getItemType(data)} '${data.name}'`}
+                {`View ${getItemType(data)} '${trimText(data.name, 45)}'`}
             </div>
             <div className={styles.DataModalTableWrapper}>
                 <table className={globalStyles.CreateNewPasswordBodyRightPanelTable}>
@@ -37,7 +40,7 @@ const DataForm = ({ data }: { data: object }) => {
                                 return  <tr>
                                             <td className={globalStyles.TableColumnOne}>{formatInputFieldTitle(key)}</td>
                                             <td className={globalStyles.TableColumnTwo}>
-                                                <span>{data[key]}</span>
+                                                <span>{trimText(data[key], 45)}</span>
                                             </td>
                                         </tr>
                             }
