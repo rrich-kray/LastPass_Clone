@@ -23,10 +23,12 @@ namespace PasswordManager.Server.Controllers
             public string? Message { get; set; }
         }
         private UserRepository UserRepository { get; set; }
+        private CategoryRepository CategoryRepository { get; set; }
 
-        public UserController(UserRepository userRepository)
+        public UserController(UserRepository userRepository, CategoryRepository categoryRepository)
         {
             this.UserRepository = userRepository;
+            this.CategoryRepository = categoryRepository;
         }
 
         [AllowAnonymous]
@@ -66,6 +68,7 @@ namespace PasswordManager.Server.Controllers
                 Roles = user.Roles,
             });
 
+            this.CreateDefaultUserCategories(newUser);
             string token = new AuthService().Create(newUser);
             return Results.Json(new AuthenticationResponse { UserId = newUser.Id, Result = true, Token = token, Message = "Account creation successful." });
         }
@@ -94,6 +97,14 @@ namespace PasswordManager.Server.Controllers
                 LastName = user.LastName,
                 Roles = user.Roles,
             });
+        }
+
+        private void CreateDefaultUserCategories(User user)
+        {
+            List<string> categoryNames = new List<string> { "Business", "Arts", "Productivity Tools", "Shopping", "Email", "Social", "Entertainment" };
+            List<Category> createdCategories = new List<Category>();
+            foreach (string categoryName in categoryNames)
+                this.CategoryRepository.Create(new Category { UserId = user.Id, Name = categoryName });
         }
     }
 }

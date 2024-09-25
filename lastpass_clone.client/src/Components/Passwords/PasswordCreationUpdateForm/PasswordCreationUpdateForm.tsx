@@ -29,13 +29,13 @@ const PasswordCreationUpdateForm =
         const [categories, setCategories] = useState<Category[]>();
         const [currentCategoryId, setCurrentCategoryId] = useState<number>();
         const { user, setUser } = useContext(UserContext);
-            const [formState, setFormState] = useState({
-                Name: "",
-                Website: "",
-                Username: "",
-                Password: "",
-                Notes: "",
-            });
+        const [formState, setFormState] = useState({
+            Name: "",
+            Website: "",
+            Username: "",
+            Password: "",
+            Notes: "",
+        });
 
     useEffect(() => {
         RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
@@ -52,7 +52,7 @@ const PasswordCreationUpdateForm =
         }
 
 
-        const handleDropdownChange = (e) => setCurrentCategoryId(e.target.options.selectedIndex);
+    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.value);
 
     const requestHelpers = new RequestHelpers();
 
@@ -107,19 +107,13 @@ const PasswordCreationUpdateForm =
                         <input name="Name" id="Name" style={{ borderColor: "border-color: rgb(167, 175, 186)"}} placeholder={updateToggle ? passwordData.name : ""} onChange={handleChange} />
                     </div>
                     <div className={styles.CreateNewPasswordFolder}>
-                        <span>Folder</span>
-                        <select onChange={handleDropdownChange}></select>
+                        <span>Category</span>
+                        <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
                     </div>
                 </div>
                 <div className={styles.CreateNewPasswordBodyRightPanel}>
                     <table className={styles.CreateNewPasswordBodyRightPanelTable}>
                         <tbody>
-                            <tr>
-                                <td className={styles.TableColumnOne}>Category</td>
-                                <td className={styles.TableColumnTwo}>
-                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id}>{c.name}</option>)}</select>
-                                </td>
-                            </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Website</td>
                                 <td className={styles.TableColumnTwo}>

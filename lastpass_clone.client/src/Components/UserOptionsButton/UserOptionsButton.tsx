@@ -31,7 +31,7 @@ const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
                     <FaRegUserCircle size={30} />
                 </div>
                 <div className={styles.UserOptionsButtonRightPanel}>
-                    { userInfo.email }
+                    {userInfo.email && (userInfo.email.length > 20 ? `${userInfo.email.slice(0, 20)}...` : userInfo.email) }
                 </div>
             </div>
             <div className={styles.DropdownContent}>

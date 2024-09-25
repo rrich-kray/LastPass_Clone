@@ -57,12 +57,12 @@ function App() {
                     } />
                     <Route path="/" element={
                         <AuthorizeView baseUrl={baseUrl}>
-                            <Main
+                            {user && <Main
                                 baseUrl={baseUrl}
                                 alerts={alerts}
                                 isAlertModalVisible={isAlertModalVisible}
                                 setAlerts={setAlerts}
-                                setIsAlertModalVisible={setIsAlertModalVisible} />
+                                setIsAlertModalVisible={setIsAlertModalVisible} />}
                         </AuthorizeView>
                     } />
                 </Routes>

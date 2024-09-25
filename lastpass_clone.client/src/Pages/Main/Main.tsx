@@ -144,6 +144,7 @@ const Main: FC = (
 
         private CreateTiles(allData: AllData) {
             const allTiles: JSX.Element[] = [];
+            console.log(allData.Passwords)
             allData.Passwords.map(password => (
                 allTiles.push(
                     <Tile
@@ -245,9 +246,9 @@ const Main: FC = (
             if (currentType !== "All Items") {
                 noneCategoryTiles = noneCategoryTiles.filter(x => x.props.type === currentType);
             }
-            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} />);
-            if (currentSort === SortingOptions.FolderAZ) categorySections = categorySections.sort((a, b) => a.props.data.categoryName.localeCompare(b.props.data.categoryName));
-            if (currentSort === SortingOptions.FolderZA) categorySections = categorySections.sort((a, b) => a.props.data.categoryName.localeCompare(b.props.data.categoryName)).reverse();
+            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} collapsed={collapsed} />);
+            if (currentSort === SortingOptions.FolderAZ) categorySections = categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName));
+            if (currentSort === SortingOptions.FolderZA) categorySections = categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName)).reverse();
             return categorySections;
         }
 
@@ -267,8 +268,9 @@ const Main: FC = (
         {
             allData = this.FilterAllData(allData);
             const allTiles = this.CreateTiles(allData);
-            setTiles(allTiles);
             const categorySections = this.CreateAllCategorySections(currentType, allData.Categories, allTiles);
+            console.log(categorySections[0].props)
+            setTiles(allTiles);
             setCategorySections(categorySections);
         }
     }
@@ -287,6 +289,8 @@ const Main: FC = (
                 axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options),
                 axios.get(`${baseUrl}/GetCategoriesByUserId`, options)
             ]);
+            console.log(categories);
+            console.log(passwords.data);
             const allData = new AllData(
                 passwords.data,
                 notes.data,
@@ -296,6 +300,7 @@ const Main: FC = (
                 categories.data
             );
             setAllData(allData);
+            setCategories(categories.data);
             // new CategorySectionComponentFactory().Execute(allData);
         }
         GetAllData();
@@ -303,7 +308,7 @@ const Main: FC = (
 
     useEffect(() => {
         if (allData) new CategorySectionComponentFactory().Execute(allData);
-    }, [allData, searchTerm, collapsed]);
+    }, [allData, searchTerm, collapsed, currentSort]);
 
     const isModalVisible = () => {
         return (
