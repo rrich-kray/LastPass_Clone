@@ -20,6 +20,7 @@
 .SidebarWrapper {
     height: 100%;
     width: 275px;
+    overflow-y: hidden;
 }
 
 .GridNavbarWrapper {
@@ -28,6 +29,8 @@
     flex-direction: column;
     flex-grow: 1;
     overflow-x: hidden;
+    min-width: 800px;
+    overflow-y: hidden;
 }
 
 .Grid {

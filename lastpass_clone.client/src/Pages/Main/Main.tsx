@@ -485,7 +485,7 @@ const Main: FC = (
                         setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
-                <div className={styles.SidebarWrapper} style={{ width: isCollapsed ? "75px" : "275px"}}>
+                <div className={styles.SidebarWrapper} style={{ width: isCollapsed ? "75px" : "275px", minWidth: isCollapsed ? "75px" : "275px" }}>
                     <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
