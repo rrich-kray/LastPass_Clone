@@ -10,14 +10,6 @@ import AccessLoginRegister from "./Components/AccessLoginRegister/AccessLoginReg
 import axios from "axios";
 import RequestHelpers from "./Other/RequestHelpers";
 
-// Auth:
-// Use login and register routes provided by ASP.NET. These will both send JWT to frontend
-// Login and register pages on Frontend will use JWT token to set a global state that will provide access to the main page through AuthorizeView. Will save JWT token in cookie for secutiry. All requests will extract token from cookie and include it.
-    // What is backend expecting to see? Just the token in 'Bearer: '?
-    // Could maybe create a custom IAuthorizationHandler and attach that to the controllers. This could include logic for verifying JWT
-    // Or a middleware that checks for a valid JWT
-// AuthroizeView will use a route to check if the token is valid. It will get the token from the global state mentioned above
-
 export const UserContext = createContext({});
 function App() {
 
@@ -35,7 +27,7 @@ function App() {
             .catch(error => console.log(error));
     }, []);
 
-    const baseUrl: string = "https://localhost:7110"; // put this in ENV file at some point
+    const baseUrl: string = "https://localhost:32777"; // put this in ENV file at some point
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
@@ -59,8 +51,8 @@ function App() {
                         <AuthorizeView baseUrl={baseUrl}>
                             {user !== null && user !== undefined && <Main
                                 baseUrl={baseUrl}
-                                alerts={alerts}
-                                isAlertModalVisible={isAlertModalVisible}
+                                alerts={alerts!}
+                                isAlertModalVisible={isAlertModalVisible!}
                                 setAlerts={setAlerts}
                                 setIsAlertModalVisible={setIsAlertModalVisible} />}
                         </AuthorizeView>

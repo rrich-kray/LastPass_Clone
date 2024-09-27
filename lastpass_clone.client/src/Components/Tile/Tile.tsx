@@ -28,7 +28,8 @@ const Tile = (
         baseUrl,
         type,
         setAlerts,
-        setIsAlertModalVisible
+        setIsAlertModalVisible,
+        typeIcon
     }: {
         data: PasswordInfo | Note | Address | BankAccount | PaymentCard,
         isDatumVisible: boolean,
@@ -39,7 +40,8 @@ const Tile = (
         baseUrl: string,
         type: string,
         setAlerts: Dispatch<JSX.Element[]>,
-        setIsAlertUpdateModalVisible: Dispatch<boolean>
+        setIsAlertUpdateModalVisible: Dispatch<boolean>,
+        typeIcon: JSX.Element[]
     }) => {
     const tileUtils: TileUtilities = new TileUtilities(baseUrl);
     const typeChecker: TypeChecker = new TypeChecker();
@@ -105,7 +107,7 @@ const Tile = (
     return (
         <div className={styles.Tile} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
             <div className={styles.TileLogoContainer} style={{ background: tileColor }}>
-                {categoryIcon && categoryIcon}
+                {typeIcon && typeIcon}
                 <div className={styles.TileViewButtonOverlay}></div>
                 <div className={styles.TileViewButton} onClick={() => {
                     setActiveDatum(data);

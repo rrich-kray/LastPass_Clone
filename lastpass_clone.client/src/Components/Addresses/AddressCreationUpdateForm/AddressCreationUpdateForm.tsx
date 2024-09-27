@@ -23,7 +23,7 @@ const AddressCreationUpdateForm = (
         {
             baseUrl: string,
             updateToggle: boolean,
-            addressData: Address,
+            addressData: Address | undefined,
             setIsAddressCreationModalVisible: Dispatch<boolean>,
             setIsAddressUpdateModalVisible: Dispatch<boolean>,
             setAlerts: Dispatch<JSX.Element[]>,

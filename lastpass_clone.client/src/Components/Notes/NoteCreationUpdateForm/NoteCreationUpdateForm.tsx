@@ -22,7 +22,7 @@ const NoteCreationUpdateForm = (
             setIsNoteUpdateModalVisible: Dispatch<boolean>,
             baseUrl: string,
             updateToggle: boolean,
-            noteData: Note,
+            noteData: Note | undefined,
             setNotes: Dispatch<JSX.Element[]>,
             setIsNoteModalVisible: Dispatch<boolean>
     }) => {

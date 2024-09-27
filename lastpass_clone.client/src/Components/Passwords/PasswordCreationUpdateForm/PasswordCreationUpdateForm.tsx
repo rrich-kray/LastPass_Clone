@@ -20,7 +20,7 @@ const PasswordCreationUpdateForm =
     }: {
             baseUrl: string,
             updateToggle: boolean,
-            passwordData: Password,
+            passwordData: Password | undefined,
             setIsPasswordCreationModalVisible: Dispatch<boolean>,
             setIsPasswordUpdateModalVisible: Dispatch<boolean>,
             setAlerts: Dispatch<JSX.Element[]>,
