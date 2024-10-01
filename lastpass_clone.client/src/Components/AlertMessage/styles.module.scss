@@ -1,6 +1,7 @@
 .ErrorMessage {
     width: 100%;
-    height: 50px;
+    min-height: 50px;
+    height: max-content;
     display: flex;
     justify-content: center;
     align-items: center;

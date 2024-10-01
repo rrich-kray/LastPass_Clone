@@ -60,9 +60,11 @@ const Main = (
     // Categories
     const [currentType, setCurrentType] = useState<string>("All Items");
     const [categorySections, setCategorySections] = useState<JSX.Element[]>([]);
+    const [currentCategoryId, setCurrentCategoryId] = useState<number>([]);
 
     // New category form
-    const [isCategoryFormVisible, setIsCategoryFormVisible] = useState<boolean>(false);
+    const [isCategoryCreationFormVisible, setIsCategoryCreationFormVisible] = useState<boolean>(false);
+    const [isCategoryUpdateFormVisible, setIsCategoryUpdateFormVisible] = useState<boolean>(false);
 
     // Collapsed
     // const [collapsed, setCollapsed] = useState<boolean>();
@@ -271,13 +273,13 @@ const Main = (
                         let tiles = allTiles.filter(tile => tile.props.data.categoryId === category.id);
                         tiles = tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name));
                         categorySections.push(
-                            <CategorySection categoryName={category.name} tiles={tiles} /* collapsed={collapsed!} */ />
+                            <CategorySection setCurrentCategoryId={setCurrentCategoryId} setIsCategoryUpdateFormVisible={setIsCategoryUpdateFormVisible} categoryName={category.name} tiles={tiles} baseUrl={baseUrl!} categoryId={category.id} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} /* collapsed={collapsed!} */ />
                         )
                     }
                 });
             }
             const noneCategoryTiles = allTiles.filter(tile => tile.props.data.categoryId === null);
-            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} /*collapsed={collapsed!}*/ />);
+            categorySections.push(<CategorySection setCurrentCategoryId={setCurrentCategoryId} setIsCategoryUpdateFormVisible={setIsCategoryUpdateFormVisible} categoryName={"None"} tiles={noneCategoryTiles} baseUrl={baseUrl!} categoryId={null} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} /*collapsed={collapsed!}*/ />);
             return categorySections;
         }
 
@@ -354,7 +356,7 @@ const Main = (
             isPaymentCardUpdateModalVisible ||
             isPaymentCardVisible ||
             isNewItemMenuVisible ||
-            isCategoryFormVisible
+            isCategoryCreationFormVisible
         )
     }
 
@@ -394,152 +396,153 @@ const Main = (
             
                     if (isNewItemMenuVisible) setIsNewItemMenuVisible(false);
 
-                    if (isCategoryFormVisible) setIsCategoryFormVisible(false);
+                    if (isCategoryCreationFormVisible) setIsCategoryCreationFormVisible(false);
                 }
             }>
 
-                {isCategoryFormVisible && <NewCategoryForm setIsCategoryFormVisible={setIsCategoryFormVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} baseUrl={baseUrl!}/>} 
+            {isCategoryCreationFormVisible && <NewCategoryForm currentCategoryId={currentCategoryId} setIsCategoryFormVisible={setIsCategoryCreationFormVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} baseUrl={baseUrl!} updateToggle={false} />} 
+            {isCategoryUpdateFormVisible && <NewCategoryForm currentCategoryId={currentCategoryId} setIsCategoryFormVisible={setIsCategoryCreationFormVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} baseUrl={baseUrl!} updateToggle={true} />} 
                 
-                <div className={styles.AddNewContainer} onMouseLeave={() => setAreNewButtonsVisible(false)}>
-                    <div className={styles.AddNewButtonContainer}>
-                        <div className={styles.AddCategoryLabel} style={{opacity: areNewButtonsVisible ? "1" : "0", marginRight: "10px"}}>New Category</div>
-                        <MdCreateNewFolder size={60} className={styles.CreateNewCategoryButton} style={{ opacity: areNewButtonsVisible ? "1" : "0", marginRight: "10px" }} onClick={() => setIsCategoryFormVisible(!isCategoryFormVisible)} />
-                    </div>
-                    <div className={styles.AddNewButtonContainer}>
-                        <div className={styles.AddItemLabel} style={{opacity: areNewButtonsVisible ? "1" : "0"}}>Add Item</div>
-                        <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsNewItemMenuVisible(!isNewItemMenuVisible)} onMouseEnter={() => setAreNewButtonsVisible(true)}/>
-                    </div>
-
+            <div className={styles.AddNewContainer} onMouseLeave={() => setAreNewButtonsVisible(false)}>
+                <div className={styles.AddNewButtonContainer}>
+                    <div className={styles.AddCategoryLabel} style={{opacity: areNewButtonsVisible ? "1" : "0", marginRight: "10px"}}>New Category</div>
+                    <MdCreateNewFolder size={60} className={styles.CreateNewCategoryButton} style={{ opacity: areNewButtonsVisible ? "1" : "0", marginRight: "10px" }} onClick={() => setIsCategoryCreationFormVisible(!isCategoryCreationFormVisible)} />
+                </div>
+                <div className={styles.AddNewButtonContainer}>
+                    <div className={styles.AddItemLabel} style={{opacity: areNewButtonsVisible ? "1" : "0"}}>Add Item</div>
+                    <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsNewItemMenuVisible(!isNewItemMenuVisible)} onMouseEnter={() => setAreNewButtonsVisible(true)}/>
                 </div>
 
-                {isModalVisible() && <div className={styles.Overlay}></div>}
+            </div>
 
-                {isAlertModalVisible && alerts && <AlertModal errors={alerts} />}
+            {isModalVisible() && <div className={styles.Overlay}></div>}
 
-                {isNewItemMenuVisible &&
-                    <NewItemMenu
-                        isPasswordCreationModalVisible={isPasswordCreationModalVisible}
-                        setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
-                        isNoteCreationModalVisible={isNoteCreationModalVisible}
-                        setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
-                        isAddressCreationModalVisible={isAddressCreationModalVisible}
-                        setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
-                        isBankAccountCreationModalVisible={isBankAccountCreationModalVisible}
-                        setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
-                        isPaymentCardCreationModalVisible={isPaymentCardCreationModalVisible}
-                        setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
-                    />}
+            {isAlertModalVisible && alerts && <AlertModal errors={alerts} />}
 
-                {isPasswordVisible && <DataForm data={activePassword!} />}
-                {isPasswordCreationModalVisible &&
-                    <PasswordCreationUpdateForm
-                        baseUrl={baseUrl!}
-                        passwordData={undefined}
-                        updateToggle={false}
-                        setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
-                        setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible} />}
-                {isPasswordUpdateModalVisible &&
-                    activePassword &&
-                    <PasswordCreationUpdateForm
-                        baseUrl={baseUrl!}
-                        passwordData={activePassword!}
-                        updateToggle={true}
-                        setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
-                        setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible} />}
+            {isNewItemMenuVisible &&
+                <NewItemMenu
+                    isPasswordCreationModalVisible={isPasswordCreationModalVisible}
+                    setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
+                    isNoteCreationModalVisible={isNoteCreationModalVisible}
+                    setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
+                    isAddressCreationModalVisible={isAddressCreationModalVisible}
+                    setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
+                    isBankAccountCreationModalVisible={isBankAccountCreationModalVisible}
+                    setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
+                    isPaymentCardCreationModalVisible={isPaymentCardCreationModalVisible}
+                    setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
+                />}
 
-                {isNoteVisible && <DataForm data={activeNote!} />}
-                {isNoteCreationModalVisible &&
-                    <NoteCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        noteData={undefined}
-                        updateToggle={false}
-                        setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
-                        setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
-                {isNoteUpdateModalVisible && activeNote &&
-                    <NoteCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        noteData={activeNote}
-                        updateToggle={true}
-                        setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
-                        setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
+            {isPasswordVisible && <DataForm data={activePassword!} />}
+            {isPasswordCreationModalVisible &&
+                <PasswordCreationUpdateForm
+                    baseUrl={baseUrl!}
+                    passwordData={undefined}
+                    updateToggle={false}
+                    setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
+                    setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible} />}
+            {isPasswordUpdateModalVisible &&
+                activePassword &&
+                <PasswordCreationUpdateForm
+                    baseUrl={baseUrl!}
+                    passwordData={activePassword!}
+                    updateToggle={true}
+                    setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
+                    setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible} />}
 
-                {isAddressVisible && <DataForm data={activeAddress!} />}
-                {isAddressCreationModalVisible &&
-                    <AddressCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        addressData={undefined}
-                        updateToggle={false}
-                        setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
-                        setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
-                {isAddressUpdateModalVisible && activeAddress &&
-                    <AddressCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        addressData={activeAddress!}
-                        updateToggle={true}
-                        setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
-                        setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
+            {isNoteVisible && <DataForm data={activeNote!} />}
+            {isNoteCreationModalVisible &&
+                <NoteCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    noteData={undefined}
+                    updateToggle={false}
+                    setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
+                    setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
+            {isNoteUpdateModalVisible && activeNote &&
+                <NoteCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    noteData={activeNote}
+                    updateToggle={true}
+                    setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
+                    setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
 
-                {isBankAccountVisible && <DataForm data={activeBankAccount!} />}
-                {isBankAccountCreationModalVisible &&
-                    <BankAccountCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        bankAccountData={undefined}
-                        updateToggle={false}
-                        setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
-                        setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
-                {isBankAccountUpdateModalVisible && activeBankAccount &&
-                    <BankAccountCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        bankAccountData={activeBankAccount!}
-                        updateToggle={true}
-                        setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
-                        setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
+            {isAddressVisible && <DataForm data={activeAddress!} />}
+            {isAddressCreationModalVisible &&
+                <AddressCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    addressData={undefined}
+                    updateToggle={false}
+                    setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
+                    setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
+            {isAddressUpdateModalVisible && activeAddress &&
+                <AddressCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    addressData={activeAddress!}
+                    updateToggle={true}
+                    setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
+                    setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
 
-                {isPaymentCardVisible && <DataForm data={activePaymentCard!} />}
-                {isPaymentCardCreationModalVisible &&
-                    <PaymentCardCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        paymentCardData={undefined}
-                        updateToggle={false}
-                        setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
-                        setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
-                {isPaymentCardUpdateModalVisible && activePaymentCard &&
-                    <PaymentCardCreationUpdateForm
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl!}
-                        paymentCardData={activePaymentCard!}
-                        updateToggle={true}
-                        setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
-                        setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
+            {isBankAccountVisible && <DataForm data={activeBankAccount!} />}
+            {isBankAccountCreationModalVisible &&
+                <BankAccountCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    bankAccountData={undefined}
+                    updateToggle={false}
+                    setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
+                    setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
+            {isBankAccountUpdateModalVisible && activeBankAccount &&
+                <BankAccountCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    bankAccountData={activeBankAccount!}
+                    updateToggle={true}
+                    setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
+                    setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
 
-                <div className={styles.SidebarWrapper} style={{ width: isSidebarCollapsed ? "75px" : "275px", minWidth: isSidebarCollapsed ? "75px" : "275px" }}>
-                    <Sidebar isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
-                </div>
-                <div className={styles.GridNavbarWrapper}>
-                    <Navbar baseUrl={baseUrl!} setSearchTerm={setSearchTerm} />
-                    <SortingBar /*collapsed={collapsed!} setCollapsed={setCollapsed}*/ currentSort={currentSort} setCurrentSort={setCurrentSort} /*SortingOptions={SortingOptions}*/ currentType={currentType} />
-                    {categorySections && tiles && RenderGrid()}
-                </div>
-                </div>)
+            {isPaymentCardVisible && <DataForm data={activePaymentCard!} />}
+            {isPaymentCardCreationModalVisible &&
+                <PaymentCardCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    paymentCardData={undefined}
+                    updateToggle={false}
+                    setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
+                    setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
+            {isPaymentCardUpdateModalVisible && activePaymentCard &&
+                <PaymentCardCreationUpdateForm
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible}
+                    baseUrl={baseUrl!}
+                    paymentCardData={activePaymentCard!}
+                    updateToggle={true}
+                    setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
+                    setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
+
+            <div className={styles.SidebarWrapper} style={{ width: isSidebarCollapsed ? "75px" : "275px", minWidth: isSidebarCollapsed ? "75px" : "275px" }}>
+                <Sidebar isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
+            </div>
+            <div className={styles.GridNavbarWrapper}>
+                <Navbar baseUrl={baseUrl!} setSearchTerm={setSearchTerm} />
+                <SortingBar /*collapsed={collapsed!} setCollapsed={setCollapsed}*/ currentSort={currentSort} setCurrentSort={setCurrentSort} /*SortingOptions={SortingOptions}*/ currentType={currentType} />
+                {categorySections && tiles && RenderGrid()}
+            </div>
+            </div>)
 }
 
 export default Main;

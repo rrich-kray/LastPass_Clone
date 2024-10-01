@@ -11,6 +11,12 @@
     border-bottom: 1px solid rgb(167, 175, 186);
 }
 
+.CategorySectionNameContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .CategorySectionGrid {
     // border-top: 1px solid rgb(167, 175, 186);
     height: 100%;
@@ -21,4 +27,20 @@
     grid-template-rows: repeat(auto);
     grid-column-gap: 25px;
     grid-row-gap: 25px;
+}
+
+.CategorySectionHeaderButton {
+    padding: 5px;
+    background-color: #4A4A4A;
+    color: #FFF;
+    font-size: 14px;
+    border-radius: 2px;
+    opacity: 0;
+    z-index: 1000;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.CategorySectionHeaderButton:hover {
+    background-color: #D3D3D3;
 }

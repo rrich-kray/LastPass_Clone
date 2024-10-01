@@ -10,6 +10,8 @@ interface CategoryFormProps {
     setAlerts: Dispatch<JSX.Element[]>,
     setIsAlertModalVisible: Dispatch<boolean>,
     setIsCategoryFormVisible: Dispatch<boolean>,
+    updateToggle: boolean,
+    currentCategoryId: number
 }
 
 const NewCategoryForm = (props: CategoryFormProps) => {
@@ -40,6 +42,7 @@ const NewCategoryForm = (props: CategoryFormProps) => {
         e.preventDefault();
         const requestHelpers = new RequestHelpers();
         return await
+            !props.updateToggle ?
              requestHelpers.MakeRequest(
                  `${props.baseUrl}/CreateCategory`,
                 {
@@ -51,7 +54,21 @@ const NewCategoryForm = (props: CategoryFormProps) => {
                 props.setAlerts,
                 props.setIsAlertModalVisible,
                 setIsSubmitButtonDisabled
+            ) :
+            requestHelpers.MakeRequest(
+                `${props.baseUrl}/UpdateCategory`,
+                {
+                    id: props.currentCategoryId,
+                    userId: user.id,
+                    name: formState.Name
+                },
+                true,
+                "Category update successful!",
+                props.setAlerts,
+                props.setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             )
+
     }
     return (
         <div className={styles.NewCategoryForm} onClick={(e) => e.stopPropagation()}>
