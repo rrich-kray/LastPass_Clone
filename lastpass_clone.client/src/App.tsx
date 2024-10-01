@@ -43,7 +43,7 @@ function App() {
             .catch(error => console.log(error));
     }, []);
 
-    const baseUrl: string = "https://localhost:32773"; // put this in ENV file at some point
+    const baseUrl: string = "https://localhost:32779"; // put this in ENV file at some point
     //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
     //const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
 

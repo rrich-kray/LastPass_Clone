@@ -32,6 +32,8 @@ import { FaRegAddressBook } from "react-icons/fa";
 import { FaRegCreditCard } from "react-icons/fa";
 import { BsBank } from "react-icons/bs";
 import Entity from "../../Types/Entity.ts"
+import { MdCreateNewFolder } from "react-icons/md";
+import NewCategoryForm from "../../Components/NewCategoryForm/NewCategoryForm.tsx";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main = (
@@ -49,12 +51,18 @@ const Main = (
             setIsAlertModalVisible: Dispatch<boolean>,
     }) =>
 {
+    // New items
+    const [areNewButtonsVisible, setAreNewButtonsVisible] = useState<boolean>(false);
+
     // Tiles
     const [tiles, setTiles] = useState<JSX.Element[]>([]);
 
     // Categories
     const [currentType, setCurrentType] = useState<string>("All Items");
     const [categorySections, setCategorySections] = useState<JSX.Element[]>([]);
+
+    // New category form
+    const [isCategoryFormVisible, setIsCategoryFormVisible] = useState<boolean>(false);
 
     // Collapsed
     // const [collapsed, setCollapsed] = useState<boolean>();
@@ -345,7 +353,8 @@ const Main = (
             isPaymentCardCreationModalVisible ||
             isPaymentCardUpdateModalVisible ||
             isPaymentCardVisible ||
-            isNewItemMenuVisible
+            isNewItemMenuVisible ||
+            isCategoryFormVisible
         )
     }
 
@@ -384,9 +393,24 @@ const Main = (
                     if (isPaymentCardVisible) setIsPaymentCardVIsible(false);
             
                     if (isNewItemMenuVisible) setIsNewItemMenuVisible(false);
+
+                    if (isCategoryFormVisible) setIsCategoryFormVisible(false);
                 }
             }>
-                <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsNewItemMenuVisible(!isNewItemMenuVisible)} />
+
+                {isCategoryFormVisible && <NewCategoryForm setIsCategoryFormVisible={setIsCategoryFormVisible} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} baseUrl={baseUrl!}/>} 
+                
+                <div className={styles.AddNewContainer} onMouseLeave={() => setAreNewButtonsVisible(false)}>
+                    <div className={styles.AddNewButtonContainer}>
+                        <div className={styles.AddCategoryLabel} style={{opacity: areNewButtonsVisible ? "1" : "0", marginRight: "10px"}}>New Category</div>
+                        <MdCreateNewFolder size={60} className={styles.CreateNewCategoryButton} style={{ opacity: areNewButtonsVisible ? "1" : "0", marginRight: "10px" }} onClick={() => setIsCategoryFormVisible(!isCategoryFormVisible)} />
+                    </div>
+                    <div className={styles.AddNewButtonContainer}>
+                        <div className={styles.AddItemLabel} style={{opacity: areNewButtonsVisible ? "1" : "0"}}>Add Item</div>
+                        <FaPlusCircle size={75} className={styles.CreateNewPasswordButton} onClick={() => setIsNewItemMenuVisible(!isNewItemMenuVisible)} onMouseEnter={() => setAreNewButtonsVisible(true)}/>
+                    </div>
+
+                </div>
 
                 {isModalVisible() && <div className={styles.Overlay}></div>}
 

@@ -21,7 +21,7 @@ namespace PasswordManager.Server.Data.Entities
     {
         public CategoryEntityValidator()
         {
-            RuleFor(x => x.Name).Length(250).WithMessage("Name must be less than 255 characters");
+            //RuleFor(x => x.Name).Length(1, 255).WithMessage("Name must be between 1 and 255 characters.");
         }
     }
 }

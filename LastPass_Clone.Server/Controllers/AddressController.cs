@@ -16,18 +16,18 @@ namespace PasswordManager.Server.Controllers
     {
         private AddressRepository AddressRepository { get; set; }
 
-        public AddressController(AddressRepository passwordManagerRepository)
+        public AddressController(AddressRepository addressRepository)
         {
-            this.AddressRepository = passwordManagerRepository;
+            this.AddressRepository = addressRepository;
         }
 
         [Route("/GetAllAddresses")]
         [HttpGet]
-        public IEnumerable<Address> GetAddresses() => this.AddressRepository.Addresses;
+        public IEnumerable<Address> GetAllAddresses() => this.AddressRepository.Addresses;
 
         [Route("/GetAddressesByUserId")]
         [HttpGet]
-        public IEnumerable<Address> GetPasswordsByUserId()
+        public IEnumerable<Address> GetAddressesByUserId()
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             var decodedToken = new AuthService().Decode(token);
