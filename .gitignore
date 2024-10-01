@@ -3,6 +3,10 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Bin and release folders. Causing merge issues
+**/bin/Debug/
+**/bin/Release/
+
 # dotenv files
 .env
 
