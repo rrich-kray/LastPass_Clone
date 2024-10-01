@@ -33,7 +33,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/Create")]
         [HttpPost]
-        public IResult Create([FromBody] Category category) =>
+        public ControllerResponse<Category> Create([FromBody] Category category) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new CategoryEntityValidator(),
                 validatee: category,
@@ -42,7 +42,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/Delete/{categoryId}")]
         [HttpDelete]
-        public IResult Delete(int categoryId) =>
+        public ControllerResponse<Category> Delete(int categoryId) =>
             ControllerUtils.CommonControllerDelete<Category>(
                 this.CategoryRepository, 
                 categoryId, 

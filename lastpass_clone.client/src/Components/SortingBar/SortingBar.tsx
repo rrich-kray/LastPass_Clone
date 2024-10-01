@@ -1,10 +1,12 @@
 import styles from "./styles.module.scss";
+/*
 import { MdExpand } from "react-icons/md";
 import { BsArrowsCollapse } from "react-icons/bs";
 import { SlMagnifierAdd } from "react-icons/sl";
 import { SlMagnifierRemove } from "react-icons/sl";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { HiMiniSquares2X2 } from "react-icons/hi2";
+*/
 import { Dispatch } from "react";
 import SortingOptions from "../../Other/SortingOptionsEnum.ts";
 
@@ -12,17 +14,17 @@ const SortingBar = (
     {
         currentType,
         currentSort,
-        setCurrentSort,
-        sortingOptions,
-        collapsed,
-        setCollapsed
+        setCurrentSort
+        // sortingOptions,
+        // collapsed,
+        // setCollapsed
     }: {
             currentType: string,
-            currentSort: string,
-            setCurrentSort: Dispatch<string>,
-            sortingOptions: SortingOptions,
-            collapsed: boolean,
-            setCollapsed: Dispatch<boolean>
+            currentSort: string | undefined,
+            setCurrentSort: Dispatch<string>
+            //sortingOptions: SortingOptions,
+            //collapsed: boolean,
+            //setCollapsed: Dispatch<boolean>
     }) => {
 
     return (

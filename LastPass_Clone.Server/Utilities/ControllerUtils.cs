@@ -14,11 +14,12 @@ namespace PasswordManager.Server.Utilities
     {
         public bool Success { get; set; }
         public T? Entity { get; set; }
-        public List<string>? Messages = new List<string>();
+
+        public List<string> Messages = new List<string>();
     }
     public static class ControllerUtils
     {
-        public static IResult CommonControllerCreate<T, J, K>(
+        public static ControllerResponse<J> CommonControllerCreate<T, J, K>(
             T validator,
             J validatee,
             K repository,
@@ -28,7 +29,10 @@ namespace PasswordManager.Server.Utilities
             where J : class
         {
             ControllerResponse<J> response = new ControllerResponse<J>();
-            if (!modelState.IsValid) return Results.Json(ModelBindingErrorLogger.LogErrorMessages(modelState, response));
+            if (!modelState.IsValid) 
+            { 
+                return ModelBindingErrorLogger.LogErrorMessages(modelState, response);
+            }
             var validationResult = validator.Validate(validatee);
             if (!validationResult.IsValid)
             {
@@ -41,7 +45,7 @@ namespace PasswordManager.Server.Utilities
                     errorMessages.Add(errorMessage.ErrorMessage.ToString());
                 }
                 response.Messages = errorMessages;
-                return Results.Json(response);
+                return response;
             }
             try
             {
@@ -55,10 +59,10 @@ namespace PasswordManager.Server.Utilities
                 response.Success = false;
                 response.Messages = new List<string> { ex.Message };
             }
-            return Results.Json(response);
+            return response;
         }
 
-        public static IResult CommonControllerUpdate<T, J, K>(
+        public static ControllerResponse<J> CommonControllerUpdate<T, J, K>(
             T validator,
             J validatee,
             K repository,
@@ -68,7 +72,7 @@ namespace PasswordManager.Server.Utilities
             where J : class
         {
             ControllerResponse<J> response = new ControllerResponse<J>();
-            if (!modelState.IsValid) return Results.Json(ModelBindingErrorLogger.LogErrorMessages(modelState, response));
+            if (!modelState.IsValid) return ModelBindingErrorLogger.LogErrorMessages(modelState, response);
             var validationResult = validator.Validate(validatee);
             if (!validationResult.IsValid)
             {
@@ -78,7 +82,7 @@ namespace PasswordManager.Server.Utilities
                 foreach (var errorMessage in validationResult.Errors)
                     errorMessages.Add(errorMessage.ErrorMessage);
                 response.Messages = errorMessages;
-                return Results.Json(response); ;
+                return response;
             }
             try
             {
@@ -92,10 +96,10 @@ namespace PasswordManager.Server.Utilities
                 response.Success = false;
                 response.Messages = new List<string> { ex.Message };
             }
-            return Results.Json(response);
+            return response;
         }
 
-        public static IResult CommonControllerDelete<T>(
+        public static ControllerResponse<T> CommonControllerDelete<T>(
             IPasswordManagerRepository<T> repository,
             int id,
             string successMessage)
@@ -112,7 +116,7 @@ namespace PasswordManager.Server.Utilities
                 response.Success = false;
                 response.Messages = new List<string> { ex.Message };
             }
-            return Results.Json(response);
+            return response;
         }
     }
 }

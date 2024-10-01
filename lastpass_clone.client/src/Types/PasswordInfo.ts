@@ -1,4 +1,6 @@
-type PasswordInfo = {
+import Entity from "./Entity.ts"
+
+interface PasswordInfo extends Entity {
     name: string;
     website: string;
     username: string;

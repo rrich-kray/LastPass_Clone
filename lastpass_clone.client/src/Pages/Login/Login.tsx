@@ -4,6 +4,7 @@ import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 import { UserContext } from "../../App";
+import RequestHelpers from "../../Other/RequestHelpers.tsx";
 
 // What if user tries to login again when there is already a token in localStorage?
     // both Login and Register components should check if there is a token, and if it is still valid, prior to granting access
@@ -18,13 +19,13 @@ const Login = (
         setAlerts: Dispatch<JSX.Element[]>,
         setIsAlertModalVisible: Dispatch<boolean>
         }) => {
-    const { user, setUser } = useContext(UserContext);
+    const { 1: setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Email: "",
         Password: "",
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormState({
             ...formState,
@@ -32,7 +33,7 @@ const Login = (
         });
     }
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const reset = () => {
             setAlerts([]);
@@ -42,7 +43,8 @@ const Login = (
             .post(`${baseUrl}/Login`, {
                 Email: formState.Email,
                 Password: formState.Password
-            })
+            },
+            RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
                     localStorage.setItem("token", response.data.token);
@@ -93,7 +95,7 @@ const Login = (
                     </div>
                     <div className={styles.RegisterInputContainer}>
                         <span>Password</span>
-                        <input name="Password" className={styles.RegisterInput} onChange={handleChange}></input>
+                        <input type="password" name="Password" className={styles.RegisterInput} onChange={handleChange}></input>
                     </div>
                 </div>
                 <div className={styles.RegisterButtons}>

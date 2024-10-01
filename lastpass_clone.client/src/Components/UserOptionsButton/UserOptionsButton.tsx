@@ -3,16 +3,24 @@ import styles from "./styles.module.scss";
 import { FaRegUserCircle } from "react-icons/fa";
 import axios from "axios";
 import RequestHelpers from "../../Other/RequestHelpers"
-import User from "../../Types/User.ts"
-import { IoMdSettings } from "react-icons/io";
+import User from "../../Types/User.ts";
 import { BiLogOut } from "react-icons/bi";
 
 const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
-    const [userInfo, setUserInfo] = useState<User>({});
+    const defaultUserValues: User = {
+        id: "",
+        email: "",
+        password: "",
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        roles: []
+    }
+    const [userInfo, setUserInfo] = useState<User>(defaultUserValues);
 
     useEffect(() => {
         axios
-            .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateRequestHeaders())
+            .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateFullRequestHeaders())
             .then(response => {
                 setUserInfo(response.data)
             })

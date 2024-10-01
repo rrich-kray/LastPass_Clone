@@ -19,9 +19,11 @@ Completed
 - fix tiles to show appropriate image
 - Fix tile coloring
 - Fix arrow direction
+- Add hover button to tiles
+- Fix type filtering. Going from all items to any other is correct, going from say passwords to notes does not work, nothing shows. Problem is that new request for all items is not performed when currentType is changed, your continuing to filter down the same set of data
+- Fix tile icons. One is a password that is displaying as a note. Somthing wrong with GetCategoryIcon logic
 
 WIP
-- Add hover button to tiles
 
 TODO
 - Add sorting to main page - need most recent. This will require adding creation/update dates to entities on backend, and modifying frontend to send back update dates/times

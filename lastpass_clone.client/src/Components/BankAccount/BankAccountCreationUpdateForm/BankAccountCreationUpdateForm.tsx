@@ -1,12 +1,11 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
 import { useState, useEffect, Dispatch, useContext } from "react";
-import axios from "axios";
 import BankAccount from "../../../Types/BankAccount";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
-import AlertMessage from "../../AlertMessage/AlertMessage";
 import {UserContext} from "../../../App";
 import RequestHelpers from "../../../Other/RequestHelpers";
+import Entity from "../../../Types/Entity.ts";
 
 const BankAccountCreationUpdateForm = (
     {
@@ -20,15 +19,16 @@ const BankAccountCreationUpdateForm = (
     }: {
             baseUrl: string,
             updateToggle: boolean,
-            bankAccountData: BankAccount,
+            bankAccountData: Entity | undefined,
             setIsBankAccountCreationModalVisible: Dispatch<boolean>,
             setIsBankAccountUpdateModalVisible: Dispatch<boolean>,
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
-    }) => {
+        }) => {
+    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(false);
     const [categories, setCategories] = useState<Category[]>();
-    const [currentCategoryId, setCurrentCategoryId] = useState<number>();
-    const { user, setUser } = useContext(UserContext);
+    const [currentCategoryId, setCurrentCategoryId] = useState<string>();
+    const [ user ] = useContext(UserContext);
     const [formState, setFormState] = useState({
         Name: "",
         BankName: "",
@@ -47,7 +47,7 @@ const BankAccountCreationUpdateForm = (
         RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormState({
             ...formState,
@@ -55,11 +55,11 @@ const BankAccountCreationUpdateForm = (
         });
     }
 
-    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.value);
+    const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => setCurrentCategoryId(e.target.value);
 
     const requestHelpers = new RequestHelpers();
 
-    const handleFormSubmit = async (e) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         return await
             !updateToggle
@@ -83,13 +83,14 @@ const BankAccountCreationUpdateForm = (
                 false,
                 "Bank account Creation successful!",
                 setAlerts,
-                setIsAlertModalVisible
+                setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             )
             : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdateBankAccount`,
                 {
                     userId: user.id,
-                    Id: bankAccountData.id,
+                    Id: bankAccountData!.id,
                     CategoryId: currentCategoryId,
                     Name: formState.Name,
                     BankName: formState.BankName,
@@ -106,7 +107,8 @@ const BankAccountCreationUpdateForm = (
                 true,
                 "Bank account update successful!",
                 setAlerts,
-                setIsAlertModalVisible
+                setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             );
     }
 
@@ -130,69 +132,63 @@ const BankAccountCreationUpdateForm = (
                     <table className={styles.CreateNewPasswordBodyRightPanelTable}>
                         <tbody>
                             <tr>
-                                <td className={styles.TableColumnOne}>Category</td>
-                                <td className={styles.TableColumnTwo}>
-                                    <select onChange={handleDropdownChange}>{categories && categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td className={styles.TableColumnOne}>Bank Name</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="BankName" id="BankName" placeholder={updateToggle ? bankAccountData.bankName : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="BankName" id="BankName" placeholder={updateToggle ? (bankAccountData as BankAccount)?.bankName : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Account Type</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="AccountType" id="AccountType" placeholder={updateToggle ? bankAccountData.accountType : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="AccountType" id="AccountType" placeholder={updateToggle ? (bankAccountData as BankAccount)?.accountType : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Routing Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input type="number" name="RoutingNumber" id="RoutingNumber" placeholder={updateToggle ? bankAccountData.routingNumber : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input type="number" name="RoutingNumber" id="RoutingNumber" placeholder={updateToggle ? (bankAccountData as BankAccount)?.routingNumber : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Account Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input type="number" name="AccountNumber" id="AccountNumber" placeholder={updateToggle ? bankAccountData.accountNumber : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input type="number" name="AccountNumber" id="AccountNumber" placeholder={updateToggle ? (bankAccountData as BankAccount)?.accountNumber : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>SWIFT Code</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="SwiftCode" id="SwiftCode" placeholder={updateToggle ? bankAccountData.swiftCode : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="SwiftCode" id="SwiftCode" placeholder={updateToggle ? (bankAccountData as BankAccount)?.swiftCode : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>IBAN Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="IbanNumber" id="IbanNumber" placeholder={updateToggle ? bankAccountData.ibanNumber : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="IbanNumber" id="IbanNumber" placeholder={updateToggle ? (bankAccountData as BankAccount)?.ibanNumber : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>PIN</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input type="number" name="Pin" id="Pin" placeholder={updateToggle ? bankAccountData.PIN : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input type="number" name="Pin" id="Pin" placeholder={updateToggle ? (bankAccountData as BankAccount)?.PIN : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Branch Address</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="BranchAddress" id="BranchAddress" placeholder={updateToggle ? bankAccountData.branchAddress : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="BranchAddress" id="BranchAddress" placeholder={updateToggle ? (bankAccountData as BankAccount)?.branchAddress : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Branch Phone</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="BranchPhone" id="BranchPhone" placeholder={updateToggle ? bankAccountData.branchPhone : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="BranchPhone" id="BranchPhone" placeholder={updateToggle ? (bankAccountData as BankAccount)?.branchPhone : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Notes</td>
                                 <td className={styles.TableNotes}>
-                                    <input name="Notes" id="Notes" placeholder={updateToggle ? bankAccountData.notes : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Notes" id="Notes" placeholder={updateToggle ? (bankAccountData as BankAccount)?.notes : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                         </tbody>
@@ -207,7 +203,7 @@ const BankAccountCreationUpdateForm = (
                 </div>
                 <div className={styles.CreateNewPasswordFooterRightContainer}>
                     <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsBankAccountUpdateModalVisible(false) : setIsBankAccountCreationModalVisible(false)}>Cancel</button>
-                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                    {isSubmitButtonDisabled === false && <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>}
                 </div>
             </div>
         </div>)

@@ -1,12 +1,11 @@
 import { useEffect, useState, Dispatch, useContext } from "react";
 import styles from "../../../Global/CreationUpdateForm.module.scss";
-import axios from "axios";
 import Note from "../../../Types/Note";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
-import AlertMessage from "../../AlertMessage/AlertMessage"
 import {UserContext} from "../../../App";
 import RequestHelpers from "../../../Other/RequestHelpers";
+import Entity from "../../../Types/Entity.ts";
 
 const NoteCreationUpdateForm = (
     {
@@ -22,13 +21,14 @@ const NoteCreationUpdateForm = (
             setIsNoteUpdateModalVisible: Dispatch<boolean>,
             baseUrl: string,
             updateToggle: boolean,
-            noteData: Note,
-            setNotes: Dispatch<JSX.Element[]>,
-            setIsNoteModalVisible: Dispatch<boolean>
-    }) => {
+            noteData: Entity | undefined,
+            setAlerts: Dispatch<JSX.Element[]>,
+            setIsAlertModalVisible: Dispatch<boolean>
+        }) => {
+        const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(false);
         const [categories, setCategories] = useState<Category[]>();
-        const [currentCategoryId, setCurrentCategoryId] = useState<number>();
-        const { user, setUser } = useContext(UserContext);
+        const [currentCategoryId, setCurrentCategoryId] = useState<string>();
+        const [ user ] = useContext(UserContext);
         const [formState, setFormState] = useState({
             Name: "",
             Content: ""
@@ -38,7 +38,7 @@ const NoteCreationUpdateForm = (
             RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
         }, []);
 
-        const handleChange = (e) => {
+        const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
             const { name, value } = e.target;
             setFormState({
                 ...formState,
@@ -46,11 +46,11 @@ const NoteCreationUpdateForm = (
             });
         }
 
-        const handleDropdownChange = (e) => setCurrentCategoryId(e.target.value);
+        const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => setCurrentCategoryId(e.target.value);
 
         const requestHelpers = new RequestHelpers();
 
-        const handleFormSubmit = async (e) => {
+        const handleFormSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
             return await
                 !updateToggle
@@ -65,13 +65,14 @@ const NoteCreationUpdateForm = (
                     false,
                     "Note Creation successful!",
                     setAlerts,
-                    setIsAlertModalVisible
+                    setIsAlertModalVisible,
+                    setIsSubmitButtonDisabled
                 )
                 : requestHelpers.MakeRequest(
                     `${baseUrl}/UpdateNote`,
                     {
                         userId: user.id,
-                        Id: noteData.id,
+                        Id: noteData!.id,
                         Name: formState.Name,
                         Content: formState.Content,
                         CategoryId: currentCategoryId!
@@ -79,7 +80,8 @@ const NoteCreationUpdateForm = (
                     true,
                     "Note update successful!",
                     setAlerts,
-                    setIsAlertModalVisible
+                    setIsAlertModalVisible,
+                    setIsSubmitButtonDisabled
                 );
         }
         return (
@@ -104,7 +106,7 @@ const NoteCreationUpdateForm = (
                                 <tr>
                                     <td className={styles.TableColumnOne}>Content</td>
                                     <td className={styles.TableColumnTwo}>
-                                        <input style={{ height: "150px" }} name="Content" id="Content" placeholder={updateToggle ? noteData.content : ""} onChange={handleChange} className={styles.formInput} />
+                                        <input style={{ height: "150px" }} name="Content" id="Content" placeholder={updateToggle ? (noteData as Note)?.content : ""} onChange={handleChange} className={styles.formInput} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -119,7 +121,7 @@ const NoteCreationUpdateForm = (
                     </div>
                     <div className={styles.CreateNewPasswordFooterRightContainer}>
                         <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsNoteUpdateModalVisible(false) : setIsNoteCreationModalVisible(false)}>Cancel</button>
-                        <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                        {isSubmitButtonDisabled === false && <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>}
                     </div>
                 </div>
             </div>

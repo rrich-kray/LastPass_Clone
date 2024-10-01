@@ -1,17 +1,18 @@
-type BankAccount = {
-    id: number,
-    name: string,
+import Entity from "./Entity.ts"
+
+interface BankAccount extends Entity {
     categoryId: number,
     bankName: string,
     accountType: string,
-    routingNumber: number,
-    accountNumber: number,
-    swiftCode: number,
+    routingNumber: string,
+    accountNumber: string,
+    swiftCode: string,
     ibanNumber: string,
-    PIN: number,
+    PIN: string,
     branchAddress: string,
-    branchPhone: number,
-    notes: string
+    branchPhone: string,
+    notes: string,
+    discriminator: "BankAccount"
 };
 
 export default BankAccount;

@@ -1,7 +1,6 @@
-import { FC, useState, useEffect, Dispatch } from "react";
+import { useState, useEffect, Dispatch } from "react";
 import Tile from "../../Components/Tile/Tile";
 import styles from "./styles.module.scss";
-import PasswordInfo from "../../Types/PasswordInfo";
 import Password from "../../Types/Password";
 import axios from "axios";
 import PasswordCreationUpdateForm from "../../Components/Passwords/PasswordCreationUpdateForm/PasswordCreationUpdateForm";
@@ -27,40 +26,44 @@ import SortingBar from "../../Components/SortingBar/SortingBar.tsx";
 import SortingOptions from "../../Other/SortingOptionsEnum.ts";
 import TileGrid from "../../Components/TileGrid/TileGrid.tsx"
 import CategoryGrid from "../../Components/CategoryGrid/CategoryGrid.tsx"
+import { FaLock } from "react-icons/fa";
+import { FaNoteSticky } from "react-icons/fa6";
+import { FaRegAddressBook } from "react-icons/fa";
+import { FaRegCreditCard } from "react-icons/fa";
+import { BsBank } from "react-icons/bs";
+import Entity from "../../Types/Entity.ts"
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
-const Main: FC = (
+const Main = (
     {
+        baseUrl,
         alerts,
         isAlertModalVisible,
         setAlerts,
         setIsAlertModalVisible,
-        baseUrl
     }: {
+            baseUrl: string | undefined
             alerts: JSX.Element[],
             isAlertModalVisible: boolean,
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>,
-            baseUrl: string
     }) =>
 {
     // Tiles
     const [tiles, setTiles] = useState<JSX.Element[]>([]);
 
     // Categories
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [currentCategoryId, setCurrentCategoryId] = useState<number>();
     const [currentType, setCurrentType] = useState<string>("All Items");
     const [categorySections, setCategorySections] = useState<JSX.Element[]>([]);
 
     // Collapsed
-    const [collapsed, setCollapsed] = useState<boolean>();
+    // const [collapsed, setCollapsed] = useState<boolean>();
 
     // Search
     const [searchTerm, setSearchTerm] = useState<string>();
 
     // Sidebar
-    const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
     // New item menu
     const [isNewItemMenuVisible, setIsNewItemMenuVisible] = useState<boolean>(false);
@@ -72,39 +75,39 @@ const Main: FC = (
     const [currentSort, setCurrentSort] = useState<string>();
 
     // Passwords
-    const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
+    // const [passwords, setPasswords] = useState<PasswordInfo[]>([]);
     const [isPasswordCreationModalVisible, setIsPasswordCreationModalVisible] = useState<boolean>(false);
     const [isPasswordUpdateModalVisible, setIsPasswordUpdateModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVIsible] = useState<boolean>(false);
-    const [activePassword, setActivePassword] = useState<PasswordInfo>();
+    const [activePassword, setActivePassword] = useState<Entity>();
 
     // Notes
-    const [notes, setNotes] = useState<Note[]>([]);
+    // const [notes, setNotes] = useState<Note[]>([]);
     const [isNoteCreationModalVisible, setIsNoteCreationModalVisible] = useState<boolean>(false);
     const [isNoteUpdateModalVisible, setIsNoteUpdateModalVisible] = useState<boolean>(false);
     const [isNoteVisible, setIsNoteVIsible] = useState<boolean>(false);
-    const [activeNote, setActiveNote] = useState<Note>();
+    const [activeNote, setActiveNote] = useState<Entity>();
 
     // Address
-    const [addresses, setAddresses] = useState<Address[]>([]);
+    // const [addresses, setAddresses] = useState<Address[]>([]);
     const [isAddressCreationModalVisible, setIsAddressCreationModalVisible] = useState<boolean>(false);
     const [isAddressUpdateModalVisible, setIsAddressUpdateModalVisible] = useState<boolean>(false);
     const [isAddressVisible, setIsAddressVIsible] = useState<boolean>(false);
-    const [activeAddress, setActiveAddress] = useState<Address>();
+    const [activeAddress, setActiveAddress] = useState<Entity>();
 
     // Bank Account
-    const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
+    // const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
     const [isBankAccountCreationModalVisible, setIsBankAccountCreationModalVisible] = useState<boolean>(false);
     const [isBankAccountUpdateModalVisible, setIsBankAccountUpdateModalVisible] = useState<boolean>(false);
     const [isBankAccountVisible, setIsBankAccountVIsible] = useState<boolean>(false);
-    const [activeBankAccount, setActiveBankAccount] = useState<BankAccount>();
+    const [activeBankAccount, setActiveBankAccount] = useState<Entity>();
 
     // Payment Card
-    const [paymentCards, setPaymentCards] = useState<PaymentCard[]>([]);
+    // const [paymentCards, setPaymentCards] = useState<PaymentCard[]>([]);
     const [isPaymentCardCreationModalVisible, setIsPaymentCardCreationModalVisible] = useState<boolean>(false);
     const [isPaymentCardUpdateModalVisible, setIsPaymentCardUpdateModalVisible] = useState<boolean>(false);
     const [isPaymentCardVisible, setIsPaymentCardVIsible] = useState<boolean>(false);
-    const [activePaymentCard, setActivePaymentCard] = useState<PaymentCard>();
+    const [activePaymentCard, setActivePaymentCard] = useState<Entity>();
 
     // Could create endpoint on backend that gets all items belonging to a particular category. Would simplify the frontend a good deal
     // Currently, gets all items, sets states on the component for all items, creates tiles for all items, and groups them by category
@@ -138,117 +141,135 @@ const Main: FC = (
             this.Categories = categories;
         }
     }
+    class TileWithType {
+        tile: JSX.Element;
+        type: string;
+
+        constructor(tile: JSX.Element, type: string) {
+            this.tile = tile;
+            this.type = type;
+        }
+    }
     class CategorySectionComponentFactory
     {
         constructor() {}
 
         private CreateTiles(allData: AllData) {
-            const allTiles: JSX.Element[] = [];
-            console.log(allData.Passwords)
-            allData.Passwords.map(password => (
+            let allTiles: TileWithType[] = [];
+            allData.Passwords.map((password: Password) => (
                 allTiles.push(
-                    <Tile
-                        data={password}
-                        isDatumVisible={isPasswordVisible}
-                        setIsDatumVisible={setIsPasswordVIsible}
-                        setActiveDatum={setActivePassword}
-                        isDatumUpdateModalVisible={isPasswordUpdateModalVisible}
-                        setIsDatumUpdateModalVisible={setIsPasswordUpdateModalVisible}
-                        baseUrl={baseUrl}
-                        type="Passwords"
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                    />
+                    new TileWithType(
+                        <Tile
+                            data={password}
+                            isDatumVisible={isPasswordVisible}
+                            setIsDatumVisible={setIsPasswordVIsible}
+                            setActiveDatum={setActivePassword}
+                            isDatumUpdateModalVisible={isPasswordUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsPasswordUpdateModalVisible}
+                            baseUrl={baseUrl!}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible}
+                            typeIcon={<FaLock size={ 30 } className = { styles.SidebarLinkIcon } />}
+                        />,
+                        "Passwords"
+                    )
                 )))
 
             allData.Notes.map((note: Note) => (
                 allTiles.push(
-                    <Tile
-                        data={note}
-                        isDatumVisible={isNoteVisible}
-                        setIsDatumVisible={setIsNoteVIsible}
-                        setActiveDatum={setActiveNote}
-                        isDatumUpdateModalVisible={isNoteUpdateModalVisible}
-                        setIsDatumUpdateModalVisible={setIsNoteUpdateModalVisible}
-                        baseUrl={baseUrl}
-                        type="Notes"
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                    />
+                    new TileWithType(
+                        <Tile
+                            data={note}
+                            isDatumVisible={isNoteVisible}
+                            setIsDatumVisible={setIsNoteVIsible}
+                            setActiveDatum={setActiveNote}
+                            isDatumUpdateModalVisible={isNoteUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsNoteUpdateModalVisible}
+                            baseUrl={baseUrl!}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible}
+                            typeIcon={<FaNoteSticky size={30} className={styles.SidebarLinkIcon} />}
+                        />,
+                        "Notes"
+                    )
                 )))
 
             allData.Addresses.map((address: Address) => (
                 allTiles.push(
-                    <Tile
-                        data={address}
-                        isDatumVisible={isAddressVisible}
-                        setIsDatumVisible={setIsAddressVIsible}
-                        setActiveDatum={setActiveAddress}
-                        isDatumUpdateModalVisible={isAddressUpdateModalVisible}
-                        setIsDatumUpdateModalVisible={setIsAddressUpdateModalVisible}
-                        baseUrl={baseUrl}
-                        type="Addresses"
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                    />
+                    new TileWithType(
+                        <Tile
+                            data={address}
+                            isDatumVisible={isAddressVisible}
+                            setIsDatumVisible={setIsAddressVIsible}
+                            setActiveDatum={setActiveAddress}
+                            isDatumUpdateModalVisible={isAddressUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsAddressUpdateModalVisible}
+                            baseUrl={baseUrl!}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible}
+                            typeIcon={<FaRegAddressBook size={30} className={styles.SidebarLinkIcon} />}
+                        />,
+                        "Addresses"
+                    )
                 )))
 
             allData.BankAccounts.map((bankAccount: BankAccount) => (
                 allTiles.push(
-                    <Tile
-                        data={bankAccount}
-                        isDatumVisible={isBankAccountVisible}
-                        setIsDatumVisible={setIsBankAccountVIsible}
-                        setActiveDatum={setActiveBankAccount}
-                        isDatumUpdateModalVisible={isBankAccountUpdateModalVisible}
-                        setIsDatumUpdateModalVisible={setIsBankAccountUpdateModalVisible}
-                        baseUrl={baseUrl}
-                        type="Bank Accounts"
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                    />
+                    new TileWithType(
+                        <Tile
+                            data={bankAccount}
+                            isDatumVisible={isBankAccountVisible}
+                            setIsDatumVisible={setIsBankAccountVIsible}
+                            setActiveDatum={setActiveBankAccount}
+                            isDatumUpdateModalVisible={isBankAccountUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsBankAccountUpdateModalVisible}
+                            baseUrl={baseUrl!}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible}
+                            typeIcon={<FaRegCreditCard size={30} className={styles.SidebarLinkIcon} />}
+                        />,
+                        "Bank Accounts"
+                    )
                 )))
 
             allData.PaymentCards.map((paymentCard: PaymentCard) => (
                 allTiles.push(
-                    <Tile
-                        data={paymentCard}
-                        isDatumVisible={isPaymentCardVisible}
-                        setIsDatumVisible={setIsPaymentCardVIsible}
-                        setActiveDatum={setActivePaymentCard}
-                        isDatumUpdateModalVisible={isPaymentCardUpdateModalVisible}
-                        setIsDatumUpdateModalVisible={setIsPaymentCardUpdateModalVisible}
-                        baseUrl={baseUrl}
-                        type="Payment Cards"
-                        setAlerts={setAlerts}
-                        setIsAlertModalVisible={setIsAlertModalVisible}
-                    />
+                    new TileWithType(
+                        <Tile
+                            data={paymentCard}
+                            isDatumVisible={isPaymentCardVisible}
+                            setIsDatumVisible={setIsPaymentCardVIsible}
+                            setActiveDatum={setActivePaymentCard}
+                            isDatumUpdateModalVisible={isPaymentCardUpdateModalVisible}
+                            setIsDatumUpdateModalVisible={setIsPaymentCardUpdateModalVisible}
+                            baseUrl={baseUrl!}
+                            setAlerts={setAlerts}
+                            setIsAlertModalVisible={setIsAlertModalVisible}
+                            typeIcon={<BsBank size={30} className={styles.SidebarLinkIcon} />}
+                        />,
+                        "Payment Cards"
+                    )
                 )))
 
-            return allTiles;
+            if (currentType !== "All Items") allTiles = allTiles.filter(x => x.type === currentType);
+            return allTiles.map(x => x.tile);
         }
 
-        public CreateAllCategorySections(currentType: string, categories: Category[], allTiles: JSX.Element[]): JSX.Element[] {
-            let categorySections: JSX.Element[] = [];
+        public CreateAllCategorySections(categories: Category[], allTiles: JSX.Element[]): JSX.Element[] {
+            const categorySections: JSX.Element[] = [];
             if (categories !== undefined) {
                 categories.forEach(category => {
                     if (allTiles !== undefined) {
                         let tiles = allTiles.filter(tile => tile.props.data.categoryId === category.id);
-                        if (currentType !== "All Items") tiles = tiles.filter(x => x.props.type === currentType);
                         tiles = tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name));
                         categorySections.push(
-                            <CategorySection categoryName={category.name} tiles={tiles} collapsed={collapsed} />
+                            <CategorySection categoryName={category.name} tiles={tiles} /* collapsed={collapsed!} */ />
                         )
                     }
                 });
             }
-            let noneCategoryTiles = allTiles.filter(tile => tile.props.data.categoryId === null);
-            if (currentType !== "All Items") {
-                noneCategoryTiles = noneCategoryTiles.filter(x => x.props.type === currentType);
-            }
-            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} collapsed={collapsed} />);
-            if (currentSort === SortingOptions.FolderAZ) categorySections = categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName));
-            if (currentSort === SortingOptions.FolderZA) categorySections = categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName)).reverse();
+            const noneCategoryTiles = allTiles.filter(tile => tile.props.data.categoryId === null);
+            categorySections.push(<CategorySection categoryName={"None"} tiles={noneCategoryTiles} /*collapsed={collapsed!}*/ />);
             return categorySections;
         }
 
@@ -268,8 +289,7 @@ const Main: FC = (
         {
             allData = this.FilterAllData(allData);
             const allTiles = this.CreateTiles(allData);
-            const categorySections = this.CreateAllCategorySections(currentType, allData.Categories, allTiles);
-            console.log(categorySections[0].props)
+            const categorySections = this.CreateAllCategorySections(allData.Categories, allTiles);
             setTiles(allTiles);
             setCategorySections(categorySections);
         }
@@ -280,7 +300,8 @@ const Main: FC = (
     // Or could be a race condition. Component displays before async function completes data fetch
     useEffect(() => {
         async function GetAllData() {
-            const options = RequestHelpers.GenerateRequestHeaders();
+            const options = RequestHelpers.GenerateFullRequestHeaders();
+            console.log(`Options in main: ${options}`);
             const [passwords, notes, addresses, bankAccounts, paymentCards, categories] = await axios.all([
                 axios.get(`${baseUrl}/GetPasswordsByUserId`, options),
                 axios.get(`${baseUrl}/GetNotesByUserId`, options),
@@ -298,15 +319,14 @@ const Main: FC = (
                 categories.data
             );
             setAllData(allData);
-            setCategories(categories.data);
             // new CategorySectionComponentFactory().Execute(allData);
         }
         GetAllData();
-    }, [currentType, searchTerm]);
+    }, [searchTerm]);
 
     useEffect(() => {
         if (allData) new CategorySectionComponentFactory().Execute(allData);
-    }, [allData, searchTerm, collapsed, currentSort]);
+    }, [allData, searchTerm, currentSort, currentType]);
 
     const isModalVisible = () => {
         return (
@@ -334,7 +354,11 @@ const Main: FC = (
             return <TileGrid tiles={tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name))} />
         } else if (currentSort === SortingOptions.NameZA) {
             return <TileGrid tiles={tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name)).reverse()} />
-        } else return <CategoryGrid categorySections={categorySections} collapsed={collapsed} />
+        } else {
+            if (currentSort === SortingOptions.FolderAZ) return <CategoryGrid categorySections={categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName))} />
+            else if (currentSort === SortingOptions.FolderZA) return <CategoryGrid categorySections={categorySections.sort((a, b) => a.props.categoryName.localeCompare(b.props.categoryName)).reverse()} /> 
+            else return <CategoryGrid categorySections={categorySections} /> 
+        }
     }
 
     return (
@@ -385,8 +409,8 @@ const Main: FC = (
                 {isPasswordVisible && <DataForm data={activePassword!} />}
                 {isPasswordCreationModalVisible &&
                     <PasswordCreationUpdateForm
-                        baseUrl={baseUrl}
-                        passwordData={passwords[0]}
+                        baseUrl={baseUrl!}
+                        passwordData={undefined}
                         updateToggle={false}
                         setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
                         setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
@@ -395,8 +419,8 @@ const Main: FC = (
                 {isPasswordUpdateModalVisible &&
                     activePassword &&
                     <PasswordCreationUpdateForm
-                        baseUrl={baseUrl}
-                        passwordData={activePassword}
+                        baseUrl={baseUrl!}
+                        passwordData={activePassword!}
                         updateToggle={true}
                         setIsPasswordCreationModalVisible={setIsPasswordCreationModalVisible}
                         setIsPasswordUpdateModalVisible={setIsPasswordUpdateModalVisible}
@@ -408,8 +432,8 @@ const Main: FC = (
                     <NoteCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
-                        noteData={notes[0]}
+                        baseUrl={baseUrl!}
+                        noteData={undefined}
                         updateToggle={false}
                         setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
                         setIsNoteUpdateModalVisible={setIsNoteUpdateModalVisible} />}
@@ -417,7 +441,7 @@ const Main: FC = (
                     <NoteCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
+                        baseUrl={baseUrl!}
                         noteData={activeNote}
                         updateToggle={true}
                         setIsNoteCreationModalVisible={setIsNoteCreationModalVisible}
@@ -428,8 +452,8 @@ const Main: FC = (
                     <AddressCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
-                        addressData={addresses[0]}
+                        baseUrl={baseUrl!}
+                        addressData={undefined}
                         updateToggle={false}
                         setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
                         setIsAddressUpdateModalVisible={setIsAddressUpdateModalVisible} />}
@@ -437,7 +461,7 @@ const Main: FC = (
                     <AddressCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
+                        baseUrl={baseUrl!}
                         addressData={activeAddress!}
                         updateToggle={true}
                         setIsAddressCreationModalVisible={setIsAddressCreationModalVisible}
@@ -448,8 +472,8 @@ const Main: FC = (
                     <BankAccountCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
-                        bankAccountData={bankAccounts[0]}
+                        baseUrl={baseUrl!}
+                        bankAccountData={undefined}
                         updateToggle={false}
                         setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
                         setIsBankAccountUpdateModalVisible={setIsBankAccountUpdateModalVisible} />}
@@ -457,7 +481,7 @@ const Main: FC = (
                     <BankAccountCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
+                        baseUrl={baseUrl!}
                         bankAccountData={activeBankAccount!}
                         updateToggle={true}
                         setIsBankAccountCreationModalVisible={setIsBankAccountCreationModalVisible}
@@ -468,8 +492,8 @@ const Main: FC = (
                     <PaymentCardCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
-                        paymentCardData={paymentCards[0]}
+                        baseUrl={baseUrl!}
+                        paymentCardData={undefined}
                         updateToggle={false}
                         setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
@@ -477,19 +501,19 @@ const Main: FC = (
                     <PaymentCardCreationUpdateForm
                         setAlerts={setAlerts}
                         setIsAlertModalVisible={setIsAlertModalVisible}
-                        baseUrl={baseUrl}
+                        baseUrl={baseUrl!}
                         paymentCardData={activePaymentCard!}
                         updateToggle={true}
                         setIsPaymentCardCreationModalVisible={setIsPaymentCardCreationModalVisible}
                         setIsPaymentCardUpdateModalVisible={setIsPaymentCardUpdateModalVisible} />}
 
-                <div className={styles.SidebarWrapper} style={{ width: isCollapsed ? "75px" : "275px", minWidth: isCollapsed ? "75px" : "275px" }}>
-                    <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
+                <div className={styles.SidebarWrapper} style={{ width: isSidebarCollapsed ? "75px" : "275px", minWidth: isSidebarCollapsed ? "75px" : "275px" }}>
+                    <Sidebar isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} currentType={currentType} setCurrentType={setCurrentType} />
                 </div>
                 <div className={styles.GridNavbarWrapper}>
-                    <Navbar baseUrl={baseUrl} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                    <SortingBar collapsed={collapsed} setCollapsed={setCollapsed} currentSort={currentSort} setCurrentSort={setCurrentSort} SortingOptions={SortingOptions} currentType={currentType} />
-                    {RenderGrid()}
+                    <Navbar baseUrl={baseUrl!} setSearchTerm={setSearchTerm} />
+                    <SortingBar /*collapsed={collapsed!} setCollapsed={setCollapsed}*/ currentSort={currentSort} setCurrentSort={setCurrentSort} /*SortingOptions={SortingOptions}*/ currentType={currentType} />
+                    {categorySections && tiles && RenderGrid()}
                 </div>
                 </div>)
 }

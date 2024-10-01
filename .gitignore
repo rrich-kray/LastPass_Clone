@@ -6,6 +6,7 @@
 # Bin and release folders. Causing merge issues
 **/bin/Debug/
 **/bin/Release/
+**/obj/
 
 # dotenv files
 .env

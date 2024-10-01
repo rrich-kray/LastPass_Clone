@@ -69,43 +69,6 @@ namespace PasswordManager.Server.Data.DatabaseContexts
                 .WithMany()
                 .HasForeignKey(p => p.UserId);
 
-            modelBuilder.Entity<Category>().HasData(
-                    new Category
-                    {
-                        Id = 1,
-                        Name = "Business",
-                    },
-                    new Category
-                    {
-                        Id = 2,
-                        Name = "Arts"
-                    },
-                    new Category
-                    {
-                        Id = 3,
-                        Name = "Productivity Tools"
-                    },
-                    new Category
-                    {
-                        Id = 4,
-                        Name = "Shopping"
-                    },
-                    new Category
-                    {
-                        Id = 5,
-                        Name = "Email"
-                    },
-                    new Category
-                    {
-                        Id = 6,
-                        Name = "Social"
-                    },
-                    new Category
-                    {
-                        Id = 7,
-                        Name = "Entertainment"
-                    }
-                );
         }
     }
 }

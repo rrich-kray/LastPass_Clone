@@ -1,11 +1,13 @@
-type Password = {
-    id: number;
-    name: string;
+import Entity from "./Entity.ts"
+
+interface Password extends Entity {
+    [key: string]: string | number,
     website: string;
     username: string;
     password: string;
     notes: string;
-    categoryId: number
+    categoryId: number;
+    discriminator: "Password"
 }
 
 export default Password;

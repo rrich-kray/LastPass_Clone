@@ -1,4 +1,5 @@
 import Entity from "../Types/Entity.ts"
+
 class EntityLevenshteinScore<T> {
     entity: T;
     score: number;
@@ -48,12 +49,14 @@ class FuzzyMatchService {
         });
     }
 
-    public static ProduceFuzzyMatchRanking<T>(entities: T[], search: string): T[] {
+
+    public static ProduceFuzzyMatchRanking<T extends Entity>(entities: T[], search: string): T[] {
         const scores: EntityLevenshteinScore<T>[] = entities.map(entity => {
+            const entityCopy: { [key: string]: string | number } = entity;
             const distances: number[] = [];
-            const properties = Object.keys(entity);
+            const properties = Object.keys(entityCopy);
             for (const property of properties) {
-                const propertyValue = entity[property];
+                const propertyValue = entityCopy[property];
                 if (typeof propertyValue === 'string') {
                     distances.push(this.LevenshteinDistance(propertyValue, search));
                 }
@@ -66,7 +69,7 @@ class FuzzyMatchService {
             .map(score => score.entity);
     }
 
-    public static SimpleMatchingAlgorithm<T extends Entity>(entities: T[], search: string): T[] {
+    public static SimpleMatchingAlgorithm<T extends Entity>(entities: T[], search: string | undefined): T[] {
         if (search === undefined || (search.length === 0)) return entities;
         return entities.filter(entity => {
             const name = entity.name;

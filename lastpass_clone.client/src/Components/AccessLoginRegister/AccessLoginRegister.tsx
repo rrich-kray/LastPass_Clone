@@ -1,16 +1,19 @@
 import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, PropsWithChildren } from "react";
 import AuthenticationUtilities from "../../Other/AuthenticationUtilities";
 
-const AccessLoginRegister = ({ baseUrl, ...props }) => {
+interface AccessLoginRegisterProps {
+    baseUrl: string
+}
+
+const AccessLoginRegister = (props: PropsWithChildren<AccessLoginRegisterProps>) => {
     const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
     
     useEffect(() => {
         new AuthenticationUtilities()
-            .VerifyToken(5, baseUrl)
+            .VerifyToken(5, props.baseUrl)
             .then(result => setIsTokenValid(result));
     });
-    console.log(isTokenValid);
 
     if (!isTokenValid) {
         return (
