@@ -1,12 +1,23 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import RequestHelpers from "./RequestHelpers"
-
 class AuthenticationUtilities
 {
     constructor() { }
     // This will be used by AuthorizeView, Login and Register components
     public async VerifyToken(maxRetries: number, baseUrl: string): Promise<boolean>
     {
+        class AxiosError {
+            response: AxiosResponse;
+            request: object;
+            message: string;
+            config: object;
+            constructor(response: AxiosResponse, request: object, message: string, config: object) {
+                this.response = response;
+                this.request = request;
+                this.message = message;
+                this.config = config;
+            }
+        }
         if (!this.DoesTokenExist()) return false;
 
         const makeRequest = async (
@@ -14,26 +25,25 @@ class AuthenticationUtilities
             maxRetries: number,
             retryCount: number,
             baseUrl: string): Promise<boolean> => {
-                const options = RequestHelpers.GenerateRequestHeaders();
-                console.log(`VarifyToken request headers: ${JSON.stringify(options.headers)}`);
                 try {
                     const result = await axios
-                        .get(`${baseUrl}/VerifyToken`, RequestHelpers.GenerateRequestHeaders()) // Maybe this is always returning false?
+                        .get(`${baseUrl}/VerifyToken`, RequestHelpers.GenerateFullRequestHeaders()) // Maybe this is always returning false?
                         .then(() => true)
                         .catch(error => { throw new Error(error) });
-                    console.log(`VerifyToken resul: ${result}`);
                     return result;
-                } catch (error) { // Anything that is not in the 2xx range will be thrown as an error by axios
-                    if (error.response) {
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    } else {
-                        console.log('Error', error.message);
-                    }
-                    console.log(error.config);
+                } catch (error: unknown) { // Anything that is not in the 2xx range will be thrown as an error by axios
+                    if (error instanceof AxiosError) {
+                        if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+                            console.log(error.request);
+                        } else {
+                            console.log('Error', error.message);
+                        }
+                        console.log(error.config);
+                    } else 
 
                     retryCount++;
                     if (retryCount > maxRetries) {

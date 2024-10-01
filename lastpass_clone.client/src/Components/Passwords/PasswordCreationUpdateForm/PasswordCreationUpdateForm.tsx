@@ -1,12 +1,11 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
 import { useState, useEffect, Dispatch, useContext } from "react";
-import axios from "axios";
 import Password from "../../../Types/Password";
 import Category from "../../../Types/Category";
 import { FaRegStar } from "react-icons/fa";
-import AlertMessage from "../../AlertMessage/AlertMessage";
 import RequestHelpers from "../../../Other/RequestHelpers";
 import { UserContext } from "../../../App";
+import Entity from "../../../Types/Entity.ts";
 
 const PasswordCreationUpdateForm =
     ({
@@ -20,15 +19,16 @@ const PasswordCreationUpdateForm =
     }: {
             baseUrl: string,
             updateToggle: boolean,
-            passwordData: Password | undefined,
+            passwordData: Entity | undefined,
             setIsPasswordCreationModalVisible: Dispatch<boolean>,
             setIsPasswordUpdateModalVisible: Dispatch<boolean>,
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
-    }) => {
+        }) => {
+        const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(false);
         const [categories, setCategories] = useState<Category[]>();
-        const [currentCategoryId, setCurrentCategoryId] = useState<number>();
-        const { user, setUser } = useContext(UserContext);
+        const [currentCategoryId, setCurrentCategoryId] = useState<string>();
+        const [user] = useContext(UserContext);
         const [formState, setFormState] = useState({
             Name: "",
             Website: "",
@@ -41,22 +41,21 @@ const PasswordCreationUpdateForm =
         RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
-        console.log(`Passwords user ID: ${user.id}`);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormState({
             ...formState,
             [name]: value
         });
-        }
+     }
 
 
-    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.value);
+    const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => setCurrentCategoryId(e.target.value);
 
     const requestHelpers = new RequestHelpers();
 
-    const handleFormSubmit = async (e) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         return await
             !updateToggle
@@ -74,12 +73,13 @@ const PasswordCreationUpdateForm =
                 false,
                 "Password Creation successful!",
                 setAlerts,
-                setIsAlertModalVisible
+                setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             )
             : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdatePassword`,
                 {
-                    Id: passwordData.id,
+                    Id: passwordData!.id,
                     userId: user.id,
                     Name: formState.Name,
                     Website: formState.Website,
@@ -91,7 +91,8 @@ const PasswordCreationUpdateForm =
                 true,
                 "Password update successful!",
                 setAlerts,
-                setIsAlertModalVisible
+                setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             );
     }
 
@@ -104,7 +105,7 @@ const PasswordCreationUpdateForm =
                 <div className={styles.CreateNewPasswordBodyLeftPanel}>
                     <div className={styles.CreateNewPasswordName}>
                         <span>Name</span>
-                        <input name="Name" id="Name" style={{ borderColor: "border-color: rgb(167, 175, 186)"}} placeholder={updateToggle ? passwordData.name : ""} onChange={handleChange} />
+                        <input name="Name" id="Name" style={{ borderColor: "border-color: rgb(167, 175, 186)"}} placeholder={updateToggle ? passwordData?.name : ""} onChange={handleChange} />
                     </div>
                     <div className={styles.CreateNewPasswordFolder}>
                         <span>Category</span>
@@ -117,25 +118,25 @@ const PasswordCreationUpdateForm =
                             <tr>
                                 <td className={styles.TableColumnOne}>Website</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Website" id="Website" placeholder={updateToggle ? passwordData.website : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Website" id="Website" placeholder={updateToggle ? (passwordData as Password)?.website : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Username</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Username" id="Username" placeholder={updateToggle ? passwordData.username : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Username" id="Username" placeholder={updateToggle ? (passwordData as Password)?.username : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Password</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Password" id="Password" placeholder={updateToggle ? passwordData.password : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Password" id="Password" placeholder={updateToggle ? (passwordData as Password)?.password : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Notes</td>
                                 <td className={styles.TableNotes}>
-                                    <input name="Notes" id="Notes" placeholder={updateToggle ? passwordData.notes : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Notes" id="Notes" placeholder={updateToggle ? (passwordData as Password)?.notes : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                         </tbody>
@@ -150,7 +151,7 @@ const PasswordCreationUpdateForm =
                 </div>
                 <div className={styles.CreateNewPasswordFooterRightContainer}>
                     <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsPasswordUpdateModalVisible(false) : setIsPasswordCreationModalVisible(false)}>Cancel</button>
-                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                    {isSubmitButtonDisabled === false && <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>}
                 </div>
             </div>
         </div>)

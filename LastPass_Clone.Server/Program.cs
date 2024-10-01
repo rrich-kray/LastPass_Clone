@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PasswordManager.Server.Services.JwtAuth;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.Data.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +35,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<PasswordManagerDatabaseContext>(options =>
-    options.UseSqlite(builder.Configuration["ConnectionStrings:PasswordDatabaseConnection"])
+     options.UseSqlite(builder.Environment.IsDevelopment() ? builder.Configuration["ConnectionStrings:Development"] : builder.Configuration["ConnectionStrings:Production"])
 );
 
 // As a client logs onto the server, and tries to grab an instance of this,
@@ -58,6 +61,7 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDeveloperExceptionPage();
 
 //app.UseNoHtmlMiddleware();
 
@@ -88,5 +92,30 @@ app.MapFallbackToFile("/index.html");
 
 app.UseHttpsRedirection();
 
+using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var db = serviceScope.ServiceProvider.GetRequiredService<PasswordManagerDatabaseContext>().Database;
+
+    logger.LogInformation("Migrating database...");
+
+    /*
+    while (!db.CanConnect())
+    {
+        logger.LogInformation("Database not ready yet; waiting...");
+        Thread.Sleep(1000);
+    }
+    */
+
+    try
+    {
+        await serviceScope.ServiceProvider.GetRequiredService<PasswordManagerDatabaseContext>().Database.EnsureCreatedAsync();
+        logger.LogInformation("Database migrated successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, ex.Message);
+    }
+}
 
 app.Run();

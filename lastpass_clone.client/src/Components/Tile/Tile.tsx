@@ -1,23 +1,38 @@
-import React, { useEffect, useState, FC } from "react";
-import PasswordInfo from "../../Types/Password.ts"
-import Category from "../../Types/Category.ts"
+import React, { useEffect, useState, SetStateAction } from "react";
+// import Password from "../../Types/Password.ts";
 import styles from './styles.module.scss';
 import trashcan from "../../assets/trash-can-icon.webp";
 import edit from "../../assets/edit-icon.png";
 import { Dispatch } from "react";
-import TileUtilities from "../../Other/TileUtilities.tsx"
-import Note from "../../Types/Note.ts"
-import Address from "../../Types/Address.ts"
-import BankAccount from "../../Types/BankAccount.ts"
-import PaymentCard from "../../Types/PaymentCard.ts"
-import axios from "axios"
+import TileUtilities from "../../Other/TileUtilities.tsx";
+/*
+import Note from "../../Types/Note.ts";
+import Address from "../../Types/Address.ts";
+import BankAccount from "../../Types/BankAccount.ts";
+import PaymentCard from "../../Types/PaymentCard.ts";
+*/
+import axios from "axios";
 import TypeChecker from "../../Other/TypeChecker.ts";
 import RequestHelpers from "../../Other/RequestHelpers";
+import Entity from "../../Types/Entity.ts"
 
 // Alternative 1: make tile generic, could be any of existing types
     // Downsides: have to modify existing code when new types are added, instead of adding additional components. Include modifying TileUtils and component
 
-const Tile = (
+interface TileProps {
+    data: Entity,
+    isDatumVisible: boolean,
+    setIsDatumVisible: Dispatch<SetStateAction<boolean>>,
+    setActiveDatum: Dispatch<SetStateAction<Entity | undefined>>
+    isDatumUpdateModalVisible: boolean,
+    setIsDatumUpdateModalVisible: Dispatch<SetStateAction<boolean>>,
+    baseUrl: string,
+    setAlerts: Dispatch<JSX.Element[]>,
+    setIsAlertModalVisible: Dispatch<boolean>,
+    typeIcon: JSX.Element
+}
+
+const Tile: React.FC<TileProps> = (
     {
         data,
         isDatumVisible,
@@ -26,28 +41,13 @@ const Tile = (
         isDatumUpdateModalVisible,
         setIsDatumUpdateModalVisible,
         baseUrl,
-        type,
         setAlerts,
         setIsAlertModalVisible,
         typeIcon
-    }: {
-        data: PasswordInfo | Note | Address | BankAccount | PaymentCard,
-        isDatumVisible: boolean,
-        setIsDatumVisible: Dispatch<boolean>,
-        setActiveDatum: Dispatch<PasswordInfo | Note | Address | BankAccount | PaymentCard>,
-        isDatumUpdateModalVisible: boolean,
-        setIsDatumUpdateModalVisible: Dispatch<boolean>,
-        baseUrl: string,
-        type: string,
-        setAlerts: Dispatch<JSX.Element[]>,
-        setIsAlertUpdateModalVisible: Dispatch<boolean>,
-        typeIcon: JSX.Element[]
     }) => {
     const tileUtils: TileUtilities = new TileUtilities(baseUrl);
     const typeChecker: TypeChecker = new TypeChecker();
-    const [categoryIcon, setCategoryIcon] = useState<React.ReactNode>();
     const [tileColor, setTileColor] = useState<string>();
-    const [title, setTitle] = useState<string>();
     const [hovered, setHovered] = useState<boolean>(false);
 
     function handleDeleteRequest() {
@@ -74,9 +74,12 @@ const Tile = (
         }
         const requestHelpers = new RequestHelpers()
         axios
-            .delete(`${baseUrl}/${url}/${data.id}`, RequestHelpers.GenerateRequestHeaders())
+            .delete(`${baseUrl}/${url}/${data!.id}`, RequestHelpers.GenerateFullRequestHeaders())
             .then(response => {
-                if (response.data.success === true) requestHelpers.HandleSuccessAlerts(`${itemType} deletion successful`, setAlerts, setIsAlertModalVisible);
+                if (response.data.success === true) {
+                    requestHelpers.HandleSuccessAlerts(`${itemType} deletion successful`, setAlerts, setIsAlertModalVisible);
+                    setTimeout(() => window.location.replace("/"), 1500)
+                }
                 else requestHelpers.HandleErrorAlerts(response, setAlerts, setIsAlertModalVisible);
             })
             .catch(error => {
@@ -92,15 +95,12 @@ const Tile = (
             if (!hovered) return trimTitleNoHover(data.website === "" || data.website === undefined ? data.name : data.website);
             else return trimTitleHover(data.website === "" || data.website === undefined ? data.name : data.website);
         } else {
-            if (!hovered) return trimTitleNoHover(data.name);
-            return trimTitleHover(data.name);
+            if (!hovered) return trimTitleNoHover(data!.name);
+            return trimTitleHover(data!.name);
         }
     }
 
     useEffect(() => {
-        const type = typeChecker.GetType(data);
-        const categoryIcon: JSX.Element = tileUtils.SelectCategoryIcon(type);
-        setCategoryIcon(categoryIcon);
         setTileColor(tileUtils.SelectRandomColor());
     }, []);
 

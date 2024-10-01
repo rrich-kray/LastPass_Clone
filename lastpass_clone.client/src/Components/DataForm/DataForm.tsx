@@ -1,8 +1,11 @@
 import styles from "./styles.module.scss";
 import globalStyles from "../../Global/CreationUpdateForm.module.scss";
 import TypeChecker from "../../Other/TypeChecker.ts";
+import Entity from "../../Types/Entity.ts";
 
-const DataForm = ({ data }: { data: object }) => {
+const DataForm = ({ data }: { data: Entity }) => {
+
+    const dataCopy: { [key: string]: string | number } = data;
     const formatInputFieldTitle = (input: string): string =>
         input.split(/(?=[A-Z])/).map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
 
@@ -35,12 +38,12 @@ const DataForm = ({ data }: { data: object }) => {
             <div className={styles.DataModalTableWrapper}>
                 <table className={globalStyles.CreateNewPasswordBodyRightPanelTable}>
                     <tbody>
-                        {Object.keys(data).map(key => {
+                        {Object.keys(dataCopy).map((key) => {
                             if (key != "id" && key != "categoryId" && key != "userId") {
                                 return  <tr>
-                                            <td className={globalStyles.TableColumnOne}>{formatInputFieldTitle(key)}</td>
+                                            <td className={globalStyles.TableColumnOne}>{formatInputFieldTitle(key as string)}</td>
                                             <td className={globalStyles.TableColumnTwo}>
-                                                <span>{trimText(data[key], 45)}</span>
+                                            <span>{trimText(dataCopy[key] as string, 45)}</span>
                                             </td>
                                         </tr>
                             }

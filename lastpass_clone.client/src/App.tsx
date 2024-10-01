@@ -3,34 +3,53 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Pages/Login/Login.tsx";
 import Register from "./Pages/Register/Register.tsx"
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, Dispatch, SetStateAction } from "react";
 import AlertModal from "./Components/AlertModal/AlertModal.tsx";
 import AuthorizeView from "./Components/AuthorizeView/AuthorizeView.tsx";
 import AccessLoginRegister from "./Components/AccessLoginRegister/AccessLoginRegister.tsx";
 import axios from "axios";
 import RequestHelpers from "./Other/RequestHelpers";
+import User from "./Types/User.ts";
 
-export const UserContext = createContext({});
+const defaultValues = {
+    id: "",
+    email: "",
+    password: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    roles: []
+}
+
+type IUserState = [
+    user: User,
+    setUser: Dispatch<SetStateAction<User>>
+]
+
+export const UserContext = createContext<IUserState>([defaultValues, () => { }]);
 function App() {
 
-    // alerts
     const [alerts, setAlerts] = useState<JSX.Element[]>();
     const [isAlertModalVisible, setIsAlertModalVisible] = useState<boolean>();
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState<User>(defaultValues);
 
     useEffect(() => {
+        console.log(RequestHelpers.GenerateFullRequestHeaders());
         axios
-            .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateRequestHeaders())
+            .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateFullRequestHeaders())
             .then(response => {
                 setUser(response.data)
             })
             .catch(error => console.log(error));
     }, []);
 
-    const baseUrl: string = "https://localhost:32777"; // put this in ENV file at some point
+    //const baseUrl: string = "https://localhost:32771"; // put this in ENV file at some point
+    //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
+    const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
+    console.log(baseUrl);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={[user, setUser]}>
             <BrowserRouter>
                 {isAlertModalVisible && alerts && <AlertModal errors={alerts} />}
                 <Routes>

@@ -1,14 +1,13 @@
 import styles from "../../../Global/CreationUpdateForm.module.scss";
 import { useState, useEffect, Dispatch, useContext } from "react";
-import axios from "axios";
 import Category from "../../../Types/Category";
 import Address from "../../../Types/Address";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaRegStar } from "react-icons/fa";
-import AlertMessage from "../../AlertMessage/AlertMessage";
 import RequestHelpers from "../../../Other/RequestHelpers";
 import { UserContext } from "../../../App"
+import Entity from "../../../Types/Entity.ts";
 
 const AddressCreationUpdateForm = (
     {
@@ -23,15 +22,16 @@ const AddressCreationUpdateForm = (
         {
             baseUrl: string,
             updateToggle: boolean,
-            addressData: Address | undefined,
+            addressData: Entity | undefined,
             setIsAddressCreationModalVisible: Dispatch<boolean>,
             setIsAddressUpdateModalVisible: Dispatch<boolean>,
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
         }) => {
+    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(false);
     const [categories, setCategories] = useState<Category[]>();
-    const [currentCategoryId, setCurrentCategoryId] = useState<number>();
-    const { user, setUser } = useContext(UserContext);
+    const [currentCategoryId, setCurrentCategoryId] = useState<string>();
+    const [ user ]= useContext(UserContext);
     const [formState, setFormState] = useState({
         Name: "",
         Title: "",
@@ -40,7 +40,7 @@ const AddressCreationUpdateForm = (
         LastName: "",
         UserName: "",
         Gender: "",
-        Birthday: new Date(),
+        Birthday: "",
         Company: "",
         Address1: "",
         Address2: "",
@@ -48,13 +48,13 @@ const AddressCreationUpdateForm = (
         City: "",
         County: "",
         State: "",
-        ZipCode: 0,
+        ZipCode: "",
         Country: "",
         EmailAddress: "",
-        PhoneNumber: 0,
-        EveningPhone: 0,
-        MobilePhone: 0,
-        Fax: 0,
+        PhoneNumber: "",
+        EveningPhone: "",
+        MobilePhone: "",
+        Fax: "",
         Notes: ""
     })
 
@@ -62,7 +62,7 @@ const AddressCreationUpdateForm = (
         RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormState({
             ...formState,
@@ -70,11 +70,11 @@ const AddressCreationUpdateForm = (
         });
     }
 
-    const handleDropdownChange = (e) => setCurrentCategoryId(e.target.value);
+    const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => setCurrentCategoryId(e.target.value);
 
     const requestHelpers = new RequestHelpers();
 
-    const handleFormSubmit = async (e) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         return await
             !updateToggle
@@ -110,13 +110,14 @@ const AddressCreationUpdateForm = (
                 false,
                 "Address Creation successful!",
                 setAlerts,
-                setIsAlertModalVisible
+                setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             )
             : requestHelpers.MakeRequest(
                 `${baseUrl}/UpdateAddress`,
                 {
                     userId: user.id,
-                    Id: addressData.id,
+                    Id: addressData!.id, // Will never be undefined when updating
                     categoryId: currentCategoryId!,
                     name: formState.Name,
                     title: formState.Title,
@@ -145,7 +146,8 @@ const AddressCreationUpdateForm = (
                 true,
                 "Address update successful!",
                 setAlerts,
-                setIsAlertModalVisible
+                setIsAlertModalVisible,
+                setIsSubmitButtonDisabled
             );
     }
 
@@ -171,46 +173,46 @@ const AddressCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>Title</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Title" id="Title" placeholder={updateToggle ? addressData.title : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Title" id="Title" placeholder={updateToggle ? (addressData as Address)?.title : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>First Name</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="FirstName" id="FirstName" placeholder={updateToggle ? addressData.firstName : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="FirstName" id="FirstName" placeholder={updateToggle ? (addressData as Address)?.firstName : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Middle Name</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="MiddleName" id="MiddleName" placeholder={updateToggle ? addressData.middleName : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="MiddleName" id="MiddleName" placeholder={updateToggle ? (addressData as Address)?.middleName : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Last Name</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="LastName" id="LastName" placeholder={updateToggle ? addressData.lastName : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="LastName" id="LastName" placeholder={updateToggle ? (addressData as Address)?.lastName : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>UserName</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="UserName" id="UserName" placeholder={updateToggle ? addressData.userName : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="UserName" id="UserName" placeholder={updateToggle ? (addressData as Address)?.userName : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Gender</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Gender" id="Gender" placeholder={updateToggle ? addressData.gender : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Gender" id="Gender" placeholder={updateToggle ? (addressData as Address)?.gender : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Birthday</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <DatePicker className={styles.DatePicker} selected={formState.Birthday} onChange={(date) => {
+                                    <DatePicker className={styles.DatePicker} selected={new Date()} onChange={(date) => {
                                         setFormState({
                                             ...formState,
-                                            Birthday: date?.toISOString()
+                                            Birthday: date!.toISOString()
                                         });
                                     }} />
                                 </td>
@@ -218,91 +220,91 @@ const AddressCreationUpdateForm = (
                             <tr>
                                 <td className={styles.TableColumnOne}>Company</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Company" id="Company" placeholder={updateToggle ? addressData.company : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Company" id="Company" placeholder={updateToggle ? (addressData as Address)?.company : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Address 1</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Address1" id="Address1" placeholder={updateToggle ? addressData.address1 : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Address1" id="Address1" placeholder={updateToggle ? (addressData as Address)?.address1 : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Address 2</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Address2" id="Address2" placeholder={updateToggle ? addressData.address2 : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Address2" id="Address2" placeholder={updateToggle ? (addressData as Address)?.address2 : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Address 3</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Address3" id="Address3" placeholder={updateToggle ? addressData.address3 : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Address3" id="Address3" placeholder={updateToggle ? (addressData as Address)?.address3 : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>City</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="City" id="City" placeholder={updateToggle ? addressData.city : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="City" id="City" placeholder={updateToggle ? (addressData as Address)?.city : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>County</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="County" id="County" placeholder={updateToggle ? addressData.county : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="County" id="County" placeholder={updateToggle ? (addressData as Address)?.county : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>State</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="State" id="State" placeholder={updateToggle ? addressData.state : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="State" id="State" placeholder={updateToggle ? (addressData as Address)?.state : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Zip Code</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="ZipCode" id="ZipCode" placeholder={updateToggle ? addressData.zipCode : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="ZipCode" id="ZipCode" placeholder={updateToggle ? (addressData as Address)?.zipCode : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Country</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Country" id="Country" placeholder={updateToggle ? addressData.country : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Country" id="Country" placeholder={updateToggle ? (addressData as Address)?.country : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Email Address</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Email Address" id="Email Address" placeholder={updateToggle ? addressData.emailAddress : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Email Address" id="Email Address" placeholder={updateToggle ? (addressData as Address)?.emailAddress : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Phone Number</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="PhoneNumber" id="PhoneNumber" placeholder={updateToggle ? addressData.phoneNumber : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="PhoneNumber" id="PhoneNumber" placeholder={updateToggle ? (addressData as Address)?.phoneNumber : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Evening Phone</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="EveningPhone" id="EveningPhone" placeholder={updateToggle ? addressData.eveningPhone : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="EveningPhone" id="EveningPhone" placeholder={updateToggle ? (addressData as Address)?.eveningPhone : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Mobile Phone</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="MobilePhone" id="MobilePhone" placeholder={updateToggle ? addressData.mobilePhone : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="MobilePhone" id="MobilePhone" placeholder={updateToggle ? (addressData as Address)?.mobilePhone : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Fax</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Fax" id="Fax" placeholder={updateToggle ? addressData.fax : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Fax" id="Fax" placeholder={updateToggle ? (addressData as Address)?.fax : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={styles.TableColumnOne}>Notes</td>
                                 <td className={styles.TableNotes}>
-                                    <input name="Notes" id="Notes" placeholder={updateToggle ? addressData.notes : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Notes" id="Notes" placeholder={updateToggle ? (addressData as Address)?.notes : ""} onChange={handleChange} className={styles.formInput} />
                                 </td>
                             </tr>
                         </tbody>
@@ -317,7 +319,7 @@ const AddressCreationUpdateForm = (
                 </div>
                 <div className={styles.CreateNewPasswordFooterRightContainer}>
                     <button type="submit" className={styles.CancelBtn} onClick={() => updateToggle ? setIsAddressUpdateModalVisible(false) : setIsAddressCreationModalVisible(false)}>Cancel</button>
-                    <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>
+                    {isSubmitButtonDisabled === false && <button type="submit" className={styles.SubmitBtn} onClick={handleFormSubmit}>Submit</button>}
                 </div>
             </div>
         </div>)

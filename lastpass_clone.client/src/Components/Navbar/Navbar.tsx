@@ -1,18 +1,18 @@
-import React, { useState, useEffect, Dispatch } from "react";
+import { Dispatch } from "react";
 import styles from "./styles.module.scss";
 import UserOptionsButton from "../UserOptionsButton/UserOptionsButton";
-import logo from "../../Assets/LastPass_Logo.webp"
+// import logo from "../../Assets/LastPass_Logo.webp"
 
-const Navbar = ({ baseUrl, searchTerm, setSearchTerm }: { baseUrl: string, searchTerm: string, setSearchTerm: Dispatch<string> }) => {
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+const Navbar = ({ baseUrl, setSearchTerm }: { baseUrl: string, setSearchTerm: Dispatch<string> }) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const { value } = e.target;
         setSearchTerm(value);
     }
 
     return (
         <div className={styles.Navbar}>
             <div className={styles.NavbarLogoContainer}>
-                <img src={logo} style={{ height: "50px" }} />
+                {/*<img src={logo} style={{ height: "50px" }} />*/}
             </div>
             <input className={styles.Search} onChange={handleChange}></input>
             <UserOptionsButton baseUrl={baseUrl} />

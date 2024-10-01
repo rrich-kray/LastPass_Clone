@@ -33,7 +33,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/CreatePaymentCard")]
         [HttpPost]
-        public IResult Create([FromBody] PaymentCard paymentCard) =>
+        public ControllerResponse<PaymentCard> Create([FromBody] PaymentCard paymentCard) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
@@ -42,7 +42,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/UpdatePaymentCard")]
         [HttpPut]
-        public IResult UpdateAddress([FromBody] PaymentCard paymentCard) =>
+        public ControllerResponse<PaymentCard> UpdateAddress([FromBody] PaymentCard paymentCard) =>
             ControllerUtils.CommonControllerUpdate(
                 validator: new PaymentCardEntityValidator(),
                 validatee: paymentCard,
@@ -51,7 +51,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeletePaymentCard/{PaymentCardId}")]
         [HttpDelete]
-        public IResult DeleteAddress(int paymentCardId) =>
+        public ControllerResponse<PaymentCard> DeleteAddress(int paymentCardId) =>
             ControllerUtils.CommonControllerDelete<PaymentCard>(
                 this.PaymentCardRepository,
                 paymentCardId,

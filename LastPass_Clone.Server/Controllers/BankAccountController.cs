@@ -34,7 +34,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/CreateBankAccount")]
         [HttpPost]
-        public IResult Create([FromBody] BankAccount bankAccount) =>
+        public ControllerResponse<BankAccount> Create([FromBody] BankAccount bankAccount) =>
             ControllerUtils.CommonControllerCreate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
@@ -43,7 +43,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/UpdateBankAccount")]
         [HttpPut]
-        public IResult UpdateBankAccount([FromBody] BankAccount bankAccount) =>
+        public ControllerResponse<BankAccount> UpdateBankAccount([FromBody] BankAccount bankAccount) =>
             ControllerUtils.CommonControllerUpdate(
                 validator: new BankAccountEntityValidator(),
                 validatee: bankAccount,
@@ -52,7 +52,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeleteBankAccount/{bankAccountId}")]
         [HttpDelete]
-        public IResult DeleteBankAccount(int bankAccountId) =>
+        public ControllerResponse<BankAccount> DeleteBankAccount(int bankAccountId) =>
             ControllerUtils.CommonControllerDelete<BankAccount>(
                 this.BankAccountRepository,
                 bankAccountId,

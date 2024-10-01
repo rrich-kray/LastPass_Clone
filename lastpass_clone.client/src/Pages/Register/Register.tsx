@@ -1,9 +1,10 @@
-import { useState, useEffect, useContext, Dispatch } from "react";
+import { useState, useContext, Dispatch } from "react";
 import styles from "./styles.module.scss";
 import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 import { UserContext } from "../../App";
+import RequestHelpers from "../../Other/RequestHelpers.tsx";
 
 const Register = (
     {
@@ -15,14 +16,14 @@ const Register = (
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
         }) => {
-    const { user, setUser } = useContext(UserContext);
+    const { 1: setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Email: "",
         Password: "",
         ConfirmPassword: ""
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormState({
             ...formState,
@@ -30,7 +31,7 @@ const Register = (
         });
     }
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const reset = () => {
             setAlerts([]);
@@ -47,7 +48,8 @@ const Register = (
             .post(`${baseUrl}/Register`, {
                 Email: formState.Email,
                 Password: formState.Password
-            })
+            },
+            RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
                     localStorage.setItem("token", response.data.token);
@@ -100,11 +102,11 @@ const Register = (
                     </div>
                     <div className={styles.RegisterInputContainer}>
                         <span>Password</span>
-                        <input name="Password" className={styles.RegisterInput} onChange={handleChange}></input>
+                        <input type="password" name="Password" className={styles.RegisterInput} onChange={handleChange}></input>
                     </div>
                     <div className={styles.RegisterInputContainer}>
                         <span>Confirm Password</span>
-                        <input name="ConfirmPassword" className={styles.RegisterInput} onChange={handleChange}></input>
+                        <input type="password" name="ConfirmPassword" className={styles.RegisterInput} onChange={handleChange}></input>
                     </div>
                 </div>
                 <div className={styles.RegisterButtons}>

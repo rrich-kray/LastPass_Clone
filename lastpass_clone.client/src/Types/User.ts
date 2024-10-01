@@ -1,11 +1,11 @@
 type User = {
-    Id: string,
-    Email: string,
-    Password: string,
-    FirstName: string,
-    MiddleName: string,
-    LastName: string,
-    Roles: string[]
+    id: string,
+    email: string,
+    password: string,
+    firstName: string,
+    middleName: string,
+    lastName: string,
+    roles: string[]
 }
 
 export default User;

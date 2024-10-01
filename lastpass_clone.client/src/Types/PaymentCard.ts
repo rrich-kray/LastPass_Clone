@@ -1,14 +1,14 @@
-type PaymentCard = {
-    id: number,
-    name: string,
+import Entity from "./Entity.ts"
+interface PaymentCard extends Entity {
     categoryId: number,
     nameOnCard: string,
     type: string,
-    number: number,
-    securityCode: number,
-    startDate: Date,
-    expirationDate: Date,
-    notes: string
+    number: string,
+    securityCode: string,
+    startDate: string,
+    expirationDate: string,
+    notes: string,
+    discriminator: "PaymentCard"
 }
 
 export default PaymentCard;

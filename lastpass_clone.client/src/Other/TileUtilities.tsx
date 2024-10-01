@@ -1,4 +1,3 @@
-import { Dispatch } from "react";
 import { FaLock } from "react-icons/fa";
 import { FaNoteSticky } from "react-icons/fa6";
 import { FaRegAddressBook } from "react-icons/fa";
@@ -6,7 +5,7 @@ import { FaRegCreditCard } from "react-icons/fa";
 import { BsBank } from "react-icons/bs";
 import axios from "axios";
 import styles from "../Components/Sidebar/styles.module.scss"
-import Category from "../../Types/Category";
+import Category from "../Types/Category.ts";
 import RequestHelpers from "./RequestHelpers.tsx";
 
 class TileUtilities

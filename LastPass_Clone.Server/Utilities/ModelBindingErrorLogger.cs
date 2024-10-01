@@ -17,12 +17,14 @@ namespace PasswordManager.Server.Utilities
                 var modelErrors = keyModelStatePair.Value.Errors;
                 if (modelErrors.Count > 0)
                 {
+                    var messages = new List<string>();
                     var errorMessages = modelErrors.Select(error => error.ErrorMessage.ToString());
                     foreach (var errorMessage in errorMessages)
                     {
                         System.Diagnostics.Debug.WriteLine($"ModelState error: {errorMessage}");
-                        response.Messages.Add(errorMessage);
+                        messages.Add(errorMessage);
                     }
+                    response.Messages = messages;
                 }
             }
             return response;

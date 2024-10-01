@@ -43,7 +43,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/CreatePassword")]
         [HttpPost]
-        public IResult CreatePassword([FromBody] PasswordInfo passwordInfo)
+        public ControllerResponse<PasswordInfo> CreatePassword([FromBody] PasswordInfo passwordInfo)
         {
             return ControllerUtils.CommonControllerCreate(
                 validator: new PasswordEntityValidator(),
@@ -54,7 +54,7 @@ namespace PasswordManager.Server.Controllers
             
         [Route("/UpdatePassword")]
         [HttpPut]
-        public IResult UpdatePassword([FromBody] PasswordInfo passwordInfo)
+        public ControllerResponse<PasswordInfo> UpdatePassword([FromBody] PasswordInfo passwordInfo)
         {
             return ControllerUtils.CommonControllerUpdate(
                 validator: new PasswordEntityValidator(),
@@ -65,7 +65,7 @@ namespace PasswordManager.Server.Controllers
 
         [Route("/DeletePassword/{passwordId}")]
         [HttpDelete]
-        public IResult DeletePassword(int passwordId) =>
+        public ControllerResponse<PasswordInfo> DeletePassword(int passwordId) =>
             ControllerUtils.CommonControllerDelete<PasswordInfo>(
                 this.PasswordRepository, 
                 passwordId, 

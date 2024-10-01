@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, PropsWithChildren } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import ComponentUtilities from "../../Other/RequestHelpers";
+import AuthenticationResponse from "../../Types/AuthenticationResponse.ts";
+import LoadingPage from "../LoadingPage/LoadingPage.tsx";
 
 // Component must make request to VerifyToken.
 // If UserContext is empty, or response comes back with a 401 error, return
@@ -10,21 +12,18 @@ import ComponentUtilities from "../../Other/RequestHelpers";
 
 // If page is refreshed or changed, UserContext is lost. Why the values appear in Register after registering, but do not appear in AuthorizeView
 
-const AuthorizeView = ({ baseUrl, ...props }) => {
+interface AuthorizeViewProps {
+    baseUrl: string
+}
+
+const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
     const [authorized, setAuthorized] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        if (localStorage.getItem("token") === undefined) {
-            return (
-                <>
-                    <Navigate to="/login" />
-                </>
-            )
-        }
         let retryCount: number = 0;
-        let maxRetries: number = 10;
-        let delay: number = 100;
+        const maxRetries: number = 10;
+        const delay: number = 100;
 
         function wait(delay: number) {
             return new Promise(resolve => setTimeout(resolve, delay));
@@ -33,14 +32,14 @@ const AuthorizeView = ({ baseUrl, ...props }) => {
         async function fetchWithRetry(url: string, options: object) {
             try {
 
-                const response = await axios.get(url, options);
+                const response = await axios.get<AuthenticationResponse>(url, options);
                 if (response.data.result === true) {
                     setAuthorized(true);
                     return response;
                 } else if (response.status === 401) {
                     console.log("Unauthorized");
                 } else {
-                    throw new Error("" + response.text);
+                    throw new Error("Not authorized");
                 }
             } catch (error) {
                 retryCount++;
@@ -52,16 +51,21 @@ const AuthorizeView = ({ baseUrl, ...props }) => {
                 }
             }
         }
-
-        fetchWithRetry(`${baseUrl}/VerifyToken`, ComponentUtilities.GenerateRequestHeaders())
+        fetchWithRetry(`${props.baseUrl}/VerifyToken`, ComponentUtilities.GenerateFullRequestHeaders())
             .catch(e => console.log(e))
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) {
+    if (localStorage.getItem("token") === undefined) {
         return (
             <>
-                <p>Loading...</p>
+                <Navigate to="/login" />
+            </>
+        )
+    } else if (loading) {
+        return (
+            <>
+                <LoadingPage />
             </>
         )
     } else {
