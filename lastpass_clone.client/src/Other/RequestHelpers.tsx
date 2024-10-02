@@ -5,8 +5,22 @@ import Category from "../Types/Category";
 
 // A collection of functions that must be performed for each creation/update form
 // Thought that this would help in the event of adding additional creation/update components
+
+class AxiosError {
+    response: AxiosResponse;
+    request: object;
+    message: string;
+    config: object;
+    constructor(response: AxiosResponse, request: object, message: string, config: object) {
+        this.response = response;
+        this.request = request;
+        this.message = message;
+        this.config = config;
+    }
+}
 class RequestHelpers
 {
+
     constructor() { }
 
     public MakeRequest(
@@ -56,23 +70,25 @@ class RequestHelpers
     }
 
     public HandleAxiosCatchErrors(
-        error: any,
+        error: unknown,
         setAlerts: Dispatch<JSX.Element[]>,
         setIsAlertModalVisible: Dispatch<boolean>
     )
     {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
+        if (error instanceof AxiosError) {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            const errors: JSX.Element[] = [];
+            errors.push(<AlertMessage message={error.message} color={"red"} />);
+            this.HandleAlerts(errors, setAlerts, setIsAlertModalVisible, 3000);
         }
-        const errors: JSX.Element[] = [];
-        errors.push(<AlertMessage message={error.message} color={"red"} />);
-        this.HandleAlerts(errors, setAlerts, setIsAlertModalVisible, 3000);
     }
 
     public HandleErrorAlerts(
