@@ -26,13 +26,15 @@ Completed
 WIP
 
 TODO
+- Add persistent storage.
+	- Azure
 - Add password reset and password confirmation
 	- Reset:
 		- Will require email service.
 			- Need an SMTP server (possibly). Can set up on localhost, but this won't work when I deploy. Need a third party smtp service
 			- Could also use the Gmail API it seems. Can use Gmail.Builder() with supplied credentials as the service to send the email. This will send an email from one address to another. 
 				- Think this is the way to go. 
-				- Created an app password that allows another service to access my gmail, will use this to access smtp.gmail.com with my email account. Could maybe create a separate accoun solely for this purpose
+				- Created an app password that allows another service to access my gmail, will use this to access smtp.gmail.com with my email account. Could maybe create a separate account solely for this purpose
 				- According to Google, "If you connect using SSL or TLS, you can send email to anyone inside or outside of your organization using smtp.gmail.com as your SMTP server.".
 		- User hits reset button, request hits a route that generates a token using the userId associated with email, and sends that token to the users email in a link to the change password page.
 		- Link will hit another route that verifies the token is still valid and sends it back. Frontend will have the secret required to decode the key, use that to decode, this will grant access to the change password page.

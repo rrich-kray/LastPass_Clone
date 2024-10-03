@@ -36,6 +36,11 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+if (!Directory.Exists("/database"))
+{
+    Directory.CreateDirectory("/database");
+}
+
 builder.Services.AddDbContext<PasswordManagerDatabaseContext>(options =>
      options.UseSqlite(builder.Environment.IsDevelopment() ? builder.Configuration["ConnectionStrings:Development"] : builder.Configuration["ConnectionStrings:Production"])
 );
@@ -92,12 +97,13 @@ app.MapFallbackToFile("/index.html");
 
 app.UseHttpsRedirection();
 
+
 using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
     var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     var db = serviceScope.ServiceProvider.GetRequiredService<PasswordManagerDatabaseContext>().Database;
 
-    logger.LogInformation("Migrating database...");
+    logger.LogInformation("Creating database...");
 
     /*
     while (!db.CanConnect())
@@ -110,12 +116,13 @@ using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>(
     try
     {
         await serviceScope.ServiceProvider.GetRequiredService<PasswordManagerDatabaseContext>().Database.EnsureCreatedAsync();
-        logger.LogInformation("Database migrated successfully.");
+        logger.LogInformation("Database created successfully.");
     }
     catch (Exception ex)
     {
         logger.LogError(ex, ex.Message);
     }
 }
+
 
 app.Run();
