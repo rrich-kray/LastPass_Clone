@@ -12,6 +12,8 @@ using PasswordManager.Server.Services.JwtAuth;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Azure;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,10 +38,12 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-if (!Directory.Exists("/database"))
+/*
+if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")))
 {
-    Directory.CreateDirectory("/database");
+    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
 }
+*/
 
 builder.Services.AddDbContext<PasswordManagerDatabaseContext>(options =>
      options.UseSqlite(builder.Environment.IsDevelopment() ? builder.Configuration["ConnectionStrings:Development"] : builder.Configuration["ConnectionStrings:Production"])
@@ -60,6 +64,11 @@ builder.Services.AddHttpsRedirection(options =>
 {
     options.RedirectStatusCode = 300;
     options.HttpsPort = 5001;
+});
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["Database:blob"]!, preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["Database:queue"]!, preferMsi: true);
 });
 
 var app = builder.Build();
