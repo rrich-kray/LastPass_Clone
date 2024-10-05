@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FhlgkWpnk8s=",
+  "dgSpecHash": "cF4bEG9231M=",
   "success": true,
-  "projectFilePath": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
+  "projectFilePath": "C:\\Users\\rrich\\test\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rrich\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\rrich\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
