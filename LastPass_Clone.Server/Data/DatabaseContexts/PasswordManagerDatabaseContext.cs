@@ -70,8 +70,7 @@ namespace PasswordManager.Server.Data.DatabaseContexts
                 .WithMany()
                 .HasForeignKey(p => p.UserId);
 
-            modelBuilder.Entity<PasswordResetCode>()
-                .HasOne(p => p.UserId);
+            modelBuilder.Entity<PasswordResetCode>();
 
         }
     }

@@ -59,6 +59,7 @@ builder.Services.AddScoped<PasswordRepository, PasswordRepository>();
 builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
 builder.Services.AddScoped<NoteRepository, NoteRepository>();
 builder.Services.AddScoped<UserRepository, UserRepository>();
+builder.Services.AddScoped<PasswordResetCodeRepository, PasswordResetCodeRepository>();
 
 builder.Services.AddHttpsRedirection(options =>
 {

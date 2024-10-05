@@ -10,6 +10,7 @@ using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
 using Microsoft.Extensions.Azure;
+using MailKit.Security;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -69,7 +70,7 @@ namespace PasswordManager.Server.Controllers
             if (new VerificationService().VerifyPassword(user.Password, 8) == false)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "Invalid password provided."};
+                response.Messages = new List<string>() { "Invalid password provided. Passwords must contain at least one uppercase letter, one number and be at least eight characters in length."};
                 return response;
             }
 
@@ -138,21 +139,29 @@ namespace PasswordManager.Server.Controllers
                 this.CategoryRepository.Create(new Category { UserId = user.Id, Name = categoryName });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("/ResetPassword")]
-        public async Task<AuthenticationResponse> ResetPassword([FromBody] string email, IConfiguration configuration)
+        public async Task<AuthenticationResponse> ResetPassword([FromBody] string email)
         {
             AuthenticationResponse response = new AuthenticationResponse();
 
-            configuration = new ConfigurationBuilder()
-                .SetBasePath(Path.GetPathRoot(Directory.GetCurrentDirectory()))
-                .AddJsonFile("Secrets.json")
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // CurrentDirectory must be root of application's folder
+                .AddJsonFile("secrets.json")
                 .Build();
 
             // check if email exists in the database
             var user = this.UserRepository.User.FirstOrDefault(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
             if (user is not null)
             {
+                var doesUserHaveOutstandingResetCode = this.PasswordResetCodeRepository.passwordResetCodes.FirstOrDefault(code => code.UserId == user.Id && code.Expiration > DateTime.Now);
+                if (doesUserHaveOutstandingResetCode != null)
+                {
+                    response.Result = false;
+                    response.Messages = new List<string>() { "The user with this email already has an outstanding reset code. Please check your email again for the code." };
+                    return response;
+                }
                 // Generate guid
                 var guid = Guid.NewGuid();
 
@@ -171,12 +180,12 @@ namespace PasswordManager.Server.Controllers
                 var client = new SmtpClient();
                 try
                 {
-                    client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate(configuration.GetSection("PasswordResetSenderEmail").Value, configuration.GetSection("PasswordResetSenderEmailAppPAssword").Value);
+                    await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.Auto);
+                    await client.AuthenticateAsync(configuration.GetSection("PasswordResetSenderEmail").Value, configuration.GetSection("PasswordResetSenderEmailAppPassword").Value);
                 } catch (Exception ex)
                 {
                     response.Result = false;
-                    response.Messages = new List<string>() { "Error connecting to Gmail SMTP server, see following exception. See exception in next message", ex.Message };
+                    response.Messages = new List<string>() { "Error connecting to Gmail SMTP server or authenticating user, see the following exception.", ex.Message };
                     return response;
                 }
 
@@ -193,7 +202,8 @@ namespace PasswordManager.Server.Controllers
                                 If this is the intended recipient, please follow the link below to reset your password.
                                 https://passwordmanager1.azurewebsites.net/VerifyPasswordReset/{guid}"
                     };
-                    client.Send(message);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
                 } catch (Exception ex)
                 {
                     response.Result = false;

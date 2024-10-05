@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hKyLFHApklLWIiYvFOFnRCxRg8JYalaUcVboZHf98w4=",
+  "Hash": "EG2c3wXQC2Y2Cu/3JK6st8A+qqAy/KO2GRXCZpptjGo=",
   "Source": "PasswordManager.Server",
   "BasePath": "_content/PasswordManager.Server",
   "Mode": "Default",
@@ -27,25 +27,5 @@
       "Pattern": "**"
     }
   ],
-  "Assets": [
-    {
-      "Identity": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\wwwroot\\database.db",
-      "SourceId": "PasswordManager.Server",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\wwwroot\\",
-      "BasePath": "_content/PasswordManager.Server",
-      "RelativePath": "database.db",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\database.db"
-    }
-  ]
+  "Assets": []
 }

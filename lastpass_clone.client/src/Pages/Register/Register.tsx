@@ -5,6 +5,8 @@ import axios from "axios";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 import { UserContext } from "../../App";
 import RequestHelpers from "../../Other/RequestHelpers.tsx";
+import AuthenticationForm from "../../Components/AuthenticationForm/AuthenticationForm.tsx";
+import AuthenticationFormInput from "../../Types/AuthenticationFormInput";
 
 const Register = (
     {
@@ -61,7 +63,9 @@ const Register = (
                     setTimeout(reset, 3000);
                 } else {
                     const errorAlerts: JSX.Element[] = [];
-                    errorAlerts.push(<AlertMessage message={response.data.message} color={"red"} />);
+                    response.data.messages.forEach((message: string)=> {
+                        errorAlerts.push(<AlertMessage message={message} color={"red"} />);
+                    })
                     setAlerts(errorAlerts);
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
@@ -81,39 +85,34 @@ const Register = (
             });
     }
 
+    const inputs: AuthenticationFormInput[] = [
+        {
+            label: "Email Address",
+            inputType: "text",
+            inputName: "Email",
+            handleChange: handleChange
+        },
+        {
+            label: "Password",
+            inputType: "password",
+            inputName: "Password",
+            handleChange: handleChange
+        },
+        {
+            label: "Confirm Password",
+            inputType: "password",
+            inputName: "ConfirmPassword",
+            handleChange: handleChange
+        },
+    ]
+
     return (
-        <div className={styles.RegisterPage}>
-            <form className={styles.RegisterForm}>
-                <div className={styles.RegisterLogoContainer}>
-                    <img src={logo} alt="logo" style={{height: "50px"}} />
-                </div>
-                <div className={styles.RegisterHeader}>
-                    <div className={styles.RegisterHeaderLeftPanel}>
-                        <span>CREATE AN ACCOUNT</span>
-                    </div>
-                    <div className={styles.RegisterHeaderRightPanel}>
-                        <span onClick={() => window.location.replace("/Login")}>Or Log In</span>
-                    </div>
-                </div>
-                <div className={styles.RegisterInputs}>
-                    <div className={styles.RegisterInputContainer}>
-                        <span>Email Address</span>
-                        <input name="Email" className={styles.RegisterInput} onChange={handleChange}></input>
-                    </div>
-                    <div className={styles.RegisterInputContainer}>
-                        <span>Password</span>
-                        <input type="password" name="Password" className={styles.RegisterInput} onChange={handleChange}></input>
-                    </div>
-                    <div className={styles.RegisterInputContainer}>
-                        <span>Confirm Password</span>
-                        <input type="password" name="ConfirmPassword" className={styles.RegisterInput} onChange={handleChange}></input>
-                    </div>
-                </div>
-                <div className={styles.RegisterButtons}>
-                    <button className={styles.RegisterSubmitBtn} onClick={handleFormSubmit}>Register!</button>
-                </div>
-            </form>
-        </div>
+        <AuthenticationForm
+            headerLeftText={"Register"}
+            headerRightText={"Log in"}
+            headerRightTextLink={"/Login"}
+            inputs={inputs}
+            handleFormSubmit={handleFormSubmit} />
     )
 }
 
