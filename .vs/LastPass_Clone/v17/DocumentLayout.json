@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|solutionrelative:lastpass_clone.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|solutionrelative:lastpass_clone.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|solutionrelative:lastpass_clone.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\pages\\main\\main.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 307,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -98,18 +98,17 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Dockerfile",
               "ViewState": "AQIAAAMAAAAAAAAAAAAAAB4AAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-10-03T15:33:03.282Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-03T15:33:03.282Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\Program.cs",
               "RelativeDocumentMoniker": "LastPass_Clone.Server\\Program.cs",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\Program.cs",
               "RelativeToolTip": "LastPass_Clone.Server\\Program.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAAADAAAACsAAAA",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADkAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-03T14:59:19.018Z",
               "EditorCaption": ""
@@ -124,8 +123,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\AlertMessage\\styles.module.scss",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2024-10-01T20:36:53.604Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:36:53.604Z"
             },
             {
               "$type": "Document",
@@ -137,8 +135,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Global\\CreationUpdateForm.module.scss",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAADoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2024-10-01T20:34:48.872Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:34:48.872Z"
             },
             {
               "$type": "Document",
@@ -150,8 +147,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Controllers\\CategoryController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAABMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-01T20:33:14.85Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:33:14.85Z"
             },
             {
               "$type": "Document",
@@ -163,8 +159,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\Main\\Main.tsx",
               "ViewState": "AQIAAGQBAAAAAAAAAAAAwJUBAADmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T20:11:29.242Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:11:29.242Z"
             },
             {
               "$type": "Document",
@@ -176,21 +171,19 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\NewCategoryForm\\NewCategoryForm.tsx",
               "ViewState": "AQIAADsAAAAAAAAAAAAAwE0AAABjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T21:28:53.51Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T21:28:53.51Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\appsettings.json",
               "RelativeDocumentMoniker": "LastPass_Clone.Server\\appsettings.json",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\appsettings.json",
               "RelativeToolTip": "LastPass_Clone.Server\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAABAAAAA",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-10-02T23:51:54.767Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-02T23:51:54.767Z"
             },
             {
               "$type": "Document",
@@ -202,8 +195,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Other\\RequestHelpers.tsx",
               "ViewState": "AQIAAEoAAAAAAAAAAAAAwFkAAABPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T21:19:43.168Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T21:19:43.168Z"
             },
             {
               "$type": "Document",
@@ -215,8 +207,7 @@
               "RelativeToolTip": "lastpass_clone.client\\TODO.md",
               "ViewState": "AQIAAAwAAAAAAAAAAAAAAB0AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2024-10-02T14:29:03.915Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-02T14:29:03.915Z"
             },
             {
               "$type": "Document",
@@ -228,8 +219,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\BankAccount\\BankAccountCreationUpdateForm\\BankAccountCreationUpdateForm.tsx",
               "ViewState": "AQIAADYAAAAAAAAAAAAAAB4AAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T21:24:35.44Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T21:24:35.44Z"
             },
             {
               "$type": "Document",
@@ -241,8 +231,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\App.tsx",
               "ViewState": "AQIAAB0AAAAAAAAAAAAxwC8AAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T16:42:20.981Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T16:42:20.981Z"
             },
             {
               "$type": "Document",
@@ -254,8 +243,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\CategorySection\\CategorySection.tsx",
               "ViewState": "AQIAAB4AAAAAAAAAAAAAADgAAAA5AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T20:06:43.314Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:06:43.314Z"
             },
             {
               "$type": "Document",
@@ -267,8 +255,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Other\\AuthenticationUtilities.tsx",
               "ViewState": "AQIAABQAAAAAAAAAAAAgwCIAAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T22:02:39.328Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T22:02:39.328Z"
             },
             {
               "$type": "Document",
@@ -280,8 +267,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Data\\DatabaseContexts\\PasswordManagerDatabaseContext.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAB7AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-01T20:52:45.729Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:52:45.729Z"
             },
             {
               "$type": "Document",
@@ -293,8 +279,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\Tile\\Tile.tsx",
               "ViewState": "AQIAADoAAAAAAAAAAAAQwEoAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-01T20:20:24.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:20:24.136Z"
             },
             {
               "$type": "Document",
@@ -306,8 +291,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\Main\\styles.module.scss",
               "ViewState": "AQIAADkAAAAAAAAAAAAAAEYAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2024-10-01T20:16:28.074Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:16:28.074Z"
             },
             {
               "$type": "Document",
@@ -319,8 +303,7 @@
               "RelativeToolTip": "lastpass_clone.client\\src\\Components\\CategorySection\\styles.module.scss",
               "ViewState": "AQIAAA8AAAAAAAAAAAAAACwAAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2024-10-01T20:08:33.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T20:08:33.974Z"
             },
             {
               "$type": "Document",
@@ -332,8 +315,7 @@
               "RelativeToolTip": "LastPass_Clone.Server\\Controllers\\AddressController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-01T16:40:43.5Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-01T16:40:43.5Z"
             }
           ]
         }

@@ -199,7 +199,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Microsoft.AspNetCore.SpaProxy/8.0.8": {
+      "Microsoft.AspNetCore.SpaProxy/8.0.10": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.SpaProxy.dll": {}
@@ -2123,10 +2123,10 @@
         "microsoft.aspnetcore.mvc.newtonsoftjson.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.SpaProxy/8.0.8": {
-      "sha512": "T9Zhb64OmOr2nU0iND7br44EfJrQYHpopxvq33l33uZM2Uu/V2GTHKg5OmGMO3XJuUX59fhqvMyXOcFFj6k1pA==",
+    "Microsoft.AspNetCore.SpaProxy/8.0.10": {
+      "sha512": "8oqu48JT85gDrgkS8nbrIBYY4R+u3twEnycD8zSJJUVfw+Y14BmkymSGtH413ev3hc4hq4le9fD0P5468NlNbg==",
       "type": "package",
-      "path": "microsoft.aspnetcore.spaproxy/8.0.8",
+      "path": "microsoft.aspnetcore.spaproxy/8.0.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2134,7 +2134,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "build/Microsoft.AspNetCore.SpaProxy.targets",
         "lib/net8.0/Microsoft.AspNetCore.SpaProxy.dll",
-        "microsoft.aspnetcore.spaproxy.8.0.8.nupkg.sha512",
+        "microsoft.aspnetcore.spaproxy.8.0.10.nupkg.sha512",
         "microsoft.aspnetcore.spaproxy.nuspec"
       ]
     },
@@ -5132,11 +5132,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rrich\\test\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
+      "projectUniqueName": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
       "projectName": "PasswordManager.Server",
-      "projectPath": "C:\\Users\\rrich\\test\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
+      "projectPath": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
       "packagesPath": "C:\\Users\\rrich\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rrich\\test\\LastPass_Clone\\LastPass_Clone.Server\\obj\\",
+      "outputPath": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5267,7 +5267,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
