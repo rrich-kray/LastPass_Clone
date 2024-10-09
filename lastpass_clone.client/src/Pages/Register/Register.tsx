@@ -1,6 +1,4 @@
 import { useState, useContext, Dispatch } from "react";
-import styles from "./styles.module.scss";
-import logo from "../../assets/LastPass-Logo.png";
 import axios from "axios";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 import { UserContext } from "../../App";
@@ -112,7 +110,9 @@ const Register = (
             headerRightText={"Log in"}
             headerRightTextLink={"/Login"}
             inputs={inputs}
-            handleFormSubmit={handleFormSubmit} />
+            handleFormSubmit={handleFormSubmit}
+            buttonText={"Register"}
+            resetPassword={false} />
     )
 }
 

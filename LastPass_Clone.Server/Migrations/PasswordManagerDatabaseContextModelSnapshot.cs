@@ -7,7 +7,7 @@ using PasswordManager.Server.Data.DatabaseContexts;
 
 #nullable disable
 
-namespace LastPass_Clone.Server.Migrations
+namespace PasswordManager.Server.Migrations
 {
     [DbContext(typeof(PasswordManagerDatabaseContext))]
     partial class PasswordManagerDatabaseContextModelSnapshot : ModelSnapshot
@@ -179,43 +179,6 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Business"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Arts"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Productivity Tools"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Shopping"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Email"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Social"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Entertainment"
-                        });
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.Note", b =>
@@ -281,6 +244,26 @@ namespace LastPass_Clone.Server.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Passwords");
+                });
+
+            modelBuilder.Entity("PasswordManager.Server.Data.Entities.PasswordResetCode", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("Code")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PasswordResetCodes");
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PaymentCard", b =>

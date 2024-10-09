@@ -45,13 +45,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = (
             .then(response => {
                 if (response.data.result === true) {
                     localStorage.setItem("token", response.data.token);
-                    const alerts = [<AlertMessage message={"Log in successful!"} color={"green"} />];
-                    setAlerts(alerts);
-                    setIsAlertModalVisible(true);
-                    setTimeout(reset, 3000);
                     setWasEmailSent(true);
                 } else {
-                    const alerts = [<AlertMessage message={response.data.message} color={"red"} />];
+                    const alerts = response.data.messages.map((message: string) => <AlertMessage message={message} color={"red"} />)
                     setAlerts(alerts);
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
@@ -86,14 +82,18 @@ const ResetPassword: React.FC<ResetPasswordProps> = (
                 headerRightText={"Or log in"}
                 headerRightTextLink={"/Login"}
                 inputs={inputs}
-                handleFormSubmit={handleFormSubmit} />}
+                handleFormSubmit={handleFormSubmit}
+                buttonText={"Reset Password"}
+                resetPassword={false} />}
 
             {wasEmailSent && <AuthenticationForm
                 headerLeftText={"Reset Password"}
                 headerRightText={"Or log in"}
                 headerRightTextLink={"/Login"}
                 bodyText={"Please check your inbox (and spam folder) for a password recovery email."}
-                handleFormSubmit={handleFormSubmit} />}
+                handleFormSubmit={handleFormSubmit}
+                buttonText={"Reset Password"}
+                resetPassword={false} />}
         </>
     )
 }

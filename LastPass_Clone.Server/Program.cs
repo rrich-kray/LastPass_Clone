@@ -72,6 +72,11 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddQueueServiceClient(builder.Configuration["Database:queue"]!, preferMsi: true);
 });
 
+// Loggin
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
+
 var app = builder.Build();
 
 app.UseAuthentication();

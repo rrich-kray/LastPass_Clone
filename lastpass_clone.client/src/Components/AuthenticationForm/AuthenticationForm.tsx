@@ -7,7 +7,9 @@ interface AuthenticationFormProps {
     headerRightTextLink: string,
     inputs?: AuthenticationFormInput[],
     bodyText?: string,
-    handleFormSubmit: (e: React.FormEvent) => void
+    handleFormSubmit: (e: React.FormEvent) => void,
+    buttonText: string,
+    resetPassword: boolean
 }
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = (
@@ -17,7 +19,9 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (
         headerRightTextLink,
         inputs,
         bodyText,
-        handleFormSubmit
+        handleFormSubmit,
+        buttonText,
+        resetPassword
     }) => {
     return (
         <div className={styles.RegisterPage}>
@@ -44,7 +48,8 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (
                 </div>
                 {inputs !== null && inputs !== undefined &&
                 <div className={styles.RegisterButtons}>
-                    <button className={styles.RegisterSubmitBtn} onClick={handleFormSubmit}>Log in!</button>
+                        <button className={styles.RegisterSubmitBtn} onClick={handleFormSubmit}>{buttonText}</button>
+                        {resetPassword && <span onClick={() => window.location.replace('/ResetPassword')} style={{cursor: "pointer"}}>Reset Password</span>}
                 </div>}
             </form>
         </div>
