@@ -45,7 +45,7 @@ function App() {
             .catch(error => console.log(error));
     }, []);
 
-    const baseUrl: string = "https://localhost:32881"; // put this in ENV file at some point
+    const baseUrl: string = "https://localhost:32887"; // put this in ENV file at some point
     //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
     //const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
 
@@ -73,7 +73,9 @@ function App() {
                         </AccessLoginRegister>
                     } />
                     <Route path="/UpdatePassword/:key" element={
-                        <UpdatePassword baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
+                        <AccessLoginRegister baseUrl={baseUrl}>
+                            <UpdatePassword baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
+                        </AccessLoginRegister>
                     } />
                     <Route path="/" element={
                         <AuthorizeView baseUrl={baseUrl}>

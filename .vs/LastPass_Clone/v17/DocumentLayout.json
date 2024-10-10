@@ -9,21 +9,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\app.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\app.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-<<<<<<< HEAD
-=======
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\pages\\changepassword\\updatepassword.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\pages\\changepassword\\updatepassword.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.client\\src\\pages\\resetpassword\\resetpassword.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{C13062A5-3F7C-4463-AFD1-E6041A5DB374}|lastpass_clone.client\\PasswordManager.Client.esproj|solutionrelative:lastpass_clone.client\\src\\pages\\resetpassword\\resetpassword.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|c:\\users\\rrich\\projects\\lastpass_clone\\lastpass_clone.server\\appsettingsdevelopment.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{7EBCB30E-4DBD-42CA-935E-FFAF75835D67}|LastPass_Clone.Server\\PasswordManager.Server.csproj|solutionrelative:lastpass_clone.server\\appsettingsdevelopment.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
->>>>>>> feature/password-reset
     }
   ],
   "DocumentGroupContainers": [
@@ -33,11 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 307,
-<<<<<<< HEAD
           "SelectedChildIndex": 1,
-=======
-          "SelectedChildIndex": 4,
->>>>>>> feature/password-reset
           "Children": [
             {
               "$type": "Document",
@@ -47,7 +28,6 @@
               "RelativeDocumentMoniker": "lastpass_clone.client\\src\\App.tsx",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\App.tsx",
               "RelativeToolTip": "lastpass_clone.client\\src\\App.tsx",
-<<<<<<< HEAD
               "ViewState": "AgIAAB4AAAAAAAAAAAAAACYAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2024-10-10T14:11:23.557Z",
@@ -55,66 +35,13 @@
             },
             {
               "$type": "Document",
-=======
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAAC8AAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-10T14:11:23.557Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UpdatePassword.tsx",
-              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\ChangePassword\\UpdatePassword.tsx",
-              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Pages\\ChangePassword\\UpdatePassword.tsx",
-              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\ChangePassword\\UpdatePassword.tsx",
-              "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\ChangePassword\\UpdatePassword.tsx",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-10T14:24:37.055Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ResetPassword.tsx",
-              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\ResetPassword\\ResetPassword.tsx",
-              "RelativeDocumentMoniker": "lastpass_clone.client\\src\\Pages\\ResetPassword\\ResetPassword.tsx",
-              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\lastpass_clone.client\\src\\Pages\\ResetPassword\\ResetPassword.tsx",
-              "RelativeToolTip": "lastpass_clone.client\\src\\Pages\\ResetPassword\\ResetPassword.tsx",
-              "ViewState": "AgIAACMAAAAAAAAAAAAQwC4AAACEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-10T14:23:48.628Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "appsettingsDevelopment.json",
-              "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\appsettingsDevelopment.json",
-              "RelativeDocumentMoniker": "LastPass_Clone.Server\\appsettingsDevelopment.json",
-              "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\appsettingsDevelopment.json",
-              "RelativeToolTip": "LastPass_Clone.Server\\appsettingsDevelopment.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-10-10T13:48:22.924Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
->>>>>>> feature/password-reset
               "DocumentIndex": 0,
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "LastPass_Clone.Server\\Controllers\\UserController.cs",
               "ToolTip": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\Controllers\\UserController.cs",
               "RelativeToolTip": "LastPass_Clone.Server\\Controllers\\UserController.cs",
-<<<<<<< HEAD
-              "ViewState": "AgIAAFQAAAAAAAAAAAAqwFgAAABoAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAKgAAAAAAAAAAAAAALQAAAA5AAAAAAAAAA==",
->>>>>>> feature/password-reset
+              "ViewState": "AgIAAFQAAAAAAAAAAAAqwG0AAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-10T12:11:27.437Z",
               "EditorCaption": ""

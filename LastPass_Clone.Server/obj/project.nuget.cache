@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "ghSMHmhT+rQ=",
-=======
   "dgSpecHash": "DNS8490KHAM=",
->>>>>>> feature/password-reset
   "success": true,
   "projectFilePath": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\PasswordManager.Server.csproj",
   "expectedPackageFiles": [
@@ -112,5 +108,12 @@
     "C:\\Users\\rrich\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
     "C:\\Users\\rrich\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
