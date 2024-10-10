@@ -177,7 +177,6 @@ namespace PasswordManager.Server.Controllers
 
             var doesUserHaveOutstandingResetCode = this.PasswordResetCodeRepository.passwordResetCodes.FirstOrDefault(code => code.UserId == user.Id && code.Expiration > DateTime.Now);
 
-            /*
             // Commented out for debugging
             if (doesUserHaveOutstandingResetCode != null)
             {
@@ -185,7 +184,6 @@ namespace PasswordManager.Server.Controllers
                 response.Messages = new List<string>() { "The user with this email already has an outstanding reset code. Please check your email again for the code." };
                 return response;
             }
-            */
 
             StringBuilder sb = new StringBuilder();
             var matchValues = Regex.Matches(Convert.ToBase64String(RandomNumberGenerator.GetBytes(24)), @"[a-zA-Z0-9]").Select(match => match.Value);
