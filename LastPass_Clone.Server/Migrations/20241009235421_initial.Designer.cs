@@ -11,7 +11,7 @@ using PasswordManager.Server.Data.DatabaseContexts;
 namespace PasswordManager.Server.Migrations
 {
     [DbContext(typeof(PasswordManagerDatabaseContext))]
-    [Migration("20241009145417_initial")]
+    [Migration("20241009235421_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -251,9 +251,9 @@ namespace PasswordManager.Server.Migrations
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PasswordResetCode", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("Code")
                         .HasColumnType("TEXT");

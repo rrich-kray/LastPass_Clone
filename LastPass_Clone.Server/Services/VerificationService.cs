@@ -12,11 +12,11 @@ namespace PasswordManager.Server.Services
         public bool VerifyPassword(string password, int lengthRequirement)
         {
             bool meetsLengthRequirement = password.Length > 8;
-            bool meetsNumberRequirement = new Regex(@"[0-9]+").IsMatch(password);
+            bool hasNumber = new Regex(@"[0-9]+").IsMatch(password);
             bool hasUppercaseLetter = new Regex(@"[A-Z]+").IsMatch(password);
             return 
                 meetsLengthRequirement &&
-                meetsNumberRequirement &&
+                hasNumber &&
                 hasUppercaseLetter;
         }
     }

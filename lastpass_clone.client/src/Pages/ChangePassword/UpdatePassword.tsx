@@ -14,21 +14,26 @@ interface UpdatePasswordProps {
 }
 
 const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
-    const { guid } = useParams();
-    const [isUpdateGuidValid, setIsUpdateGuidValid] = useState<boolean>(true);
+    const { key } = useParams();
+    const [isUpdateGuidValid, setIsUpdateGuidValid] = useState<boolean | null>(null);
+    const [updateResultMessage, setUpdateResultMessage] = useState<string>("");
+    const [hasPasswordBeenReset, setHasPasswordBeenReset] = useState<boolean>(false);
     const [formState, setFormState] = useState({
         password: ""
     })
 
     useEffect(() => {
         axios
-            .get(`${props.baseUrl}/VerifyPasswordReset/${guid}`)
+            .get(`${props.baseUrl}/VerifyPasswordReset/${key}`)
             .then(response => {
                 if (response.data.result === false) {
                     setIsUpdateGuidValid(false);
-                }
+                    setUpdateResultMessage(response.data.messages[0]); // Backend will only return a single message
+                } else {
+                    setIsUpdateGuidValid(true);
+                } 
             });
-    })
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -47,16 +52,12 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
         axios
             .put(`${props.baseUrl}/ChangePassword`, {
                 Password: formState.password,
-                Guid: guid
+                Guid: key
             },
                 RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
-                    const alerts = [<AlertMessage message={"Password successfully changed. Please login with your new credentials."} color={"green"} />];
-                    props.setAlerts(alerts);
-                    props.setIsAlertModalVisible(true);
-                    setTimeout(reset, 3000);
-                    window.location.replace("/Login");
+                    setHasPasswordBeenReset(true);
                 } else {
                     const alerts = response.data.messages.map((message: string) => <AlertMessage message={message} color={"red"} />)
                     props.setAlerts(alerts);
@@ -94,6 +95,15 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
 
     return (
         <>
+            {hasPasswordBeenReset && <AuthenticationForm
+                headerLeftText={"Update Password"}
+                headerRightText={"Log in"}
+                headerRightTextLink={"/Login"}
+                bodyText={"Your password has been reset. Please navigate to the login page to login."}
+                handleFormSubmit={handleFormSubmit}
+                buttonText={"Update Password"}
+                resetPassword={false} />}
+
             {isUpdateGuidValid && <AuthenticationForm
                 headerLeftText={"Reset Password"}
                 headerRightText={"Or log in"}
@@ -107,7 +117,7 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
                 headerLeftText={"Update Password"}
                 headerRightText={"Or reset password"}
                 headerRightTextLink={"/ResetPassword"}
-                bodyText={"Your token has expired. Please navigate to the password reset page using the link above and acquire a new one."}
+                bodyText={updateResultMessage}
                 handleFormSubmit={handleFormSubmit}
                 buttonText={"Update Password"}
                 resetPassword={true} />}

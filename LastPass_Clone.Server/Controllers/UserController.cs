@@ -4,14 +4,12 @@ using PasswordManager.Server.Data.Entities;
 using PasswordManager.Server.Data.Repositories;
 using PasswordManager.Server.Services.JwtAuth;
 using PasswordManager.Server.Services;
-using PasswordManager.Server.Utilities;
-using static PasswordManager.Server.Controllers.UserController;
 using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
-using Microsoft.Extensions.Azure;
 using MailKit.Security;
-using PasswordManager.Server.Data.DatabaseContexts;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -149,20 +147,17 @@ namespace PasswordManager.Server.Controllers
                 this.CategoryRepository.Create(new Category { UserId = user.Id, Name = categoryName });
         }
 
-        public class ResetPasswordRequest
-        {
-            public string Email { get; set; }
-        }
-
+        // reset code table will eventually become too large for any meaningful application. This solution is not scalable. 
+        // Remove the code from the DB when it is used? Or remove when expired, and just check for that in the code?
         [AllowAnonymous]
         [HttpPost]
-        [Route("/ResetPassword")]
-        public AuthenticationResponse ResetPassword([FromBody] ResetPasswordRequest passwordResetRequest)
+        [Route("/ResetPassword/{email}")]
+        public AuthenticationResponse ResetPassword(string email)
         {
             AuthenticationResponse response = new AuthenticationResponse();
 
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // CurrentDirectory IS be root of application's folder
+                .SetBasePath(Directory.GetCurrentDirectory()) // CurrentDirectory is root of application's folder
                 .AddJsonFile("secrets.json")
                 .Build();
 
@@ -170,11 +165,11 @@ namespace PasswordManager.Server.Controllers
             var passwordResetSenderEmailGoogleAppPassword = configuration.GetSection("PasswordResetSenderEmailAppPassword").Value;
 
             // check if email exists in the database
-            var user = this.UserRepository.Users.FirstOrDefault(x => x.Email.Equals(passwordResetRequest.Email, StringComparison.OrdinalIgnoreCase));
+            var user = this.UserRepository.Users.FirstOrDefault(user => user.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
             if (user is null)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "Could not find user in database." };
+                response.Messages = new List<string>() { "Could not find a user associated with the provided email." };
                 return response;
             }
 
@@ -188,11 +183,12 @@ namespace PasswordManager.Server.Controllers
                 return response;
             }
 
-            // Generate guid
-            var guid = Guid.NewGuid();
+            // Generate Cryptographically secure random number for reset key
+            var hmac = new HMACSHA256();
+            var key = Convert.ToBase64String(hmac.Key).Replace("/", "?").Replace("\\", "?"); // Is it still cryptographically secure if some characters are replaced? Do I even need cryptographic security?
 
-            // Save GUID to database with User Id
-            this.PasswordResetCodeRepository.Create(new PasswordResetCode { UserId = user.Id, Code = guid, Expiration = DateTime.Now.AddMinutes(30)});
+            // Save key to database with User Id
+            this.PasswordResetCodeRepository.Create(new PasswordResetCode { UserId = user.Id, Code = key, Expiration = DateTime.Now.AddMinutes(30)});
 
             // Connect client
             var client = new SmtpClient(new ProtocolLogger("smtp.log"));
@@ -201,7 +197,7 @@ namespace PasswordManager.Server.Controllers
             if (!client.IsConnected)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "Client is not currently connected to Gmail SMTP server." };
+                response.Messages = new List<string>() { "Client could not connect to the SMTP server." };
                 return response;
             }
 
@@ -217,14 +213,15 @@ namespace PasswordManager.Server.Controllers
             // Create message
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("Password Manager", passwordResetSenderEmail));
-            message.To.Add(new MailboxAddress("User", passwordResetRequest.Email));
+            message.To.Add(new MailboxAddress("User", email));
             message.Subject = "PasswordManager Password Recovery";
             string resetLink = this._hostEnvironment.IsDevelopment() ? $"https://localhost:5173" : "https://passwordmanager1.azurewebsites.net";
             message.Body = new TextPart("Plain")
             {
-                Text = $@"This user requested a password reset. If this is a mistake, please ignore this email.
+                Text = $@"This user requested a password reset. If this is a mistake, please ignore this email
+.
                         If this is the intended recipient, please follow the link below to reset your password.
-                        {resetLink}/UpdatePassword/{guid}"
+                        {resetLink}/UpdatePassword/{key}"
             };
 
             client.Send(message);
@@ -248,13 +245,13 @@ namespace PasswordManager.Server.Controllers
             if (passwordResetCode is null)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "User does not have a password reset code." };
+                response.Messages = new List<string>() { "This code has already been used." };
                 return response;
             }
             if (passwordResetCode!.Expiration < DateTime.Now)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "Password Reset Code is expired." };
+                response.Messages = new List<string>() { "The provided password Reset Code is expired. Please navigate to the Reset Password page if you need another." };
                 return response;
             }
 
@@ -275,13 +272,24 @@ namespace PasswordManager.Server.Controllers
         public AuthenticationResponse ChangePassword([FromBody] UpdatePasswordRequest updatePasswordRequest)
         {
             AuthenticationResponse response = new AuthenticationResponse();
+            if (new VerificationService().VerifyPassword(updatePasswordRequest.Password, 8) == false)
+            {
+                response.Result = false;
+                response.Messages = new List<string>() { "Invalid password provided. Passwords must contain at least one uppercase letter, one number and be at least eight characters in length." };
+                return response;
+            }
+            // Throwing an exception here would not be ideal, as this is expected to happen
             PasswordResetCode? code = this.PasswordResetCodeRepository.passwordResetCodes.FirstOrDefault(code => code.Code.ToString().Equals(updatePasswordRequest.Guid, StringComparison.OrdinalIgnoreCase));
+
+            // This may warrant an exception. This error is not expected to occur. But what if I decide to implement a service that deletes codes x amount of time after expiration?
             if (code is null)
             {
                 response.Result = false;
                 response.Messages = new List<string>() { "A reset code was not found for the specified user." };
                 return response;
             }
+
+            // Should I delete code here?
             if (code.Expiration < DateTime.Now)
             {
                 response.Result = false;
@@ -289,26 +297,34 @@ namespace PasswordManager.Server.Controllers
                 return response;
             }
 
+            // Will implement a delete user feature in the future. What if user deletes account right after asking for a reset code? Highky unlikely, as there would be no reason to request a reset code when they have access to their account, why throwing an exception here may not be ideal.
+            // Could delete the code if the user logs in 
             User? user = this.UserRepository.Users.FirstOrDefault(user => user.Id == code.UserId);
-            if (user == null)
+            if (user is null)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "User not found." };
+                response.Messages = new List<string>() { "User not found. It is likely that the user deleted their account after initializing the password reset." };
                 return response;
             }
 
-            try
-            {
-                user.Password = updatePasswordRequest.Password;
-                this.UserRepository.SaveChanges();
-                response.Result = true;
-                response.Messages = new List<string>() { "User password successfully updated." };
-
-            } catch (Exception ex)
+            if (updatePasswordRequest.Password.Equals(user.Password))
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "Error updating the user's password, see following exception.", ex.Message };
+                response.Messages = new List<string>() { "Password cannot be the same as the existing password."};
+                return response;
             }
+            user.Password = updatePasswordRequest.Password;
+            this.UserRepository.SaveChanges();
+
+
+            // Delete the reset code
+            // Should I delete here
+            // Should I write a service that periodically deletes expired reset codes to ensure the table does not grow too large?
+            this.PasswordResetCodeRepository.Delete(code.Id);
+            this.PasswordResetCodeRepository.SaveChanges();
+
+            response.Result = true;
+            response.Messages = new List<string>() { "User password successfully updated." };
 
             return response;
         }

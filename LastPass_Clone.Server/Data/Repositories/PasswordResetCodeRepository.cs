@@ -45,7 +45,7 @@ namespace PasswordManager.Server.Data.Repositories
         {
             try
             {
-                Address? currentPasswordResetCode = this.PasswordManagerDatabaseContext.Addresses?.FirstOrDefault(x => x.Id == passwordResetCodeId);
+                PasswordResetCode? currentPasswordResetCode = this.PasswordManagerDatabaseContext.PasswordResetCodes?.FirstOrDefault(x => x.Id == passwordResetCodeId);
                 if (currentPasswordResetCode is not null)
                 {
                     this.PasswordManagerDatabaseContext.Remove(currentPasswordResetCode);

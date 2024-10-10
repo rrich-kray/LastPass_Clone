@@ -248,9 +248,9 @@ namespace PasswordManager.Server.Migrations
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PasswordResetCode", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("Code")
                         .HasColumnType("TEXT");
