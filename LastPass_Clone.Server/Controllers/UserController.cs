@@ -10,6 +10,8 @@ using MimeKit;
 using MailKit.Security;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -175,6 +177,7 @@ namespace PasswordManager.Server.Controllers
 
             var doesUserHaveOutstandingResetCode = this.PasswordResetCodeRepository.passwordResetCodes.FirstOrDefault(code => code.UserId == user.Id && code.Expiration > DateTime.Now);
 
+            /*
             // Commented out for debugging
             if (doesUserHaveOutstandingResetCode != null)
             {
@@ -182,10 +185,12 @@ namespace PasswordManager.Server.Controllers
                 response.Messages = new List<string>() { "The user with this email already has an outstanding reset code. Please check your email again for the code." };
                 return response;
             }
+            */
 
-            // Generate Cryptographically secure random number for reset key
-            var hmac = new HMACSHA256();
-            var key = Convert.ToBase64String(hmac.Key).Replace("/", "?").Replace("\\", "?"); // Is it still cryptographically secure if some characters are replaced? Do I even need cryptographic security?
+            StringBuilder sb = new StringBuilder();
+            var matchValues = Regex.Matches(Convert.ToBase64String(RandomNumberGenerator.GetBytes(24)), @"[a-zA-Z0-9]").Select(match => match.Value);
+            foreach (var matchValue in matchValues) sb.Append(matchValue);
+            var key = sb.ToString();
 
             // Save key to database with User Id
             this.PasswordResetCodeRepository.Create(new PasswordResetCode { UserId = user.Id, Code = key, Expiration = DateTime.Now.AddMinutes(30)});
@@ -235,17 +240,17 @@ namespace PasswordManager.Server.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("/VerifyPasswordReset/{guid}")]
-        public AuthenticationResponse VerifyPasswordReset(string guid)
+        [Route("/VerifyPasswordReset/{key}")]
+        public AuthenticationResponse VerifyPasswordReset(string key)
         {
             var response = new AuthenticationResponse();
 
             // Find password reset code in database
-            var passwordResetCode = this.PasswordResetCodeRepository.passwordResetCodes.FirstOrDefault(code => code.Code.ToString().Equals(guid, StringComparison.OrdinalIgnoreCase));
+            var passwordResetCode = this.PasswordResetCodeRepository.passwordResetCodes.FirstOrDefault(code => code.Code.Equals(key, StringComparison.OrdinalIgnoreCase));
             if (passwordResetCode is null)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "This code has already been used." };
+                response.Messages = new List<string>() { "This code has already been used." }; // Hitting this error. React router appears to be cutting off a portion of the key, likely a character it doesn't like
                 return response;
             }
             if (passwordResetCode!.Expiration < DateTime.Now)

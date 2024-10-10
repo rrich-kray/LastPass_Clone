@@ -15,6 +15,7 @@ interface UpdatePasswordProps {
 
 const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
     const { key } = useParams();
+    console.log(key);
     const [isUpdateGuidValid, setIsUpdateGuidValid] = useState<boolean | null>(null);
     const [updateResultMessage, setUpdateResultMessage] = useState<string>("");
     const [hasPasswordBeenReset, setHasPasswordBeenReset] = useState<boolean>(false);
