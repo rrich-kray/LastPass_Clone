@@ -15,6 +15,7 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<PaymentCard> PaymentCards { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<PasswordResetCode> PasswordResetCodes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -68,6 +69,8 @@ namespace PasswordManager.Server.Data.DatabaseContexts
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(p => p.UserId);
+
+            modelBuilder.Entity<PasswordResetCode>();
 
         }
     }

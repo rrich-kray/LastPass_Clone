@@ -59,6 +59,7 @@ builder.Services.AddScoped<PasswordRepository, PasswordRepository>();
 builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
 builder.Services.AddScoped<NoteRepository, NoteRepository>();
 builder.Services.AddScoped<UserRepository, UserRepository>();
+builder.Services.AddScoped<PasswordResetCodeRepository, PasswordResetCodeRepository>();
 
 builder.Services.AddHttpsRedirection(options =>
 {
@@ -70,6 +71,11 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddBlobServiceClient(builder.Configuration["Database:blob"]!, preferMsi: true);
     clientBuilder.AddQueueServiceClient(builder.Configuration["Database:queue"]!, preferMsi: true);
 });
+
+// Loggin
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
 
 var app = builder.Build();
 

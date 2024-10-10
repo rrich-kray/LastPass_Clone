@@ -8,8 +8,16 @@
 **/bin/Release/
 **/obj/
 
+/bin/Debug/
+/bin/Release/
+/obj/
+
 # dotenv files
 .env
+
+# User Secrets
+secrets.json
+**/secrets.json
 
 # User-specific files
 *.rsuser

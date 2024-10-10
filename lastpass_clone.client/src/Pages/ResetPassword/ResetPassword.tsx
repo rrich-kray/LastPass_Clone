@@ -1,31 +1,27 @@
-import { useState, Dispatch, useContext } from "react";
-import axios from "axios";
-import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
-import { UserContext } from "../../App";
-import RequestHelpers from "../../Other/RequestHelpers.tsx";
+import { useState, Dispatch } from "react";
 import AuthenticationForm from "../../Components/AuthenticationForm/AuthenticationForm.tsx";
-import AuthenticationFormInput from "../../Types/AuthenticationFormInput";
+import AuthenticationFormInput from "../../Types/AuthenticationFormInput.ts";
+import axios from "axios";
+import RequestHelpers from "../../Other/RequestHelpers.tsx";
+import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 
-// What if user tries to login again when there is already a token in localStorage?
-    // both Login and Register components should check if there is a token, and if it is still valid, prior to granting access
-
-interface LoginProps {
+interface ResetPasswordProps {
     baseUrl: string,
     setAlerts: Dispatch<JSX.Element[]>,
     setIsAlertModalVisible: Dispatch<boolean>
 }
 
-const Login: React.FC<LoginProps> = (
+const ResetPassword: React.FC<ResetPasswordProps> = (
     {
         baseUrl,
         setAlerts,
         setIsAlertModalVisible
-    }) => {
-    const { 1: setUser } = useContext(UserContext);
+    }
+) => {
+    const [wasEmailSent, setWasEmailSent] = useState<boolean>(false);
     const [formState, setFormState] = useState({
-        Email: "",
-        Password: "",
-    });
+        Email: ""
+    })
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -42,19 +38,11 @@ const Login: React.FC<LoginProps> = (
             setIsAlertModalVisible(false);
         }
         axios
-            .post(`${baseUrl}/Login`, {
-                Email: formState.Email,
-                Password: formState.Password
-            },
-            RequestHelpers.GenerateAuthenticationRequestHeaders())
+            .post(`${baseUrl}/ResetPassword/${formState.Email}`,
+                RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
-                    localStorage.setItem("token", response.data.token);
-                    const alerts = [<AlertMessage message={"Log in successful!"} color={"green"} />];
-                    setUser(response.data.user);
-                    setAlerts(alerts);
-                    setIsAlertModalVisible(true);
-                    setTimeout(reset, 3000);
+                    setWasEmailSent(true);
                 } else {
                     const alerts = response.data.messages.map((message: string) => <AlertMessage message={message} color={"red"} />)
                     setAlerts(alerts);
@@ -73,9 +61,8 @@ const Login: React.FC<LoginProps> = (
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
                 }
-            });
+            })
     }
-
     const inputs: AuthenticationFormInput[] = [
         {
             label: "Email Address",
@@ -83,24 +70,30 @@ const Login: React.FC<LoginProps> = (
             inputName: "Email",
             handleChange: handleChange
         },
-        {
-            label: "Password",
-            inputType: "password",
-            inputName: "Password",
-            handleChange: handleChange
-        },
     ]
 
     return (
-        <AuthenticationForm
-            headerLeftText={"Log In"}
-            headerRightText={"Or create an account"}
-            headerRightTextLink={"/Register"}
-            inputs={inputs}
-            handleFormSubmit={handleFormSubmit}
-            buttonText={"Log in!"}
-            resetPassword={true} />
+        <>
+            {!wasEmailSent && <AuthenticationForm
+                headerLeftText={"Reset Password"}
+                headerRightText={"Or log in"}
+                headerRightTextLink={"/Login"}
+                inputs={inputs}
+                handleFormSubmit={handleFormSubmit}
+                buttonText={"Reset Password"}
+                resetPassword={false} />}
+
+            {wasEmailSent && <AuthenticationForm
+                headerLeftText={"Reset Password"}
+                headerRightText={"Or log in"}
+                headerRightTextLink={"/Login"}
+                bodyText={"Please check your inbox (and spam folder) for a password recovery email."}
+                handleFormSubmit={handleFormSubmit}
+                buttonText={"Reset Password"}
+                resetPassword={false} />}
+        </>
     )
 }
 
-export default Login;
+
+    export default ResetPassword;

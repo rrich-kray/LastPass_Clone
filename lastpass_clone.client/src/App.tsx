@@ -10,6 +10,8 @@ import AccessLoginRegister from "./Components/AccessLoginRegister/AccessLoginReg
 import axios from "axios";
 import RequestHelpers from "./Other/RequestHelpers";
 import User from "./Types/User.ts";
+import ResetPassword from "./Pages/ResetPassword/ResetPassword.tsx";
+import UpdatePassword from "./Pages/ChangePassword/UpdatePassword.tsx";
 
 const defaultValues = {
     id: "",
@@ -43,9 +45,9 @@ function App() {
             .catch(error => console.log(error));
     }, []);
 
-    //const baseUrl: string = "https://localhost:32783"; // put this in ENV file at some point
+    const baseUrl: string = "https://localhost:32881"; // put this in ENV file at some point
     //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
-    const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
+    //const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
 
     return (
         <UserContext.Provider value={[user, setUser]}>
@@ -64,6 +66,14 @@ function App() {
                                 setAlerts={setAlerts}
                                 setIsAlertModalVisible={setIsAlertModalVisible} />
                         </AccessLoginRegister>
+                    } />
+                    <Route path="/ResetPassword" element={
+                        <AccessLoginRegister baseUrl={baseUrl}>
+                            <ResetPassword baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
+                        </AccessLoginRegister>
+                    } />
+                    <Route path="/UpdatePassword/:key" element={
+                        <UpdatePassword baseUrl={baseUrl} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} />
                     } />
                     <Route path="/" element={
                         <AuthorizeView baseUrl={baseUrl}>

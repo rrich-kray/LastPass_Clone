@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hKyLFHApklLWIiYvFOFnRCxRg8JYalaUcVboZHf98w4=",
+  "Hash": "a3kBh+NITctGl0mvCtlvIxjy9EWMRY8zPV2HpUGNBBQ=",
   "Source": "PasswordManager.Server",
   "BasePath": "_content/PasswordManager.Server",
   "Mode": "Default",
@@ -18,34 +18,6 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],
-  "DiscoveryPatterns": [
-    {
-      "Name": "PasswordManager.Server\\wwwroot",
-      "Source": "PasswordManager.Server",
-      "ContentRoot": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\wwwroot\\",
-      "BasePath": "_content/PasswordManager.Server",
-      "Pattern": "**"
-    }
-  ],
-  "Assets": [
-    {
-      "Identity": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\wwwroot\\database.db",
-      "SourceId": "PasswordManager.Server",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\rrich\\Projects\\LastPass_Clone\\LastPass_Clone.Server\\wwwroot\\",
-      "BasePath": "_content/PasswordManager.Server",
-      "RelativePath": "database.db",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\database.db"
-    }
-  ]
+  "DiscoveryPatterns": [],
+  "Assets": []
 }

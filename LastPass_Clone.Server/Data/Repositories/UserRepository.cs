@@ -11,7 +11,7 @@ namespace PasswordManager.Server.Data.Repositories
             this.PasswordManagerDatabaseContext = passwordManagerDatabaseContext;
         }
 
-        public IEnumerable<User> User => this.PasswordManagerDatabaseContext.Users;
+        public IEnumerable<User> Users => this.PasswordManagerDatabaseContext.Users;
 
         public User Create(User user)
         {
