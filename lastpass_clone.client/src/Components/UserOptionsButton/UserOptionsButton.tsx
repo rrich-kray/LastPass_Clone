@@ -22,7 +22,7 @@ const UserOptionsButton = ({ baseUrl }: { baseUrl: string }) => {
         axios
             .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateFullRequestHeaders())
             .then(response => {
-                setUserInfo(response.data)
+                setUserInfo(response.data.user)
             })
             .catch(error => console.log(error));
     }, []);

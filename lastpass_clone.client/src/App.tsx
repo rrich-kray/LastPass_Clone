@@ -40,14 +40,14 @@ function App() {
         axios
             .get(`${baseUrl}/GetUserData`, RequestHelpers.GenerateFullRequestHeaders())
             .then(response => {
-                setUser(response.data)
+                setUser(response.data.user)
             })
             .catch(error => console.log(error));
     }, []);
 
-    const baseUrl: string = "https://localhost:32887"; // put this in ENV file at some point
+    //const baseUrl: string = "https://localhost:32773"; // put this in ENV file at some point
     //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
-    //const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
+    const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
 
     return (
         <UserContext.Provider value={[user, setUser]}>

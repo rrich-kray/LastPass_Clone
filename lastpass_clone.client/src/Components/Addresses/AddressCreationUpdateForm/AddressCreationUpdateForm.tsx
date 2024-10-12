@@ -31,7 +31,9 @@ const AddressCreationUpdateForm = (
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(false);
     const [categories, setCategories] = useState<Category[]>();
     const [currentCategoryId, setCurrentCategoryId] = useState<string>();
-    const [ user ]= useContext(UserContext);
+    const [user, setUser] = useContext(UserContext);
+    console.log(setUser);
+    console.log(user);
     const [formState, setFormState] = useState({
         Name: "",
         Title: "",
