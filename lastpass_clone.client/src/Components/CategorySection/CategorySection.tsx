@@ -53,11 +53,11 @@ const CategorySection = (
                 <div className={styles.CategorySectionNameContainer} onMouseEnter={() => setAreButtonsVisible(true)} onMouseLeave={() => setAreButtonsVisible(false)}>
                     <span>{categoryName} {`(${tiles.length})`}</span>
                     {!isCategorySectionCollapsed ? <RxTriangleDown onClick={() => setIsCategorySectionCollapsed(true)} style={{ marginLeft: "5px" }} size={25} /> : <RxTriangleLeft onClick={() => setIsCategorySectionCollapsed(false)} style={{ marginLeft: "5px" }} size={25} />}
-                    {categoryId !== null && <div className={styles.CategorySectionHeaderButton} style={{ opacity: areButtonsVisible ? "1" : "0" }} onClick={() => {
+                    {categoryId !== null && <div className={styles.CategorySectionHeaderButton} style={{ opacity: areButtonsVisible ? "1" : "0", zIndex: -1 }} onClick={() => {
                         setCurrentCategoryId(categoryId);
                         setIsCategoryUpdateFormVisible(true)
                     }}>Rename</div>}
-                    {categoryId !== null && <div className={styles.CategorySectionHeaderButton} style={{ opacity: areButtonsVisible ? "1" : "0" }} onClick={handleDeleteRequest}>Delete</div>}
+                    {categoryId !== null && <div className={styles.CategorySectionHeaderButton} style={{ opacity: areButtonsVisible ? "1" : "0", zIndex: -1 }} onClick={handleDeleteRequest}>Delete</div>}
                 </div>
             </div>
             <div className={styles.CategorySectionGrid} style={{ display: isCategorySectionCollapsed  ? "none" : "grid"}}>

@@ -23,23 +23,23 @@ Completed
 - Fix type filtering. Going from all items to any other is correct, going from say passwords to notes does not work, nothing shows. Problem is that new request for all items is not performed when currentType is changed, your continuing to filter down the same set of data
 - Fix tile icons. One is a password that is displaying as a note. Somthing wrong with GetCategoryIcon logic
 - Add persistent storage.
+- Add password reset
 
 WIP
 
 TODO
-- Add password reset and password confirmation
-	- Reset:
-		- Will require email service.
-			- Need an SMTP server (possibly). Can set up on localhost, but this won't work when I deploy. Need a third party smtp service
-			- Could also use the Gmail API it seems. Can use Gmail.Builder() with supplied credentials as the service to send the email. This will send an email from one address to another. 
-				- Think this is the way to go. 
-				- Created an app password that allows another service to access my gmail, will use this to access smtp.gmail.com with my email account. Could maybe create a separate account solely for this purpose
-				- According to Google, "If you connect using SSL or TLS, you can send email to anyone inside or outside of your organization using smtp.gmail.com as your SMTP server.".
-		- User provides email and hits reset button, request hits a route that first checks if the email exists in the database, then generates a token/guid using the userId associated with email, and sends that token to the users email in a link to the change password page. This token will be stored in a table along with its expiration datatime
-		- Link will hit another route that verifies the token is still valid by checking the database and its expiration, and sends it back. Frontend will have the secret required to decode the key, use that to decode, this will grant access to the change password page.
-		- Change password page 
-- Add sorting to main page - need most recent. This will require adding creation/update dates to entities on backend, and modifying frontend to send back update dates/times
-- Refactor main page
+- Make application faster
+- Make application more scalable
+- Improve security of app
+	- Hash password prior to entry into the Db
+- Password confirmation.
+	- Add account confirmed property to user model. To current login route: if AccountConfirmed = false, redirect user to a page that tells them this. Can just 
+	- Enter information, hits route that sends email. Can create an email service from existing reset password code to do this
+	- User hits link, 
+- 2FA authentication.
+- If it wouldn't be a security concern, can add exporting functionality. Export the passwords as CSV, Excel, etc...
+- Most recent sorting. This will require adding creation/update dates to entities on backend, and modifying frontend to send back update dates/times
+- Refactor main page. Tile creation in particular
 - Add account settings
 - Add configuration file to store things like URLs
 - Update formatting of loading page. Add nice animation

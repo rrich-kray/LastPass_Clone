@@ -2,10 +2,10 @@ import { useState, Dispatch, useEffect } from "react";
 import AuthenticationForm from "../../Components/AuthenticationForm/AuthenticationForm.tsx";
 import AuthenticationFormInput from "../../Types/AuthenticationFormInput.ts";
 import axios from "axios";
-import RequestHelpers from "../../Other/RequestHelpers.tsx";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
 //import AuthenticationResponse from "../../Types/AuthenticationResponse.ts";
 import { useParams } from "react-router-dom";
+import RequestHelpers from "../../Other/RequestHelpers.tsx";
 
 interface UpdatePasswordProps {
     baseUrl: string,
@@ -15,7 +15,6 @@ interface UpdatePasswordProps {
 
 const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
     const { key } = useParams();
-    console.log(key);
     const [isUpdateGuidValid, setIsUpdateGuidValid] = useState<boolean | null>(null);
     const [updateResultMessage, setUpdateResultMessage] = useState<string>("");
     const [hasPasswordBeenReset, setHasPasswordBeenReset] = useState<boolean>(false);
@@ -25,7 +24,7 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = (props) => {
 
     useEffect(() => {
         axios
-            .get(`${props.baseUrl}/VerifyPasswordReset/${key}`)
+            .get(`${props.baseUrl}/VerifyPasswordReset/${key}`, RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === false) {
                     setIsUpdateGuidValid(false);

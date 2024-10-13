@@ -53,9 +53,8 @@ namespace PasswordManager.Server.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("/Login")]
-        public async Task<IResult> Login([FromBody] LoginReq loginReq)
+        public IResult Login([FromBody] LoginReq loginReq)
         {
-            // look up user in database by email, check password, if 
             var user = this.UserRepository.Users.FirstOrDefault(x => x.Email == loginReq.Email);
             if (user is null)
                 return Results.Json(new AuthenticationResponse { Result = false, Messages = new List<string>() { "User with email was not found." } });
@@ -68,7 +67,7 @@ namespace PasswordManager.Server.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("/Register")]
-        public async Task<AuthenticationResponse> Register([FromBody] User user)
+        public AuthenticationResponse Register([FromBody] User user)
         {
             AuthenticationResponse response = new AuthenticationResponse();
             var doesEmailExist = this.UserRepository.Users.FirstOrDefault(x => x.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase)) is not null;
@@ -107,14 +106,14 @@ namespace PasswordManager.Server.Controllers
 
         [HttpGet]
         [Route("/VerifyToken")]
-        public async Task<AuthenticationResponse> VerifyToken()
+        public AuthenticationResponse VerifyToken()
         {
             return new AuthenticationResponse { Result = true, Messages = new List<string>() { "This route is guarded. If this request succeeded, the user possesses a valid JWT." } };
         }
 
         [HttpGet]
         [Route("/GetUserData")]
-        public async Task<AuthenticationResponse> GetUserDataFromToken()
+        public AuthenticationResponse GetUserDataFromToken()
         {
             AuthenticationResponse response = new AuthenticationResponse();
             var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
@@ -159,7 +158,7 @@ namespace PasswordManager.Server.Controllers
             AuthenticationResponse response = new AuthenticationResponse();
 
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // CurrentDirectory is root of application's folder
+                .SetBasePath(Directory.GetCurrentDirectory()) 
                 .AddJsonFile("secrets.json")
                 .Build();
 

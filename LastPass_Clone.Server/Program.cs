@@ -14,6 +14,7 @@ using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Azure;
 using System.IO;
+using Microsoft.Extensions.Hosting.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +46,22 @@ if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")))
 }
 */
 
+//if (!Directory.Exists("/home")) Directory.CreateDirectory("/home"); 
+
+// I think this is creating the database, but it just can't be opened due to a locking or permissions issue
 builder.Services.AddDbContext<PasswordManagerDatabaseContext>(options =>
-     options.UseSqlite(builder.Environment.IsDevelopment() ? builder.Configuration["ConnectionStrings:Development"] : builder.Configuration["ConnectionStrings:Production"])
+     options.UseSqlite(
+         builder.Environment.IsDevelopment() 
+         ? new SqliteConnectionStringBuilder()
+         {
+             DataSource = builder.Configuration["ConnectionStrings:Development"],
+             DefaultTimeout = 5000
+         }.ToString()
+         : new SqliteConnectionStringBuilder()
+         {
+             DataSource = builder.Configuration["ConnectionStrings:Production"],
+             DefaultTimeout = 5000
+         }.ToString()  /*builder.Configuration["ConnectionStrings:Production"]*/)
 );
 
 // As a client logs onto the server, and tries to grab an instance of this,
@@ -72,7 +87,7 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddQueueServiceClient(builder.Configuration["Database:queue"]!, preferMsi: true);
 });
 
-// Loggin
+// Logging
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Trace);
@@ -112,32 +127,27 @@ app.MapFallbackToFile("/index.html");
 
 app.UseHttpsRedirection();
 
-
 using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
     var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     var db = serviceScope.ServiceProvider.GetRequiredService<PasswordManagerDatabaseContext>().Database;
 
     logger.LogInformation("Creating database...");
+    if (!db.CanConnect())
+    {
+        try
+        {
+            db.Migrate();
+            logger.LogInformation("Database created successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, ex.Message);
+        }
+    }
 
-    /*
-    while (!db.CanConnect())
-    {
-        logger.LogInformation("Database not ready yet; waiting...");
-        Thread.Sleep(1000);
-    }
-    */
-
-    try
-    {
-        await serviceScope.ServiceProvider.GetRequiredService<PasswordManagerDatabaseContext>().Database.EnsureCreatedAsync();
-        logger.LogInformation("Database created successfully.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, ex.Message);
-    }
 }
+
 
 
 app.Run();

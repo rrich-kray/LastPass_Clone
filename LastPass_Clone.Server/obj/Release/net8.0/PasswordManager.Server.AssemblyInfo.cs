@@ -15,11 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PasswordManager.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b3fad15a4981b901c0c995ba40e060e110532ca")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8310a49feaad97173539734b9fa25c3195feab89")]
->>>>>>> feature/password-reset
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80ffe2be5be88dc307c8669eee19fc55496435ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("PasswordManager.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PasswordManager.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

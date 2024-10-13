@@ -38,7 +38,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = (
             setIsAlertModalVisible(false);
         }
         axios
-            .post(`${baseUrl}/ResetPassword/${formState.Email}`,
+            .post(
+                `${baseUrl}/ResetPassword/${formState.Email}`,
+                {},
                 RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
