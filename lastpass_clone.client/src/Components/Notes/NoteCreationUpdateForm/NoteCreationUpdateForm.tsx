@@ -35,7 +35,7 @@ const NoteCreationUpdateForm = (
         })
 
         useEffect(() => {
-            RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
+            RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId, user.id);
         }, []);
 
         const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

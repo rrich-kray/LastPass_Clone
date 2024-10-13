@@ -25,14 +25,10 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<Address> GetAllAddresses() => this.AddressRepository.Addresses;
 
-        [Route("/GetAddressesByUserId")]
+        [Route("/GetAddressesByUserId/{Id}")]
         [HttpGet]
-        public IEnumerable<Address> GetAddressesByUserId()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var decodedToken = new AuthService().Decode(token);
-            return this.AddressRepository.Addresses.Where(address => address.UserId.ToString().Equals(decodedToken.Id));
-        }
+        public IEnumerable<Address> GetAddressesByUserId(string Id) =>
+            this.AddressRepository.Addresses.Where(address => address.UserId.ToString().Equals(Id));
 
         [Route("/CreateAddress")]
         [HttpPost]

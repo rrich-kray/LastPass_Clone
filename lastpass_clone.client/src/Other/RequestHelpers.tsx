@@ -158,10 +158,11 @@ class RequestHelpers
     public static GetCategories(
         baseUrl: string,
         setCategories: Dispatch<React.SetStateAction<Category[] | undefined>>,
-        setCurrentCategoryId: Dispatch<string>)
+        setCurrentCategoryId: Dispatch<string>,
+        userId: string)
     {
         axios
-            .get(`${baseUrl}/GetCategoriesByUserId`, RequestHelpers.GenerateFullRequestHeaders())
+            .get(`${baseUrl}/GetCategoriesByUserId/${userId}`, RequestHelpers.GenerateFullRequestHeaders())
             .then(response => {
                 const data = response.data;
                 setCategories(data);

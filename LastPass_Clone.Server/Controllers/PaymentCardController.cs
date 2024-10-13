@@ -22,14 +22,10 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<PaymentCard> GetPaymentCards() => this.PaymentCardRepository.PaymentCards;
 
-        [Route("/GetPaymentCardsByUserId")]
+        [Route("/GetPaymentCardsByUserId/{Id}")]
         [HttpGet]
-        public IEnumerable<PaymentCard> GetPasswordsByUserId()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var decodedToken = new AuthService().Decode(token);
-            return this.PaymentCardRepository.PaymentCards.Where(paymentCard => paymentCard.UserId.ToString().Equals(decodedToken.Id));
-        }
+        public IEnumerable<PaymentCard> GetPaymentCardsByUserId(string Id) =>
+            this.PaymentCardRepository.PaymentCards.Where(PaymentCards => PaymentCards.UserId.ToString().Equals(Id));
 
         [Route("/CreatePaymentCard")]
         [HttpPost]

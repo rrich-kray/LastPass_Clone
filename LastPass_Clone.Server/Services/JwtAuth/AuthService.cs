@@ -39,7 +39,7 @@ public class AuthService
 
     public DecodedToken Decode(string token)
     {
-        string secret = Configuration.PrivateKey;
+        string secret = Configuration.PrivateKey; // Is this excluded from version control?
         var key = Encoding.ASCII.GetBytes(secret);
         var handler = new JwtSecurityTokenHandler();
         var validations = new TokenValidationParameters

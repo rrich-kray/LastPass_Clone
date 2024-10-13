@@ -25,14 +25,10 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<Category> GetCategories() => this.CategoryRepository.Categories;
 
-        [Route("/GetCategoriesByUserId")]
+        [Route("/GetCategoriesByUserId/{Id}")]
         [HttpGet]
-        public IEnumerable<Category> GetCategoriesByUserId()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var decodedToken = new AuthService().Decode(token);
-            return this.CategoryRepository.Categories.Where(category => category.UserId.ToString().Equals(decodedToken.Id));
-        }
+        public IEnumerable<Category> GetCategoriesByUserId(string Id) =>
+            this.CategoryRepository.Categories.Where(category => category.UserId.ToString().Equals(Id));
 
         [Route("/CreateCategory")]
         [HttpPost]

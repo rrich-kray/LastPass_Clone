@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch } from "react";
+import { useState, useEffect, Dispatch, useContext } from "react";
 import Tile from "../../Components/Tile/Tile";
 import styles from "./styles.module.scss";
 import Password from "../../Types/Password";
@@ -34,6 +34,7 @@ import { BsBank } from "react-icons/bs";
 import Entity from "../../Types/Entity.ts"
 import { MdCreateNewFolder } from "react-icons/md";
 import NewCategoryForm from "../../Components/NewCategoryForm/NewCategoryForm.tsx";
+import { UserContext } from "../../App";
 
 // fetch categories: for each category, create a CategorySection element. This will consist of all passwords, notes etc. that belong to that category
 const Main = (
@@ -51,6 +52,9 @@ const Main = (
             setIsAlertModalVisible: Dispatch<boolean>,
     }) =>
 {
+    // Global user state
+    const [user, setUser] = useContext(UserContext);
+
     // New items
     const [areNewButtonsVisible, setAreNewButtonsVisible] = useState<boolean>(false);
 
@@ -273,13 +277,29 @@ const Main = (
                         let tiles = allTiles.filter(tile => tile.props.data.categoryId === category.id);
                         tiles = tiles.sort((a, b) => a.props.data.name.localeCompare(b.props.data.name));
                         categorySections.push(
-                            <CategorySection setCurrentCategoryId={setCurrentCategoryId} setIsCategoryUpdateFormVisible={setIsCategoryUpdateFormVisible} categoryName={category.name} tiles={tiles} baseUrl={baseUrl!} categoryId={category.id} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} /* collapsed={collapsed!} */ />
+                            <CategorySection
+                                setCurrentCategoryId={setCurrentCategoryId}
+                                setIsCategoryUpdateFormVisible={setIsCategoryUpdateFormVisible}
+                                categoryName={category.name} tiles={tiles} baseUrl={baseUrl!}
+                                categoryId={category.id}
+                                setAlerts={setAlerts}
+                                setIsAlertModalVisible={setIsAlertModalVisible} /* collapsed={collapsed!} */ />
                         )
                     }
                 });
             }
             const noneCategoryTiles = allTiles.filter(tile => tile.props.data.categoryId === null);
-            categorySections.push(<CategorySection setCurrentCategoryId={setCurrentCategoryId} setIsCategoryUpdateFormVisible={setIsCategoryUpdateFormVisible} categoryName={"None"} tiles={noneCategoryTiles} baseUrl={baseUrl!} categoryId={null} setAlerts={setAlerts} setIsAlertModalVisible={setIsAlertModalVisible} /*collapsed={collapsed!}*/ />);
+            categorySections.push(
+                <CategorySection
+                    setCurrentCategoryId={setCurrentCategoryId}
+                    setIsCategoryUpdateFormVisible={setIsCategoryUpdateFormVisible}
+                    categoryName={"None"}
+                    tiles={noneCategoryTiles}
+                    baseUrl={baseUrl!}
+                    categoryId={null}
+                    setAlerts={setAlerts}
+                    setIsAlertModalVisible={setIsAlertModalVisible} /*collapsed={collapsed!}*/ />);
+
             return categorySections;
         }
 
@@ -305,20 +325,17 @@ const Main = (
         }
     }
 
-    // on initial render, useEffect runs after the component is rendered and commited to the DOM, and the DOM is painted, but the data is stilled stored in state
-    // On subsequent renders, the content will appear because it is saved in state
-    // Or could be a race condition. Component displays before async function completes data fetch
-    useEffect(() => {
+    // Can refactor these routes to take the user ID from the global user state in the params rather than the token, so it doesn't have to decode them on the backen. May speed things up on the backend
+    useEffect(() => { 
         async function GetAllData() {
             const options = RequestHelpers.GenerateFullRequestHeaders();
-            console.log(`Options in main: ${options}`);
             const [passwords, notes, addresses, bankAccounts, paymentCards, categories] = await axios.all([
-                axios.get(`${baseUrl}/GetPasswordsByUserId`, options),
-                axios.get(`${baseUrl}/GetNotesByUserId`, options),
-                axios.get(`${baseUrl}/GetAddressesByUserId`, options),
-                axios.get(`${baseUrl}/GetBankAccountsByUserId`, options),
-                axios.get(`${baseUrl}/GetPaymentCardsByUserId`, options),
-                axios.get(`${baseUrl}/GetCategoriesByUserId`, options)
+                axios.get(`${baseUrl}/GetPasswordsByUserId/${user.id}`, options),
+                axios.get(`${baseUrl}/GetNotesByUserId/${user.id}`, options),
+                axios.get(`${baseUrl}/GetAddressesByUserId/${user.id}`, options),
+                axios.get(`${baseUrl}/GetBankAccountsByUserId/${user.id}`, options),
+                axios.get(`${baseUrl}/GetPaymentCardsByUserId/${user.id}`, options),
+                axios.get(`${baseUrl}/GetCategoriesByUserId/${user.id}`, options)
             ]);
             const allData = new AllData(
                 passwords.data,

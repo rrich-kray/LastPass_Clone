@@ -23,14 +23,10 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<BankAccount> GetBankAccounts() => this.BankAccountRepository.BankAccounts;
 
-        [Route("/GetBankAccountsByUserId")]
+        [Route("/GetBankAccountsByUserId/{Id}")]
         [HttpGet]
-        public IEnumerable<BankAccount> GetPasswordsByUserId()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var decodedToken = new AuthService().Decode(token);
-            return this.BankAccountRepository.BankAccounts.Where(account => account.UserId.ToString().Equals(decodedToken.Id));
-        }
+        public IEnumerable<BankAccount> GetBankAccountsByUserId(string Id) =>
+            this.BankAccountRepository.BankAccounts.Where(BankAccount => BankAccount.UserId.ToString().Equals(Id));
 
         [Route("/CreateBankAccount")]
         [HttpPost]

@@ -38,7 +38,7 @@ const PasswordCreationUpdateForm =
         });
 
     useEffect(() => {
-        RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId);
+        RequestHelpers.GetCategories(baseUrl, setCategories, setCurrentCategoryId, user.id);
     }, []);
 
 

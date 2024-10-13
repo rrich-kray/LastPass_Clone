@@ -26,21 +26,15 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<PasswordInfo> GetAllPasswords() => this.PasswordRepository.Passwords;
 
-        [Route("/GetPasswordsByUserId")]
+        [Route("/GetPasswordsByUserId/{Id}")]
         [HttpGet]
-        public IEnumerable<PasswordInfo> GetPasswordsByUserId()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var decodedToken = new AuthService().Decode(token);
-            var userPasswords = this.PasswordRepository.Passwords.Where(password => password.UserId.ToString().Equals(decodedToken.Id));
-            return userPasswords;
-        }
+        public IEnumerable<PasswordInfo> GetPasswordsByUserId(string Id) =>
+            this.PasswordRepository.Passwords.Where(password => password.UserId.ToString().Equals(Id));
 
         [Route("/GetPasswordsForCategory/{categoryId}")]
         [HttpGet]
         public IEnumerable<PasswordInfo> GetPasswordsForCategory(int categoryId) => this.PasswordRepository.GetPasswordsForCategory(categoryId);
         
-
         [Route("/CreatePassword")]
         [HttpPost]
         public ControllerResponse<PasswordInfo> CreatePassword([FromBody] PasswordInfo passwordInfo)

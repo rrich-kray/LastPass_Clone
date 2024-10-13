@@ -23,14 +23,10 @@ namespace PasswordManager.Server.Controllers
         [HttpGet]
         public IEnumerable<Note> GetCategories() => this.NoteRepository.Notes;
 
-        [Route("/GetNotesByUserId")]
+        [Route("/GetNotesByUserId/{Id}")]
         [HttpGet]
-        public IEnumerable<Note> GetPasswordsByUserId()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var decodedToken = new AuthService().Decode(token);
-            return this.NoteRepository.Notes.Where(note => note.UserId.ToString().Equals(decodedToken.Id));
-        }
+        public IEnumerable<Note> GetNotesByUserId(string Id) =>
+            this.NoteRepository.Notes.Where(Notes => Notes.UserId.ToString().Equals(Id));
 
         [Route("/CreateNote")]
         [HttpPost]
