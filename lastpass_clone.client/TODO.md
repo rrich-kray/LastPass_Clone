@@ -26,12 +26,14 @@ Completed
 - Add password reset
 
 WIP
+- Password hashing
 
 TODO
-- Make application faster
-- Make application more scalable
 - Improve security of app
 	- Hash password prior to entry into the Db
+- Refactor
+	- Make application faster
+	- Make application more scalable
 - Password confirmation.
 	- Add account confirmed property to user model. To current login route: if AccountConfirmed = false, redirect user to a page that tells them this. Can just 
 	- Enter information, hits route that sends email. Can create an email service from existing reset password code to do this

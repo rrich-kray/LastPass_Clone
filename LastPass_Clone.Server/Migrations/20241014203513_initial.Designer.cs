@@ -11,7 +11,7 @@ using PasswordManager.Server.Data.DatabaseContexts;
 namespace PasswordManager.Server.Migrations
 {
     [DbContext(typeof(PasswordManagerDatabaseContext))]
-    [Migration("20241009235421_initial")]
+    [Migration("20241014203513_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -93,7 +93,7 @@ namespace PasswordManager.Server.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
@@ -155,6 +155,7 @@ namespace PasswordManager.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("UserId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -176,7 +177,7 @@ namespace PasswordManager.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -200,7 +201,7 @@ namespace PasswordManager.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -231,7 +232,7 @@ namespace PasswordManager.Server.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Username")
@@ -255,7 +256,8 @@ namespace PasswordManager.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("Code")
+                    b.Property<string>("Code")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Expiration")
@@ -303,7 +305,7 @@ namespace PasswordManager.Server.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -357,7 +359,9 @@ namespace PasswordManager.Server.Migrations
 
                     b.HasOne("PasswordManager.Server.Data.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.BankAccount", b =>
@@ -368,7 +372,9 @@ namespace PasswordManager.Server.Migrations
 
                     b.HasOne("PasswordManager.Server.Data.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.Note", b =>
@@ -379,7 +385,9 @@ namespace PasswordManager.Server.Migrations
 
                     b.HasOne("PasswordManager.Server.Data.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PasswordInfo", b =>
@@ -390,7 +398,9 @@ namespace PasswordManager.Server.Migrations
 
                     b.HasOne("PasswordManager.Server.Data.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PasswordManager.Server.Data.Entities.PaymentCard", b =>
@@ -401,7 +411,9 @@ namespace PasswordManager.Server.Migrations
 
                     b.HasOne("PasswordManager.Server.Data.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

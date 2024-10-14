@@ -26,7 +26,7 @@ const NewCategoryForm = (props: CategoryFormProps) => {
     })
 
     useEffect(() => {
-        RequestHelpers.GetCategories(props.baseUrl, setCategories, setCurrentCategoryId);
+        RequestHelpers.GetCategories(props.baseUrl, setCategories, setCurrentCategoryId, user.id);
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

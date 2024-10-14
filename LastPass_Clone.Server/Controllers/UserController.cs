@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Web.Helpers;
 
 namespace PasswordManager.Server.Controllers
 {
@@ -35,19 +36,24 @@ namespace PasswordManager.Server.Controllers
         private CategoryRepository CategoryRepository { get; set; }
         private IHostEnvironment _hostEnvironment { get; set; }
         private readonly ILogger _logger;
-
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IConfiguration _configuration;
         public UserController(
             UserRepository userRepository, 
             CategoryRepository categoryRepository, 
             PasswordResetCodeRepository passwordResetCodeRepository, 
             ILogger<UserController> logger,
-            IHostEnvironment hostEnvironment)
+            IHostEnvironment hostEnvironment,
+            IPasswordHasher passwordHasher,
+            IConfiguration configuration)
         {
             this.UserRepository = userRepository;
             this.CategoryRepository = categoryRepository;
             this.PasswordResetCodeRepository = passwordResetCodeRepository;
             this._logger = logger;
             this._hostEnvironment = hostEnvironment;
+            this._passwordHasher = passwordHasher;
+            this._configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -58,7 +64,7 @@ namespace PasswordManager.Server.Controllers
             var user = this.UserRepository.Users.FirstOrDefault(x => x.Email == loginReq.Email);
             if (user is null)
                 return Results.Json(new AuthenticationResponse { Result = false, Messages = new List<string>() { "User with email was not found." } });
-            if (user.Password != loginReq.Password)
+            if (!Crypto.VerifyHashedPassword(user.Password, loginReq.Password))
                 return Results.Json(new AuthenticationResponse { Result = false, Messages = new List<string>() { "Invalid credentials provided." } });
             string token = new AuthService().Create(user);
             return Results.Json(new AuthenticationResponse { User = user, Result = true, Token = token, Messages = new List<string>() { "Log in successful." } });
@@ -79,7 +85,7 @@ namespace PasswordManager.Server.Controllers
             if (new VerificationService().VerifyPassword(user.Password, 8) == false)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "Invalid password provided. Passwords must contain at least one uppercase letter, one number and be at least eight characters in length."};
+                response.Messages = new List<string>() { "Invalid password provided. Passwords must contain at least one uppercase letter, one number and be at least eight characters in length." };
                 return response;
             }
 
@@ -87,7 +93,7 @@ namespace PasswordManager.Server.Controllers
                 new User
             {
                 Email = user.Email,
-                Password = user.Password,
+                Password = Crypto.HashPassword(user.Password),
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,
@@ -131,7 +137,7 @@ namespace PasswordManager.Server.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
-                Password = user.Password,
+                Password = user.Password, // REMOVE THIS WTF
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,
@@ -309,19 +315,19 @@ namespace PasswordManager.Server.Controllers
                 return response;
             }
 
-            if (updatePasswordRequest.Password.Equals(user.Password))
+            if (Crypto.VerifyHashedPassword(user.Password, updatePasswordRequest.Password))
             {
                 response.Result = false;
                 response.Messages = new List<string>() { "Password cannot be the same as the existing password."};
                 return response;
             }
-            user.Password = updatePasswordRequest.Password;
+            user.Password = Crypto.HashPassword(updatePasswordRequest.Password);
             this.UserRepository.SaveChanges();
-
 
             // Delete the reset code
             // Should I delete here
             // Should I write a service that periodically deletes expired reset codes to ensure the table does not grow too large?
+            // Will have to write a migration that updates all of the current passwords in teh database with hashes
             this.PasswordResetCodeRepository.Delete(code.Id);
             this.PasswordResetCodeRepository.SaveChanges();
 

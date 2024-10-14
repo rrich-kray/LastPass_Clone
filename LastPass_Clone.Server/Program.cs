@@ -15,6 +15,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Azure;
 using System.IO;
 using Microsoft.Extensions.Hosting.Internal;
+using PasswordManager.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,12 +55,12 @@ builder.Services.AddDbContext<PasswordManagerDatabaseContext>(options =>
          builder.Environment.IsDevelopment() 
          ? new SqliteConnectionStringBuilder()
          {
-             DataSource = builder.Configuration["ConnectionStrings:Development"],
+             DataSource = builder.Configuration["ConnectionStrings:Development"]!.Split("=")[1],
              DefaultTimeout = 5000
          }.ToString()
          : new SqliteConnectionStringBuilder()
          {
-             DataSource = builder.Configuration["ConnectionStrings:Production"],
+             DataSource = builder.Configuration["ConnectionStrings:Production"]!.Split("=")[1],
              DefaultTimeout = 5000
          }.ToString()  /*builder.Configuration["ConnectionStrings:Production"]*/)
 );
@@ -75,6 +76,8 @@ builder.Services.AddScoped<PaymentCardRepository, PaymentCardRepository>();
 builder.Services.AddScoped<NoteRepository, NoteRepository>();
 builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddScoped<PasswordResetCodeRepository, PasswordResetCodeRepository>();
+
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddHttpsRedirection(options =>
 {

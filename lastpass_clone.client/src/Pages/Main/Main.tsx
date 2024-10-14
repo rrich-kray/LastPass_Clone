@@ -53,7 +53,7 @@ const Main = (
     }) =>
 {
     // Global user state
-    const [user, setUser] = useContext(UserContext);
+    const { 0: user } = useContext(UserContext);
 
     // New items
     const [areNewButtonsVisible, setAreNewButtonsVisible] = useState<boolean>(false);
