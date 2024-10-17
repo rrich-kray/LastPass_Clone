@@ -36,7 +36,6 @@ namespace PasswordManager.Server.Controllers
         private CategoryRepository CategoryRepository { get; set; }
         private IHostEnvironment _hostEnvironment { get; set; }
         private readonly ILogger _logger;
-        private readonly IPasswordHasher _passwordHasher;
         private readonly IConfiguration _configuration;
         public UserController(
             UserRepository userRepository, 
@@ -44,7 +43,6 @@ namespace PasswordManager.Server.Controllers
             PasswordResetCodeRepository passwordResetCodeRepository, 
             ILogger<UserController> logger,
             IHostEnvironment hostEnvironment,
-            IPasswordHasher passwordHasher,
             IConfiguration configuration)
         {
             this.UserRepository = userRepository;
@@ -52,7 +50,6 @@ namespace PasswordManager.Server.Controllers
             this.PasswordResetCodeRepository = passwordResetCodeRepository;
             this._logger = logger;
             this._hostEnvironment = hostEnvironment;
-            this._passwordHasher = passwordHasher;
             this._configuration = configuration;
         }
 

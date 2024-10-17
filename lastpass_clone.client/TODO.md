@@ -24,20 +24,24 @@ Completed
 - Fix tile icons. One is a password that is displaying as a note. Somthing wrong with GetCategoryIcon logic
 - Add persistent storage.
 - Add password reset
+- Password hashing
+
 
 WIP
-- Password hashing
+- Password confirmation.
+	- Backend:
+		- Add account confirmed property to user model.
+	- To current login/register route: if AccountConfirmed = false, redirect user to a page that tells them this. Or can add another table with UserId and Account confirmed flag
+		- Will require a component that governs access to Main Page. Maybe could use current AccessLoginRegister component
+	- Enter information, hits route that sends email. Can create an email service from existing reset password code to do this
+	- User hits link, 
 
 TODO
 - Improve security of app
-	- Hash password prior to entry into the Db
+	- Hash password prior to entry into the Db - Done
 - Refactor
 	- Make application faster
 	- Make application more scalable
-- Password confirmation.
-	- Add account confirmed property to user model. To current login route: if AccountConfirmed = false, redirect user to a page that tells them this. Can just 
-	- Enter information, hits route that sends email. Can create an email service from existing reset password code to do this
-	- User hits link, 
 - 2FA authentication.
 - If it wouldn't be a security concern, can add exporting functionality. Export the passwords as CSV, Excel, etc...
 - Most recent sorting. This will require adding creation/update dates to entities on backend, and modifying frontend to send back update dates/times

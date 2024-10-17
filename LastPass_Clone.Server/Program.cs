@@ -77,8 +77,6 @@ builder.Services.AddScoped<NoteRepository, NoteRepository>();
 builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddScoped<PasswordResetCodeRepository, PasswordResetCodeRepository>();
 
-builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
-
 builder.Services.AddHttpsRedirection(options =>
 {
     options.RedirectStatusCode = 300;
