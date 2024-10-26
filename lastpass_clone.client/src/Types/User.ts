@@ -5,6 +5,7 @@ type User = {
     firstName: string,
     middleName: string,
     lastName: string,
+    isAccountVerified: boolean,
     roles: string[]
 }
 

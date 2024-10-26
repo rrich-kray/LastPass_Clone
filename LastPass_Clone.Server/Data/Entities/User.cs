@@ -23,6 +23,7 @@ namespace PasswordManager.Server.Data.Entities
                 return $"{this.FirstName} {this.MiddleName} {this.LastName}";
             } }
         public string[]? Roles { get; set; }
+        public bool IsAccountVerified { get; set; }
 
     }
 }

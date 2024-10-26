@@ -7,7 +7,7 @@ interface AuthenticationFormProps {
     headerRightTextLink: string,
     inputs?: AuthenticationFormInput[],
     bodyText?: string,
-    handleFormSubmit: (e: React.FormEvent) => void,
+    handleFormSubmit?: (e: React.FormEvent) => void,
     buttonText: string,
     resetPassword: boolean
 }

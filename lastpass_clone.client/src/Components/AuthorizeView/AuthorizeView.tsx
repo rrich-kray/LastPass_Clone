@@ -23,7 +23,7 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
     useEffect(() => {
         let retryCount: number = 0;
         const maxRetries: number = 10;
-        const delay: number = 100;
+        const delay: number = 10;
 
         function wait(delay: number) {
             return new Promise(resolve => setTimeout(resolve, delay));
@@ -31,10 +31,10 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
 
         async function fetchWithRetry(url: string, options: object) {
             try {
-
                 const response = await axios.get<AuthenticationResponse>(url, options);
                 if (response.data.result === true) {
                     setAuthorized(true);
+                    setLoading(false);
                     return response;
                 } else if (response.status === 401) {
                     console.log("Unauthorized");

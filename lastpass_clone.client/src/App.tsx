@@ -20,6 +20,7 @@ const defaultValues = {
     firstName: "",
     middleName: "",
     lastName: "",
+    isAccountVerified: false,
     roles: []
 }
 
@@ -46,9 +47,9 @@ function App() {
     }, []);
 
 
-    //const baseUrl: string = "https://localhost:32807"; // put this in ENV file at some point
+    const baseUrl: string = "https://localhost:32807"; // put this in ENV file at some point
     //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
-    const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
+    //const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
 
     return (
         <UserContext.Provider value={[user, setUser]}>
@@ -80,12 +81,14 @@ function App() {
                     } />
                     <Route path="/" element={
                         <AuthorizeView baseUrl={baseUrl}>
-                            {user !== null && user !== undefined && user.id !== "" && <Main
+                            {user !== null && user !== undefined && user.id !== "" &&
+                            <Main
                                 baseUrl={baseUrl}
                                 alerts={alerts!}
                                 isAlertModalVisible={isAlertModalVisible!}
                                 setAlerts={setAlerts}
-                                setIsAlertModalVisible={setIsAlertModalVisible} />}
+                                setIsAlertModalVisible={setIsAlertModalVisible}
+                             />}
                         </AuthorizeView>
                     } />
                 </Routes>

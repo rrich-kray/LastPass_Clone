@@ -9,31 +9,22 @@ using MailKit;
 using MimeKit;
 using MailKit.Security;
 using System.Security.Cryptography;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Web.Helpers;
+using PasswordManager.Server.Types;
+using Org.BouncyCastle.Bcpg;
 
 namespace PasswordManager.Server.Controllers
 {
     public class UserController : Controller
     {
-        public class LoginReq
-        {
-            public string Email { get; set; }
-            public string Password { get; set; }
-        }
 
-        public class AuthenticationResponse
-        {
-            public User? User { get; set; }
-            public bool? Result { get; set; }
-            public string? Token { get; set; }
-            public List<string>? Messages { get; set; }
-        }
         private UserRepository UserRepository { get; set; }
         private PasswordResetCodeRepository PasswordResetCodeRepository { get; set; }
         private CategoryRepository CategoryRepository { get; set; }
+        private AccountVerificationCodeRepository AccountVerificationCodeRepository { get; set; }
+        private string BaseUrl { get; set; }
         private IHostEnvironment _hostEnvironment { get; set; }
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
@@ -43,7 +34,8 @@ namespace PasswordManager.Server.Controllers
             PasswordResetCodeRepository passwordResetCodeRepository, 
             ILogger<UserController> logger,
             IHostEnvironment hostEnvironment,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            AccountVerificationCodeRepository accountVerificationCodeRepository)
         {
             this.UserRepository = userRepository;
             this.CategoryRepository = categoryRepository;
@@ -51,6 +43,22 @@ namespace PasswordManager.Server.Controllers
             this._logger = logger;
             this._hostEnvironment = hostEnvironment;
             this._configuration = configuration;
+            this.AccountVerificationCodeRepository = accountVerificationCodeRepository;
+            this.BaseUrl = this._hostEnvironment.IsDevelopment() ? $"https://localhost:5173" : "https://passwordmanager1.azurewebsites.net";
+        }
+
+        public class LoginReq
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
+
+        public string GenerateKey()
+        {
+            StringBuilder sb = new StringBuilder();
+            var matchValues = Regex.Matches(Convert.ToBase64String(RandomNumberGenerator.GetBytes(24)), @"[a-zA-Z0-9]").Select(match => match.Value);
+            foreach (var matchValue in matchValues) sb.Append(matchValue);
+            return sb.ToString();
         }
 
         [AllowAnonymous]
@@ -88,21 +96,34 @@ namespace PasswordManager.Server.Controllers
 
             var newUser = this.UserRepository.Create(
                 new User
-            {
-                Email = user.Email,
-                Password = Crypto.HashPassword(user.Password),
-                FirstName = user.FirstName,
-                MiddleName = user.MiddleName,
-                LastName = user.LastName,
-                Roles = user.Roles,
-            });
+                {
+                    Email = user.Email,
+                    Password = Crypto.HashPassword(user.Password),
+                    FirstName = user.FirstName,
+                    MiddleName = user.MiddleName,
+                    LastName = user.LastName,
+                    Roles = user.Roles,
+                });
+
+            string key = this.GenerateKey();
+
+            // need to create an AccountVerificationCode
+            this.AccountVerificationCodeRepository.Create(new AccountVerificationCode { UserId = newUser.Id, Key = key, ExpirationDate =  DateTime.Now.AddMinutes(30), SendDate = DateTime.Now});
+            this.AccountVerificationCodeRepository.SaveChanges();
+
+            EmailService emailService = new EmailService();
+            emailService.SendEmail(
+                response,
+                user.Email,
+                @$"If this is the intended recipient, please follow the link below to confirm your account. If not, please disregard this email.
+                  https://{this.BaseUrl}/ConfirmAccount/{this.GenerateKey()}");
 
             this.CreateDefaultUserCategories(newUser);
             string token = new AuthService().Create(newUser);
 
             response.Result = true;
             response.Token = token;
-            response.User = newUser;
+            // response.User = newUser; // Remove this WTF, don't send password back to client
             response.Messages = new List<string>() { "Account creation successful." };
             return response;
         }
@@ -160,14 +181,6 @@ namespace PasswordManager.Server.Controllers
         {
             AuthenticationResponse response = new AuthenticationResponse();
 
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) 
-                .AddJsonFile("secrets.json")
-                .Build();
-
-            var passwordResetSenderEmail = configuration.GetSection("PasswordResetSenderEmail").Value;
-            var passwordResetSenderEmailGoogleAppPassword = configuration.GetSection("PasswordResetSenderEmailAppPassword").Value;
-
             // check if email exists in the database
             var user = this.UserRepository.Users.FirstOrDefault(user => user.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
             if (user is null)
@@ -187,55 +200,25 @@ namespace PasswordManager.Server.Controllers
                 return response;
             }
 
-            StringBuilder sb = new StringBuilder();
-            var matchValues = Regex.Matches(Convert.ToBase64String(RandomNumberGenerator.GetBytes(24)), @"[a-zA-Z0-9]").Select(match => match.Value);
-            foreach (var matchValue in matchValues) sb.Append(matchValue);
-            var key = sb.ToString();
+            string key = this.GenerateKey();
 
             // Save key to database with User Id
-            this.PasswordResetCodeRepository.Create(new PasswordResetCode { UserId = user.Id, Code = key, Expiration = DateTime.Now.AddMinutes(30)});
+            this.PasswordResetCodeRepository.Create(
+                new PasswordResetCode 
+                { 
+                    UserId = user.Id, 
+                    Code = key, 
+                    Expiration = DateTime.Now.AddMinutes(30)
+                });
 
-            // Connect client
-            var client = new SmtpClient(new ProtocolLogger("smtp.log"));
-            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-            client.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
-            if (!client.IsConnected)
-            {
-                response.Result = false;
-                response.Messages = new List<string>() { "Client could not connect to the SMTP server." };
-                return response;
-            }
-
-            // Authenticate client
-            client.Authenticate(passwordResetSenderEmail, passwordResetSenderEmailGoogleAppPassword);
-            if (!client.IsAuthenticated)
-            {
-                response.Result = false;
-                response.Messages = new List<string>() { "Could not authenticate the sender." };
-                return response;
-            }
-
-            // Create message
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Password Manager", passwordResetSenderEmail));
-            message.To.Add(new MailboxAddress("User", email));
-            message.Subject = "PasswordManager Password Recovery";
-            string resetLink = this._hostEnvironment.IsDevelopment() ? $"https://localhost:5173" : "https://passwordmanager1.azurewebsites.net";
-            message.Body = new TextPart("Plain")
-            {
-                Text = $@"This user requested a password reset. If this is a mistake, please ignore this email
+            EmailService emailService = new EmailService();
+            return emailService.SendEmail(
+                response,
+                email,
+                $@"This user requested a password reset. If this is a mistake, please ignore this email
 .
                         If this is the intended recipient, please follow the link below to reset your password.
-                        {resetLink}/UpdatePassword/{key}"
-            };
-
-            client.Send(message);
-            client.Disconnect(true);
-            client.Dispose();
-
-            response.Result = true;
-            response.Messages = new List<string>() { "Password recovery email successfully sent." };
-            return response;
+                        {this.BaseUrl}/UpdatePassword/{key}");
         }
 
         [AllowAnonymous]
@@ -250,7 +233,7 @@ namespace PasswordManager.Server.Controllers
             if (passwordResetCode is null)
             {
                 response.Result = false;
-                response.Messages = new List<string>() { "This code has already been used." }; // Hitting this error. React router appears to be cutting off a portion of the key, likely a character it doesn't like
+                response.Messages = new List<string>() { "This code has already been used." };
                 return response;
             }
             if (passwordResetCode!.Expiration < DateTime.Now)
@@ -302,7 +285,7 @@ namespace PasswordManager.Server.Controllers
                 return response;
             }
 
-            // Will implement a delete user feature in the future. What if user deletes account right after asking for a reset code? Highky unlikely, as there would be no reason to request a reset code when they have access to their account, why throwing an exception here may not be ideal.
+            // Will implement a delete user feature in the future. What if user deletes account right after asking for a reset code? Highly unlikely, as there would be no reason to request a reset code when they have access to their account, why throwing an exception here may not be ideal.
             // Could delete the code if the user logs in 
             User? user = this.UserRepository.Users.FirstOrDefault(user => user.Id == code.UserId);
             if (user is null)
@@ -333,5 +316,85 @@ namespace PasswordManager.Server.Controllers
 
             return response;
         }
+
+        [AllowAnonymous]
+        [HttpPut]
+        [Route("/ConfirmAcount/{key}")]
+        public AuthenticationResponse VerifyAccount(string key)
+        {
+            // Look up key in database, if it is not expired, set isAccountVerified switch on user to true
+            var response = new AuthenticationResponse();
+
+            // Will select the most recently sent code
+            var verificationCode = this.AccountVerificationCodeRepository.AccountVerificationCodes
+                .OrderByDescending(x => x.SendDate)
+                .FirstOrDefault(code => code.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+
+            if (verificationCode == null)
+            {
+                response.Result = false;
+                response.Messages = new List<string>() { "Verification code not found in database." };
+                return response;
+            }
+            if (DateTime.Now > verificationCode.ExpirationDate)
+            {
+                response.Result = false;
+                response.Messages = new List<string>() { "Verification code has expired, please request another one." };
+                return response;
+            }
+
+            var user = this.UserRepository.Users.FirstOrDefault(user => user.Id == verificationCode.UserId);
+            if (user is null)
+            {
+                response.Result = false;
+                response.Messages = new List<string>() { "No user associated with the account verification code was found." };
+                return response;
+            }
+
+            user.IsAccountVerified = true;
+            this.UserRepository.SaveChanges();
+
+            response.Result = true;
+            response.Messages = new List<string>() { "Password Reset Code is valid." };
+            return response;
+        }
+
+        [AllowAnonymous]
+        [HttpPut]
+        [Route("/ResendConfirmationEmail/{email}/{userId}")]
+        public AuthenticationResponse ResendConfirmationEmail(string email, int userId)
+        {
+            AuthenticationResponse response = new AuthenticationResponse();
+            // Create an account verification code string
+            string key = this.GenerateKey();
+
+            // create a new AccountVerificationCode
+            this.AccountVerificationCodeRepository.Create(
+                new AccountVerificationCode 
+                { 
+                    UserId = userId, 
+                    Key = key, 
+                    SendDate = DateTime.Now, 
+                    ExpirationDate = DateTime.Now.AddMinutes(30) 
+                });
+
+            EmailService emailService = new EmailService();
+            return emailService.SendEmail(
+                response,
+                email,
+                @$"If this is the intended recipient, please follow the link below to confirm your account. If not, please disregard this email.
+                  https://{this.BaseUrl}/ConfirmAccount/{key}");
+
+        }
     }
 }
+
+
+// Process
+// User registers, hits /Register, gets email, is logged in (i.e. has token in localstorage).
+// App.tsx will use this to get User info. User info will have IsAccountVerified = false until link is clicked. Guards will use user info from App.tsx to check if user is verified, if not, will redirect to ConfirmAccount page. So refreshing after registering will yield this page.
+// Email takes user to /ConfirmAccount/{key}, this opens ConfirmAccount page on frontend. This will use /ConfirmAccount/{key} route in useEffect to confirm key 
+
+// Frontend
+// After registering, user will get token, 
+// AcessLoginRegister can house logic that presents user with page telling user to check email for verification code, or get another one, if user.isAccountVerified = false

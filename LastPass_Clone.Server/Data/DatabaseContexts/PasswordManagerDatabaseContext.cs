@@ -16,6 +16,7 @@ namespace PasswordManager.Server.Data.DatabaseContexts
         public DbSet<Note> Notes { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<PasswordResetCode> PasswordResetCodes { get; set; }
+        public DbSet<AccountVerificationCode> AccountVerificationCodes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

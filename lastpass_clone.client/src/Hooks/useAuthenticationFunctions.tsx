@@ -1,24 +1,16 @@
-import { useState, Dispatch, useContext } from "react";
+import { useState, useEffect, Dispatch } from "react";
 import axios from "axios";
-import AlertMessage from "../../Components/AlertMessage/AlertMessage.tsx";
-import { UserContext } from "../../App";
-import RequestHelpers from "../../Other/RequestHelpers.tsx";
-import AuthenticationForm from "../../Components/AuthenticationForm/AuthenticationForm.tsx";
-import AuthenticationFormInput from "../../Types/AuthenticationFormInput";
+import RequestHelpers from "../Other/RequestHelpers.tsx";
+import AlertMessage from "../Components/AlertMessage/AlertMessage.tsx";
+import User from "../Types/User.ts"
 
-interface LoginProps {
-    baseUrl: string,
+const useAuthenticationFunctions = (
+    userInfo: object,
+    url: string,
     setAlerts: Dispatch<JSX.Element[]>,
-    setIsAlertModalVisible: Dispatch<boolean>
-}
+    setIsAlertModalVisible: Dispatch<boolean>,
+    setUser: Dispatch<User>) => {
 
-const Login: React.FC<LoginProps> = (
-    {
-        baseUrl,
-        setAlerts,
-        setIsAlertModalVisible
-    }) => {
-    const { 1: setUser } = useContext(UserContext);
     const [formState, setFormState] = useState({
         Email: "",
         Password: "",
@@ -39,11 +31,7 @@ const Login: React.FC<LoginProps> = (
             setIsAlertModalVisible(false);
         }
         axios
-            .post(`${baseUrl}/Login`, {
-                Email: formState.Email,
-                Password: formState.Password
-            },
-            RequestHelpers.GenerateAuthenticationRequestHeaders())
+            .post(url, userInfo, RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
                     localStorage.setItem("token", response.data.token);
@@ -72,32 +60,7 @@ const Login: React.FC<LoginProps> = (
                 }
             });
     }
-
-    const inputs: AuthenticationFormInput[] = [
-        {
-            label: "Email Address",
-            inputType: "text",
-            inputName: "Email",
-            handleChange: handleChange
-        },
-        {
-            label: "Password",
-            inputType: "password",
-            inputName: "Password",
-            handleChange: handleChange
-        },
-    ]
-
-    return (
-        <AuthenticationForm
-            headerLeftText={"Log In"}
-            headerRightText={"Or create an account"}
-            headerRightTextLink={"/Register"}
-            inputs={inputs}
-            handleFormSubmit={handleFormSubmit}
-            buttonText={"Log in!"}
-            resetPassword={true} />
-    )
+     return { handleChange, handleFormSubmit };
 }
 
-export default Login;
+export default useAuthenticationFunctions;

@@ -31,10 +31,11 @@ WIP
 - Password confirmation.
 	- Backend:
 		- Add account confirmed property to user model.
-	- To current login/register route: if AccountConfirmed = false, redirect user to a page that tells them this. Or can add another table with UserId and Account confirmed flag
-		- Will require a component that governs access to Main Page. Maybe could use current AccessLoginRegister component
-	- Enter information, hits route that sends email. Can create an email service from existing reset password code to do this
-	- User hits link, 
+	- Frontend:
+		- To current login/register route: if AccountConfirmed = false, redirect user to a page that tells them this. Or can add another table with UserId and Account confirmed flag
+			- Will require a component that governs access to Main Page. Maybe could use current AccessLoginRegister component
+		- Enter information, hits route that sends email. Can create an email service from existing reset password code to do this
+		- User hits link, 
 
 TODO
 - Improve security of app
