@@ -1,0 +1,78 @@
+.loadingOverlay {
+    height: 100vh;
+    width: 100vw;
+    opacity: 75%;
+    background-color: lightgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loadingModal {
+    height: 250px;
+    width: 250px;
+    display: flex;
+    place-content: center;
+    background-color: grey;
+    opacity: 75%;
+    border-radius: 15%;
+}
+
+.loadingSquare {
+    border-radius: 50%;
+    opacity: 0;
+    animation: loadingSquareAmimation 1s lineatr infinite;
+}
+
+@keyframes loadingSquareAmimation {
+    100% { transform: rotate(360deg) }
+}
+
+.loadingCircleOne {
+    border-radius: 50%;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    background-color: white;
+}
+
+.loadingCircleTwo {
+    border-radius: 50%;
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    background-color: white;
+}
+
+.loadingCircleThree {
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    background-color: white;
+}
+
+.loadingCircleFour {
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    background-color: white;
+}
+
+.loadingCircleFive {
+    border-radius: 50%;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    background-color: white;
+}
+
+.loadingCircleSix {
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    background-color: white;
+}
