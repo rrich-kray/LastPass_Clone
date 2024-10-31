@@ -4,6 +4,7 @@ import axios from "axios";
 import ComponentUtilities from "../../Other/RequestHelpers";
 import AuthenticationResponse from "../../Types/AuthenticationResponse.ts";
 import LoadingPage from "../LoadingPage/LoadingPage.tsx";
+//import LoadingOverlay from "../LoadingOverlay/LoadingOverlay.tsx";
 
 // Component must make request to VerifyToken.
 // If UserContext is empty, or response comes back with a 401 error, return
@@ -31,9 +32,9 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
 
         async function fetchWithRetry(url: string, options: object) {
             try {
-
                 const response = await axios.get<AuthenticationResponse>(url, options);
                 if (response.data.result === true) {
+                    setLoading(false);
                     setAuthorized(true);
                     return response;
                 } else if (response.status === 401) {
@@ -56,7 +57,7 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
             .finally(() => setLoading(false));
     }, []);
 
-    if (localStorage.getItem("token") === undefined) {
+    if (localStorage.getItem("token") === undefined || localStorage.getItem("token") === null) {
         return (
             <>
                 <Navigate to="/login" />

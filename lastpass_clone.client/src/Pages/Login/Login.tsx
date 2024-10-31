@@ -60,7 +60,7 @@ const Login: React.FC<LoginProps> = (
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
                 } else {
-                    //setIsloading(false);
+                    setIsloading(false);
                     const alerts = response.data.messages.map((message: string) => <AlertMessage message={message} color={"red"} />)
                     setAlerts(alerts);
                     setIsAlertModalVisible(true);
