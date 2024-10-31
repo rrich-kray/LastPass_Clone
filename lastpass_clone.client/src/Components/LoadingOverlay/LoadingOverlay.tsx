@@ -5,13 +5,20 @@ const LoadingOverlay = () => {
     return (
         <div className={styles.loadingOverlay}>
             <div className={styles.loadingModal}>
-                <div className={styles.loadingSquare}>
-                    <div className={styles.loadingCircleOne}></div>
-                    <div className={styles.loadingCircleTwo}></div>
-                    <div className={styles.loadingCircleThree}></div>
-                    <div className={styles.loadingCircleFour}></div>
-                    <div className={styles.loadingCircleFive}></div>
-                    <div className={styles.loadingCircleSix}></div>
+                <div className={styles.loadingSquareOne}>
+                    <div className={styles.loadingCircle}></div>
+                </div>
+                <div className={styles.loadingSquareTwo}>
+                    <div className={styles.loadingCircle}></div>
+                </div>
+                <div className={styles.loadingSquareThree}>
+                    <div className={styles.loadingCircle}></div>
+                </div>
+                <div className={styles.loadingSquareFour}>
+                    <div className={styles.loadingCircle}></div>
+                </div>
+                <div className={styles.loadingSquareFive}>
+                    <div className={styles.loadingCircle}></div>
                 </div>
             </div>
         </div>

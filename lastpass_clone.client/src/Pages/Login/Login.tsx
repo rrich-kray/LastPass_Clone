@@ -52,6 +52,7 @@ const Login: React.FC<LoginProps> = (
             RequestHelpers.GenerateAuthenticationRequestHeaders())
             .then(response => {
                 if (response.data.result === true) {
+                    setIsloading(false);
                     localStorage.setItem("token", response.data.token);
                     const alerts = [<AlertMessage message={"Log in successful!"} color={"green"} />];
                     setUser(response.data.user);
@@ -59,6 +60,7 @@ const Login: React.FC<LoginProps> = (
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
                 } else {
+                    //setIsloading(false);
                     const alerts = response.data.messages.map((message: string) => <AlertMessage message={message} color={"red"} />)
                     setAlerts(alerts);
                     setIsAlertModalVisible(true);
@@ -66,6 +68,7 @@ const Login: React.FC<LoginProps> = (
                 }
             })
             .catch(error => {
+                setIsloading(false);
                 if (axios.isAxiosError(error) && error.response) {
                     const responseErrors = error.response.data.errors;
                     const errorAlerts: JSX.Element[] = [];
@@ -76,11 +79,6 @@ const Login: React.FC<LoginProps> = (
                     setIsAlertModalVisible(true);
                     setTimeout(reset, 3000);
                 }
-            })
-            .finally(() => {
-                setTimeout(() => {
-                    setIsloading(false);
-                }, 1000);
             })
     }
 

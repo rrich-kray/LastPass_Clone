@@ -1,8 +1,9 @@
 .loadingOverlay {
     height: 100vh;
     width: 100vw;
-    opacity: 75%;
+    opacity: 50%;
     background-color: lightgrey;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,66 +14,81 @@
     height: 250px;
     width: 250px;
     display: flex;
-    place-content: center;
+    justify-content: center;
+    align-items: center;
     background-color: grey;
     opacity: 75%;
-    border-radius: 15%;
+    border-radius: 5%;
 }
 
-.loadingSquare {
+.loadingSquareOne {
+    position: absolute;
     border-radius: 50%;
-    opacity: 0;
-    animation: loadingSquareAmimation 1s lineatr infinite;
+    height: 75px;
+    width: 75px;
+    animation: loadingSquareAmimation 2s ease-in-out infinite;
+    animation-delay: 250ms;
+}
+
+.loadingSquareTwo {
+    position: absolute;
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+    animation: loadingSquareAmimation 2s ease-in-out infinite;
+    animation-delay: 250ms;
+}
+
+.loadingSquareThree {
+    position: absolute;
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+    animation: loadingSquareAmimation 2s ease-in-out infinite;
+    animation-delay: 500ms;
+}
+
+.loadingSquareFour {
+    position: absolute;
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+    animation: loadingSquareAmimation 2s ease-in-out infinite;
+    animation-delay: 750ms;
+}
+
+.loadingSquareFive {
+    position: absolute;
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+    animation: loadingSquareAmimation 2s ease-in-out infinite;
+    animation-delay: 1000ms;
 }
 
 @keyframes loadingSquareAmimation {
-    100% { transform: rotate(360deg) }
+    0% {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
-.loadingCircleOne {
+.loadingCircle {
+    height: 10px;
+    width: 10px;
     border-radius: 50%;
     position: absolute;
-    top: 0%;
-    left: 0%;
-    background-color: white;
-}
-
-.loadingCircleTwo {
-    border-radius: 50%;
-    position: absolute;
-    top: 0%;
-    right: 0%;
-    background-color: white;
-}
-
-.loadingCircleThree {
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0%;
-    right: 0%;
-    background-color: white;
-}
-
-.loadingCircleFour {
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0%;
-    left: 0%;
-    background-color: white;
-}
-
-.loadingCircleFive {
-    border-radius: 50%;
-    position: absolute;
-    top: 0%;
-    left: 50%;
-    background-color: white;
-}
-
-.loadingCircleSix {
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0%;
+    top: 0;
     left: 50%;
     background-color: white;
 }
