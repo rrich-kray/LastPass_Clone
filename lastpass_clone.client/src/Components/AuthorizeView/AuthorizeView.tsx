@@ -22,14 +22,6 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        let retryCount: number = 0;
-        const maxRetries: number = 10;
-        const delay: number = 100;
-
-        function wait(delay: number) {
-            return new Promise(resolve => setTimeout(resolve, delay));
-        }
-
         async function fetchWithRetry(url: string, options: object) {
             try {
                 const response = await axios.get<AuthenticationResponse>(url, options);
@@ -42,13 +34,7 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
                     throw new Error("Not authorized");
                 }
             } catch (error) {
-                retryCount++;
-                if (retryCount > maxRetries) {
-                    throw error;
-                } else {
-                    await wait(delay);
-                    return fetchWithRetry(url, options);
-                }
+                console.log(error);
             }
         }
         fetchWithRetry(`${props.baseUrl}/VerifyToken`, ComponentUtilities.GenerateFullRequestHeaders())
