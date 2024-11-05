@@ -34,7 +34,6 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
             try {
                 const response = await axios.get<AuthenticationResponse>(url, options);
                 if (response.data.result === true) {
-                    setLoading(false);
                     setAuthorized(true);
                     return response;
                 } else if (response.status === 401) {

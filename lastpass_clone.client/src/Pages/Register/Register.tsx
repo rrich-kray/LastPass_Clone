@@ -119,7 +119,7 @@ const Register = (
 
     return (
         <>
-            {isLoading && <LoadingOverlay />}        
+            {isLoading && <LoadingOverlay />}      
             <AuthenticationForm
                 headerLeftText={"Register"}
                 headerRightText={"Log in"}

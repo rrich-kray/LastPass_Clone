@@ -8,6 +8,11 @@
 **/bin/Release/
 **/obj/
 
+# Database files
+**/*.db
+**/*.db-shm
+**/*.db-wal
+
 /bin/Debug/
 /bin/Release/
 /obj/
