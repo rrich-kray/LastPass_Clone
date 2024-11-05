@@ -28,15 +28,14 @@ const AuthorizeView = (props: PropsWithChildren<AuthorizeViewProps>) => {
                 if (response.data.result === true) {
                     setAuthorized(true);
                     return response;
-                } else if (response.status === 401) {
-                    console.log("Unauthorized");
                 } else {
-                    throw new Error("Not authorized");
-                }
+                    console.log("Unauthorized");
+                } 
             } catch (error) {
                 console.log(error);
             }
         }
+
         fetchWithRetry(`${props.baseUrl}/VerifyToken`, ComponentUtilities.GenerateFullRequestHeaders())
             .catch(e => console.log(e))
             .finally(() => setLoading(false));
