@@ -119,6 +119,7 @@
 }
 
 .TableColumnTwo {
+    position: relative;
     text-align: center;
     padding: 15px;
     height: 25px;
@@ -205,4 +206,11 @@
 
 input {
     border-color: rgb(167, 175, 186);
+}
+
+.GeneratePassword {
+    position: absolute;
+    right: 5%;
+    bottom: 37.5%;
+    cursor: pointer;
 }

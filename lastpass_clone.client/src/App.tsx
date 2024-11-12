@@ -46,9 +46,9 @@ function App() {
     }, []);
 
 
-    //const baseUrl: string = "https://localhost:32775"; // put this in ENV file at some point
+    const baseUrl: string = "https://localhost:32777"; // put this in ENV file at some point
     //const baseUrl: string = "https://passwordmanagerserverapi.azure-api.net";
-    const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
+    //const baseUrl: string = "https://passwordmanagerapi.azure-api.net";
 
     return (
         <UserContext.Provider value={[user, setUser]}>

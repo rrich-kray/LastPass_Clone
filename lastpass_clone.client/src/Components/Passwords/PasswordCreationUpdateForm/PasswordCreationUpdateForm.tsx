@@ -6,6 +6,8 @@ import { FaRegStar } from "react-icons/fa";
 import RequestHelpers from "../../../Other/RequestHelpers";
 import { UserContext } from "../../../App";
 import Entity from "../../../Types/Entity.ts";
+import { MdOutlinePassword } from "react-icons/md";
+import RandomPasswordGenerator from "../../../Other/RandomPasswordGenerator";
 
 const PasswordCreationUpdateForm =
     ({
@@ -25,6 +27,7 @@ const PasswordCreationUpdateForm =
             setAlerts: Dispatch<JSX.Element[]>,
             setIsAlertModalVisible: Dispatch<boolean>
         }) => {
+        const [randomPassword, setRandomPassword] = useState<string>();
         const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(false);
         const [categories, setCategories] = useState<Category[]>();
         const [currentCategoryId, setCurrentCategoryId] = useState<string>();
@@ -130,7 +133,8 @@ const PasswordCreationUpdateForm =
                             <tr>
                                 <td className={styles.TableColumnOne}>Password</td>
                                 <td className={styles.TableColumnTwo}>
-                                    <input name="Password" id="Password" placeholder={updateToggle ? (passwordData as Password)?.password : ""} onChange={handleChange} className={styles.formInput} />
+                                    <input name="Password" id="Password" value={randomPassword} placeholder={updateToggle ? (passwordData as Password)?.password : ""} onChange={handleChange} className={styles.formInput} />
+                                    <MdOutlinePassword onClick={() => setRandomPassword(new RandomPasswordGenerator().GeneratePassword())} title="Generate Random Password" className={ styles.GeneratePassword } />
                                 </td>
                             </tr>
                             <tr>
