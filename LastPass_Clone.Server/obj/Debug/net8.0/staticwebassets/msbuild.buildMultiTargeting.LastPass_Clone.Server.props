@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\LastPass_Clone.Server.props" />
-</Project>
